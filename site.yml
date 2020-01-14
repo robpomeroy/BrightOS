@@ -1,0 +1,36 @@
+#!/usr/bin/env ansible-playbook
+---
+# Pre-req: user in place + SSH key + sudo power
+# To run: ansible-playbook [-i production] playbook.yml --ask-become-pass [--skip-tags "tag1"] [--tags "tag2"]
+- hosts: all
+  become: true
+  tasks:
+  - name: Install several (simple, no config) packages
+    apt:
+      name: "{{item}}"
+      state: latest
+    loop:
+      - ansible
+    tags:
+      - init
+  - name: Set time zone
+    timezone:
+      name: "{{ server_timezone }}"
+    tags:
+      - init
+
+  # Use the OS & SSH hardening playbooks
+  # (first download, e.g.: ansible-galaxy --ignore-certs install dev-sec.os-hardening)
+  roles:
+    - role: name
+      tags:
+        - init
+    - role: dev-sec.os-hardening
+      tags:
+        - compliance
+    - role: dev-sec.ssh-hardening
+      vars:
+        sftp_enabled: true
+      tags:
+        - compliance
+    #- ufw

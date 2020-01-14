@@ -1,0 +1,9 @@
+---
+system_hostname: [insert]
+
+ # Firewall settings
+ufw_open_ports:
+  ssh: 22 # note the key here ("ssh") isn't used elsewhere, just the port value ("22")
+
+# Time zone
+server_timezone: Europe/London

@@ -1,0 +1,12 @@
+---
+- name: Set hostname
+  hostname:
+    name: "{{ system_hostname }}"
+
+- name: Configure domain name
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    state: present
+    line: '127.0.1.1        {{ system_hostname }}.{{ ad_domain }}        {{ system_hostname }}'
+
