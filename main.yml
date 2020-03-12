@@ -3,31 +3,45 @@
 # See README.md for installation & guidance
 - hosts: all
   become: true
-  tasks:
-  - name: Install simple, no config packages
-    apt:
-      name: ['ansible']
-      state: latest
-    tags:
-      - init
-  - name: Set time zone
-    timezone:
-      name: "{{ server_timezone }}"
-    tags:
-      - init
 
-  # Use the OS & SSH hardening playbooks
-  # (first download, e.g.: ansible-galaxy --ignore-certs install dev-sec.os-hardening)
+  # The main config file should not be edited
+  vars_files:
+    - default.config.yml
+
+  # End users of this playbook can amend the contents of config.yml to suit their requirements.
+  # The config.yml file could also override settings in default.config.yml.
+  pre_tasks:
+    - include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags:
+        - always
+
+  # Simple tasks that don't merit a role
+  tasks:
+    - name: Install simple, no config packages
+      apt:
+        name: ['ansible']
+        state: latest
+      tags:
+        - init
+    - name: Set time zone
+      timezone:
+        name: "{{ server_timezone }}"
+      tags:
+        - init
+
+  # Additional roles, including third party requirements
   roles:
     - role: name
       tags:
         - init
     - role: dev-sec.os-hardening
       tags:
-        - compliance
+        - security
     - role: dev-sec.ssh-hardening
       vars:
         sftp_enabled: true
       tags:
-        - compliance
+        - security
     #- ufw
