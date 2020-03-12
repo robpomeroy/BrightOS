@@ -2,9 +2,9 @@
 
 Ansible playbook for customising Linux to help users with special needs.
 
-## Notes: 14 January 2020
+## Notes: 12 March 2020
 
-This repository is a holding place for a potential project. The aim is to
+This repository for a project under development. The aim is to
 create an Ansible build that converts a Linux installation into something
 suitable for users (particularly children) with special needs. Elements to
 include, potentially:

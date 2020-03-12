@@ -5,12 +5,10 @@
 - hosts: all
   become: true
   tasks:
-  - name: Install several (simple, no config) packages
+  - name: Install simple, no config packages
     apt:
-      name: "{{item}}"
+      name: ['ansible']
       state: latest
-    loop:
-      - ansible
     tags:
       - init
   - name: Set time zone
