@@ -1,7 +1,6 @@
 #!/usr/bin/env ansible-playbook
 ---
-# Pre-req: user in place + SSH key + sudo power
-# To run: ansible-playbook [-i production] playbook.yml --ask-become-pass [--skip-tags "tag1"] [--tags "tag2"]
+# See README.md for installation & guidance
 - hosts: all
   become: true
   tasks:

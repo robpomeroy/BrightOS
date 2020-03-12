@@ -1,6 +1,5 @@
 ---
-system_hostname: [insert]
-ad_domain: [insert]
+  system_hostname: SNL # Edit to suit you
 
 # Firewall settings
 # Note the ufw role leaves SSH open by default
@@ -9,3 +8,4 @@ ufw_open_ports:
 
 # Time zone
 server_timezone: Europe/London
+

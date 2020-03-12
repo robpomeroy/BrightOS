@@ -1,5 +1,4 @@
-# Install all with ansible-galaxy --ignore-certs install -r requirements.yml
-
+---
 # The DevSec OS & SSH hardening playbooks
 - src: dev-sec.os-hardening
 - src: dev-sec.ssh-hardening
