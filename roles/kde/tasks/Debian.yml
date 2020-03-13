@@ -1,0 +1,10 @@
+---
+- name: KDE installation
+  apt:
+    name: [kde-plasma-desktop, kdeaccessibility]
+    state: latest
+
+#- name: Xnstall Xorg
+#  apt:
+#    name: xorg
+#    state: latest

@@ -1,0 +1,9 @@
+---
+#- name: Install X11
+#  shell: 'yum groups install -y "X Window System"'
+
+- name: Install KDE
+  yum:
+    name: "@^KDE Plasma Workspaces"
+    state: latest
+    # enablerepo: epel

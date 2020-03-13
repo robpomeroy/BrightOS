@@ -1,0 +1,10 @@
+---
+- name: Include task list appropriate for OS family (Debian/RedHat)
+  include: "{{ ansible_os_family }}.yml"  
+
+#- name: get default runlevel
+#  shell: 'systemctl get-default'
+#  register: runlevel
+  
+#- name: Set graphical runlevel
+#  shell: 'systemctl set-default graphical.target'

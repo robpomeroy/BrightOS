@@ -36,12 +36,16 @@
     - role: name
       tags:
         - init
-    - role: dev-sec.os-hardening
+    - role: kde
       tags:
-        - security
-    - role: dev-sec.ssh-hardening
-      vars:
-        sftp_enabled: true
-      tags:
-        - security
-    #- ufw
+        - desktop
+#      tags:
+#        - security
+#    - role: dev-sec.os-hardening
+#      tags:
+#        - security
+#    - role: dev-sec.ssh-hardening
+#      vars:
+#        sftp_enabled: true
+#      tags:
+#        - security

@@ -2,6 +2,3 @@
 # You should generally not need to edit things in this file. Use config.yml instead.
 
 # Firewall settings
-# Note the ufw role leaves SSH open by default
-ufw_open_ports:
-  https: 443 # note the key here ("https") isn't used elsewhere, just the port value ("443")
