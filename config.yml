@@ -1,7 +1,7 @@
 ---
 # Edit the following to suit you
-system_hostname: SNL           # What do you want to call this computer?
 server_timezone: Europe/London # For acceptable entries here, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+snl_user: snl                  # This is the name of the user that logs in automatically
 
 # Firewall settings
 # Note the ufw role leaves SSH open by default

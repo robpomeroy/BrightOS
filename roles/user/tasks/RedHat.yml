@@ -1,0 +1,5 @@
+---
+- name: Set SNL user's shell (no shell use)
+  user:
+    name: "{{ snl_user }}"
+    shell: /sbin/nologin

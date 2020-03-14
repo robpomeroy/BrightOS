@@ -1,0 +1,6 @@
+---
+- name: Install the theme
+  command: update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/ubuntu-logo/ubuntu-logo.plymouth 100
+
+- name: Update initramfs
+  command: update-initramfs -u

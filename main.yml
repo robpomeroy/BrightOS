@@ -21,7 +21,7 @@
   tasks:
     - name: Install simple, no config packages
       apt:
-        name: ['ansible']
+        name: ['ansible', 'python-apt']
         state: latest
       tags:
         - init
@@ -34,6 +34,9 @@
   # Additional roles, including third party requirements
   roles:
     - role: name
+      tags:
+        - init
+    - role: user
       tags:
         - init
     - role: kde

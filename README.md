@@ -30,6 +30,10 @@ These are the general aims for this project:
   * TuxMath
   * KDE Edu Suite
   * Tux Paint
+* Project-specific customisation
+  * Plmouth boot screen
+  * Desktop background
+  * Menu logo
 
 ## Sources for ideas
 

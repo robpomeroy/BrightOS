@@ -1,2 +1,3 @@
-[target]
-10.0.0.108
+[targets]
+# Amend as required, based on how the host[s] you're configuring
+10.0.0.108 system_hostname=snl-ubuntu

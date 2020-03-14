@@ -2,6 +2,20 @@
 - name: Include task list appropriate for OS family (Debian/RedHat)
   include: "{{ ansible_os_family }}.yml"  
 
+- name: Create sddm configuration (which enables autologin)
+  template:
+    src: sddm.conf.j2
+    dest: /etc/sddm.conf
+    owner: root
+    group: root
+    mode: 0444
+
+- name: Copy files for locked-down kiosk mode
+  # Note: the search directories for loading the config files are stored in the $XDG_CONFIG_DIRS variable
+  copy:
+    src: etc/xdg/
+    dest: /etc/xdg/
+
 #- name: get default runlevel
 #  shell: 'systemctl get-default'
 #  register: runlevel

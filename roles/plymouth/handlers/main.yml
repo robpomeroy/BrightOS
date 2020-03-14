@@ -1,0 +1,3 @@
+---
+- name: Plymouth tasks
+  import_tasks: tasks/plymouth_tasks.yml

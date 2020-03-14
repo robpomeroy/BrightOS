@@ -1,0 +1,16 @@
+---
+- name: Create SNL user's group (same name as user account)
+  group:
+    name: "{{ snl_user }}"
+    state: present
+
+- name: Create SNL default user (which logs in automatically) with no password
+  user:
+    name: "{{ snl_user }}"
+    group: "{{ snl_user }}"
+    state: present
+    shell: /usr/sbin/nologin
+
+- name: Include task list appropriate for OS family (Debian/RedHat)
+  include: "{{ ansible_os_family }}.yml"  
+
