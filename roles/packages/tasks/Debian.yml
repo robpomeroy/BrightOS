@@ -1,0 +1,7 @@
+---
+- name: Install simple, no config packages
+  apt:
+    name: ['ansible', 'python-apt'] # not convinced we need to install these; check with full reinstall
+    state: latest
+  tags:
+    - init

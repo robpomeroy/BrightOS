@@ -12,6 +12,10 @@
 
 - name: Copy files for locked-down kiosk mode
   # Note: the search directories for loading the config files are stored in the $XDG_CONFIG_DIRS variable
+  # Further reading on the kiosk framework:
+  #    https://userbase.kde.org/KDE_System_Administration/Kiosk/Introduction
+  #    https://userbase.kde.org/KDE_System_Administration/Kiosk/Keys
+  # Unfortunately the documentation is out of date and in some cases plain wrong.
   copy:
     src: etc/xdg/
     dest: /etc/xdg/

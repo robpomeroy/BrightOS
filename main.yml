@@ -19,12 +19,6 @@
 
   # Simple tasks that don't merit a role
   tasks:
-    - name: Install simple, no config packages
-      apt:
-        name: ['ansible', 'python-apt']
-        state: latest
-      tags:
-        - init
     - name: Set time zone
       timezone:
         name: "{{ server_timezone }}"
@@ -33,6 +27,9 @@
 
   # Additional roles, including third party requirements
   roles:
+    - role: packages
+      tags:
+        - init
     - role: name
       tags:
         - init

@@ -1,0 +1,5 @@
+---
+- name: Enable EPEL testing
+  shell:
+    # There isn't currently a 'pure' Ansible way of doing this. See https://github.com/ansible/ansible/issues/64852
+    cmd: dnf config-manager --set-enabled epel-testing

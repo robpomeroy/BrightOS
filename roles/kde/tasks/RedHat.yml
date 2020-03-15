@@ -1,9 +1,13 @@
 ---
-#- name: Install X11
-#  shell: 'yum groups install -y "X Window System"'
+# KDE for CentoS 8.1 needs the EPEL repository. But note there are broken dependencies.
+- name: Add EPEL repository
+  dnf:
+    name: epel-release
+    state: latest
+  notify: Enable EPEL testing
 
 - name: Install KDE
-  yum:
-    name: "@^KDE Plasma Workspaces"
+  dnf:
+    name: "@KDE Plasma Workspaces"
     state: latest
-    # enablerepo: epel
+    update_cache: yes

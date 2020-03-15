@@ -2,3 +2,4 @@
 action/lock_screen=false
 action/switch_user=false
 action/start_new_session=false
+#logout=false
