@@ -4,7 +4,7 @@
 
 You will need a machine from which to run Ansible. In addition, your target machine should meet the following requirements:
 
-* Ubuntu installed (preferably minimal, for the cleanest effects; I use Ubuntu Server).
+* Ubuntu installed (preferably minimal, for the cleanest effects; I use Ubuntu Server)
 * OpenSSH installed
 * A user account set up, with a password and sudo capability
 * Public/private keys set up for this user (TODO: document this)

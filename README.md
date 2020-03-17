@@ -8,8 +8,6 @@ For prerequsites and usage instructions, refer to ```INSTALL.md```
 
 -- Rob Pomeroy
 
-Note to self: I'm leaning on Jeff Geerling's approach, for overall structure of the playbook: https://github.com/geerlingguy/mac-dev-playbook
-
 ## Licence
 
 This work is licensed under GNU General Public License v3.0. See the ```LICENCE``` file for the text. I'm British, so yes, that's how I spell 'licence'. :-)
@@ -25,20 +23,20 @@ Ubuntu has a lot of traction, features and support. This makes it an ideal start
 These are the general aims for this project:
 
 * Security hardening
-  * AppArmor or SELinux
-  * Firewall
+    * AppArmor or SELinux
+    * Firewall
 * Built-in web proxy for safe surfing (squid + E2guardian)
 * Generalise for GNU/Linuxes other than Ubuntu
 * Games & apps
-  * KTuberling/Potato Guy
-  * GCompris
-  * TuxMath
-  * KDE Edu Suite
-  * Tux Paint
+    * KTuberling/Potato Guy
+    * GCompris
+    * TuxMath
+    * KDE Edu Suite
+    * Tux Paint
 * Project-specific customisation
-  * Plmouth boot screen
-  * Desktop background
-  * Menu logo
+    * Plymouth boot screen
+    * Desktop background
+    * Menu logo
 
 ## Sources for ideas
 
