@@ -1,0 +1,6 @@
+---
+- name: Install Firefox
+  apt:
+    name: firefox
+    state: latest
+

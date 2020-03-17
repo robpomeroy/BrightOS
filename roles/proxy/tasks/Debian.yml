@@ -1,0 +1,48 @@
+---
+# Ubuntu's version of Squid comes without SSL support.
+# Diladele B.V. provides packages with SSL support compiled in.
+# See https://www.diladele.com/ and https://github.com/diladele/squid-ubuntu
+
+- name: Add Diladele's apt key
+  apt_key:
+    url: http://packages.diladele.com/diladele_pub.asc
+    state: present
+
+- name: Add Diladele's Squid repository
+  apt_repository:
+    repo: deb http://squid410.diladele.com/ubuntu/ bionic main
+    state: present
+
+- name: Install Squid proxy
+  apt:
+    name: ['squid-common', 'squid', 'squidclient']
+    state: latest
+
+- name: Generate private key
+  openssl_privatekey:
+    path: /etc/ssl/private/SNLSquid.key
+    size: 2048
+
+- name: Set permissions on private key
+  file:
+    path: /etc/ssl/private/SNLSquid.key
+    owner: root
+    group: ssl-cert
+    mode: 0440
+    
+- name: Generate certificate signing request
+  openssl_csr:
+    path: /etc/ssl/SNLSquid.csr
+    privatekey_path: /etc/ssl/private/SNLSquid.key
+
+# Note: the use of relative time (for expiry) prevents this task from being idempotent
+# See https://docs.ansible.com/ansible/latest/modules/openssl_certificate_module.html
+- name: Generate self-signed certificate [not idempotent!]
+  openssl_certificate:
+    provider: selfsigned
+    selfsigned_digest: sha256
+    selfsigned_not_after: "+3650d"
+    path: /etc/ssl/SNLSquid.crt
+    privatekey_path: /etc/ssl/private/SNLSquid.key
+    csr_path: /etc/ssl/SNLSquid.csr
+

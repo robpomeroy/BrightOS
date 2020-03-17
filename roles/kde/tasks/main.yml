@@ -20,9 +20,5 @@
     src: etc/xdg/
     dest: /etc/xdg/
 
-#- name: get default runlevel
-#  shell: 'systemctl get-default'
-#  register: runlevel
-  
-#- name: Set graphical runlevel
-#  shell: 'systemctl set-default graphical.target'
+- name: Install desktop programs
+  include: programs.yml

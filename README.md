@@ -27,7 +27,7 @@ These are the general aims for this project:
 * Security hardening
   * AppArmor or SELinux
   * Firewall
-* Built-in web proxy for safe surfing (squid + DansGuardian)
+* Built-in web proxy for safe surfing (squid + E2guardian)
 * Generalise for GNU/Linuxes other than Ubuntu
 * Games & apps
   * KTuberling/Potato Guy
