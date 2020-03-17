@@ -6,7 +6,7 @@ This repository contains an Ansible playbook for customising Linux to help users
 
 For prerequsites and usage instructions, refer to ```INSTALL.md```
 
--- Rob Pomeroy
+-- [Rob Pomeroy](https://pomeroy.me/contact "contact me via my website") | [Twitter](https://twitter.com/robpomeroy "reach me on Twitter") | [LinkedIn](https://linkedin/com/in/robpomeroy "connect via LinkedIn")
 
 ## Licence
 
