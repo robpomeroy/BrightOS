@@ -46,3 +46,9 @@
     privatekey_path: /etc/ssl/private/SNLSquid.key
     csr_path: /etc/ssl/SNLSquid.csr
 
+- name: Ensure /var/lib/squid exists
+  file:
+    path: /var/lib/squid
+    state: directory
+    mode: '0700'
+    owner: proxy
