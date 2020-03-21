@@ -2,7 +2,11 @@
 
 ## Introduction
 
-This repository contains an Ansible playbook for customising Linux to help users with special needs. The aim of this project is to create an Ansible build that converts a Linux installation into something suitable for users (particularly children) with special needs.
+The world of special needs is largely unseen - until you are thrust into it. This is the position my wife and I found ourselves in, in 2004, when she gave birth to our twins Morgan and James. Due to a [condition during pregnancy](https://en.wikipedia.org/wiki/Twin-to-twin_transfusion_syndrome) our boys both have profound special needs. Morgan has severe spastic cerebral palsy, is quadriplegic and vision impaired. James has severe learning difficulties, is on the autistic spectrum and suffers from anxiety.
+
+The following years have been a massive learning experience and, I hope, character building! What has become abundantly apparent is that there are gaps in the market, for all sorts of specialist provision. And that where specialist provision *does* exist, applying the label "disabled" or "adapated" to any product or service reduces its market and increases its cost, dramatically. (A specialist bath for Morgan comes in at £10,000, or thereabouts.)
+
+It does not have to be costly, to meet computing needs. This open source (free!) repository contains an [Ansible](https://www.ansible.com/) playbook for customising Linux to help users with special needs. The aim of this project is to create an Ansible build that converts a Linux installation into something suitable for users (particularly children) with special needs.
 
 For prerequsites and usage instructions, refer to ```INSTALL.md```
 
@@ -50,7 +54,7 @@ Ubuntu has a lot of traction, features and support. This makes it an ideal start
 
 Further down the line, other possibilities include:
 
-* Generalising this overall (orchestration) approach to build a reproducible framework for *other* single-purpose operating systems - education, ICS, healthcare, etc.
+* Generalising this overall (orchestration) approach to build a reproducible framework for *other* primary-purpose operating systems - education, ICS, healthcare, etc.
 * Build pipelines (CI/CD) to generate downloadable ISOs, for non-technical users.
 
 ## Sources for other ideas
@@ -70,3 +74,7 @@ There are some existing child-friendly Linux distributions. These do not focus o
 * Educado
 * UberStudent
 * UKnow4Kids
+
+## A note on the name
+
+With apologies, I do not have any appetite for [arguments about whether we should insist on calling the operating system "GNU/Linux"](https://en.wikipedia.org/wiki/GNU/Linux_naming_controversy). I certainly intend no disrespect to any of the people who have worked so hard, over so many years, to contribute to the many many packages that bring us a competent, modern and [free](https://en.wikipedia.org/wiki/Free_and_open-source_software) operating system.
