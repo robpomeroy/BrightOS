@@ -8,6 +8,12 @@ The following years have been a massive learning experience and, I hope, charact
 
 It does not have to be costly, to meet computing needs. This open source (free!) repository contains an [Ansible](https://www.ansible.com/) playbook for customising Linux to help users with special needs. The aim of this project is to create an Ansible build that converts a Linux installation into something suitable for users (particularly children) with special needs.
 
+Why Linux rather than Windows? Several reasons:
+
+* **Cost.** Open source licensing allows us to distribute the finished work at no cost to end users - who for the reasons above may aleady find their lives to be expensive!
+* **Simplicity.** Using open source software as a starting point avoids becoming bogged down in licensing issues.
+* **Familiarity.** I've been using Linux for over twenty years. I've worked with developers and picked up knowledge of orchestration and text-based configuration. It's much easier for me to achieve this project's goals with Linux.
+
 For prerequsites and usage instructions, refer to ```INSTALL.md```
 
 -- [Rob Pomeroy](https://pomeroy.me/contact "contact me via my website") | [Twitter](https://twitter.com/robpomeroy "reach me on Twitter") | [LinkedIn](https://linkedin/com/in/robpomeroy "connect via LinkedIn")
@@ -16,9 +22,9 @@ For prerequsites and usage instructions, refer to ```INSTALL.md```
 
 Why this playbook? Why this approach?
 
-1. **Longevity.** Many great, education-focused Linux distributions have started well but fizzled out. A low-maintenance strategy is key to survival of a project of this nature. An orchestration approach reduces much of the work normally associated to maintaining a single-purpose operating system, hence Ansible.
+1. **Accessible fun.** This project should enhance the lives of people who may otherwise struggle to use a computer.
 2. **Safety.** When preparing a computer environment for vulnerable people, their safety is of paramount importance.
-3. **Accessible fun.** This project should enhance the lives of people who may otherwise struggle to use a computer.
+3. **Longevity.** Many great, education-focused Linux distributions have started well but fizzled out. A low-maintenance strategy is key to survival of a project of this nature. An orchestration approach reduces much of the work normally associated to maintaining a single-purpose operating system, hence Ansible.
 
 ## Progress/state of development
 
