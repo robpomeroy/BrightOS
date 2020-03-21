@@ -12,7 +12,7 @@ For prerequsites and usage instructions, refer to ```INSTALL.md```
 
 Why this playbook? Why this approach?
 
-1. **Longevity.** Many great, education-focused Linux distributions have started well but fizzled out. A low-maintenance approach is key to survival of a project of this nature. An orchestration approach reduces much of the work normally associated to maintaining a single-purpose operating system, hence Ansible.
+1. **Longevity.** Many great, education-focused Linux distributions have started well but fizzled out. A low-maintenance strategy is key to survival of a project of this nature. An orchestration approach reduces much of the work normally associated to maintaining a single-purpose operating system, hence Ansible.
 2. **Safety.** When preparing a computer environment for vulnerable people, their safety is of paramount importance.
 3. **Accessible fun.** This project should enhance the lives of people who may otherwise struggle to use a computer.
 
