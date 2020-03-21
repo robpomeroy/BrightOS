@@ -52,3 +52,19 @@
     state: directory
     mode: '0700'
     owner: proxy
+
+- name: Configure SSL inspection exclusions
+  template:
+    src: "no-proxy-{{ item }}.conf.j2"
+    dest: "/etc/squid/no-proxy-{{ item }}.conf"
+    mode: '0644'
+  with_items:
+    - domains
+    - ips
+
+- name: Initialise Squid's certificate storage database
+  command: /usr/lib/squid/security_file_certgen -c -s /var/lib/squid/ssl_db -M 4MB
+  args:
+    creates: /var/lib/squid/ssl_db/index.txt
+  become: yes
+  become_user: proxy

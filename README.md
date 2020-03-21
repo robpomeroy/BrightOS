@@ -8,6 +8,18 @@ For prerequsites and usage instructions, refer to ```INSTALL.md```
 
 -- [Rob Pomeroy](https://pomeroy.me/contact "contact me via my website") | [Twitter](https://twitter.com/robpomeroy "reach me on Twitter") | [LinkedIn](https://linkedin/com/in/robpomeroy "connect via LinkedIn")
 
+## Goals
+
+Why this playbook? Why this approach?
+
+1. **Longevity.** Many great, education-focused Linux distributions have started well but fizzled out. A low-maintenance approach is key to survival of a project of this nature. An orchestration approach reduces much of the work normally associated to maintaining a single-purpose operating system, hence Ansible.
+2. **Safety.** When preparing a computer environment for vulnerable people, their safety is of paramount importance.
+3. **Accessible fun.** This project should enhance the lives of people who may otherwise struggle to use a computer.
+
+## Progress/state of development
+
+We're a long way from production-ready. Currently the playbook, starting from a bare-bones Ubuntu installation, sets up a KDE desktop with automatic passwordless login for a default user. The desktop environment is partially locked down. You'll see from the TODO list below there's a lot left... to do...
+
 ## Licence
 
 This work is licensed under GNU General Public License v3.0. See the ```LICENCE``` file for the text. I'm British, so yes, that's how I spell 'licence'. :-)
@@ -18,9 +30,7 @@ An ideal scenario would be to generalise this project so that it could work with
 
 Ubuntu has a lot of traction, features and support. This makes it an ideal starting point for this project. This Ansible playbook contains some RedHat-focused components; this is in the hope that KDE support becomes available in due course.
 
-## Wish list
-
-These are the general aims for this project:
+## TODO
 
 * Security hardening
     * AppArmor or SELinux
@@ -38,9 +48,14 @@ These are the general aims for this project:
     * Desktop background
     * Menu logo
 
-## Sources for ideas
+Further down the line, other possibilities include:
 
-See existing child-friendly Linux distributions:
+* Generalising this overall (orchestration) approach to build a reproducible framework for *other* single-purpose operating systems - education, ICS, healthcare, etc.
+* Build pipelines (CI/CD) to generate downloadable ISOs, for non-technical users.
+
+## Sources for other ideas
+
+There are some existing child-friendly Linux distributions. These do not focus on the needs of users with special needs (a cause dear to my heart) and many of them suffer from a lack of ongoing maintenance. Nevertheless, they are very useful sources of inspiration for this project.
 
 * Debian Edu/Skolelinux
 * DoudouLinux
