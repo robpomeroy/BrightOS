@@ -32,6 +32,6 @@ To work on this project, get in touch with Rob (see the README), who will set yo
 
 ## Contributing anything else
 
-Rob will be the first to admit he has absolutely no graphics design or marketing skills. Whatsoever. (He's not a developer either, for that matter. He's just a guy, with an idea.) All contributions are very welcome - desktop backgrounds, a project icon, web design, etc. Drop a note to Rob (see the README for contact details) and we'll work from there.
+Rob will be the first to admit he has absolutely no graphics design or marketing skills. Whatsoever. All contributions are very welcome - desktop backgrounds, a project icon, web design, etc. Drop a note to Rob (see the README for contact details) and we'll work from there.
 
 Thanks for your interest in Special Needs Linux!
