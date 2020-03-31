@@ -14,7 +14,7 @@ Why Linux rather than Windows? Several reasons:
 * **Simplicity.** Using open source software as a starting point avoids becoming bogged down in licensing issues.
 * **Familiarity.** I've been using Linux for over twenty years. I've worked with developers and picked up knowledge of orchestration and text-based configuration. It's much easier for me to achieve this project's goals with Linux.
 
-For prerequsites and usage instructions, refer to ```INSTALL.md```
+For prerequsites and usage instructions, refer to ```INSTALL.md``` in the ```docs``` directory. To learn how to get involved in the project, see the ```Development.md``` file.
 
 -- [Rob Pomeroy](https://pomeroy.me/contact "contact me via my website") | [Twitter](https://twitter.com/robpomeroy "reach me on Twitter") | [LinkedIn](https://linkedin/com/in/robpomeroy "connect via LinkedIn")
 
@@ -32,7 +32,7 @@ We're a long way from production-ready. Currently the playbook, starting from a 
 
 ## Licence
 
-This work is licensed under GNU General Public License v3.0. See the ```LICENCE``` file for the text. I'm British, so yes, that's how I spell 'licence'. :-)
+This work is licensed under GNU General Public License v3.0. See the ```LICENCE``` file in the ```docs``` directory for the text. I'm British, so yes, that's how I spell 'licence'. :-)
 
 ## Choice of base OS
 
