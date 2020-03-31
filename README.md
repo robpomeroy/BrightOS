@@ -32,7 +32,7 @@ We're a long way from production-ready. Currently the playbook, starting from a 
 
 ## Licence
 
-This work is licensed under GNU General Public License v3.0. See the ```LICENCE``` file in the ```docs``` directory for the text. I'm British, so yes, that's how I spell 'licence'. :-)
+This work is licensed under GNU General Public License v3.0. See the ```LICENCE``` file for the text. I'm British, so yes, that's how I spell 'licence'. :-)
 
 ## Choice of base OS
 
