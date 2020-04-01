@@ -11,7 +11,7 @@ Without recourse to commercial products, the project will reduce risks from
 malicious software. This will probably involve a combination of multiple
 security layers:
 
-* Proxies to limit access to low quality/high risk destination
+* Proxies to limit access to low quality/high risk destinations
 * Regularly (automatically) updated antivirus software with low impact scanning
 and realtime protection
 * Application whitelisting
