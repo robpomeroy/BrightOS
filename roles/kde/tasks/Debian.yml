@@ -1,10 +1,25 @@
 ---
 - name: KDE installation
   apt:
-    name: [kde-plasma-desktop, kdeaccessibility]
+    name: [kde-plasma-desktop, kdeaccessibility, sddm]
     state: latest
 
-#- name: Xnstall Xorg
-#  apt:
-#    name: xorg
-#    state: latest
+- name: Remove GDM3 - we're using SDDM
+  apt:
+    name: gdm3
+    state: absent
+    purge: yes
+
+# Note this doesn't apply if GDM3 is still present...
+- name: Set display manager to SDDM
+  copy:
+    src: etc/X11/default-display-manager
+    dest: /etc/X11/default-display-manager
+
+# See docs/Kiosk mode.md
+# Note: the search directories for loading the config files are stored in the $XDG_CONFIG_DIRS variable
+- name: Copy files for locked-down kiosk mode
+  copy:
+    src: etc/xdg/
+    dest: /etc/xdg/
+

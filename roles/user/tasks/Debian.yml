@@ -1,5 +1,7 @@
----
-- name: Set SNL user's shell (no shell use)
-  user:
-    name: "{{ snl_user }}"
-    shell: /usr/sbin/nologin
+- name: Give passwordless sudo to the 'sudo' group (validate with visudo program)
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%sudo'
+    line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+    validate: /sbin/visudo -cf %s

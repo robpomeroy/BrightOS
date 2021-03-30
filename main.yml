@@ -39,10 +39,10 @@
     - role: kde
       tags:
         - desktop
-    - role: proxy
-      tags:
-        - security
-        - proxy
+#    - role: proxy
+#      tags:
+#        - security
+#        - proxy
 #    - role: dev-sec.os-hardening
 #      tags:
 #        - security

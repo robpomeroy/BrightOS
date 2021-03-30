@@ -13,4 +13,3 @@
 
 - name: Include task list appropriate for OS family (Debian/RedHat)
   include: "{{ ansible_os_family }}.yml"  
-
