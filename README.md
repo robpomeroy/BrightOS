@@ -59,10 +59,8 @@ Why this playbook? Why this approach?
 
 ## Progress/state of development
 
-We're a long way from production-ready. Currently the playbook, starting from a
-bare-bones Ubuntu installation, sets up a KDE desktop with automatic
-passwordless login for a default user. The desktop environment is partially
-locked down. You'll see from the TODO list below there's a lot left... to do...
+We're a long way from production-ready. You'll see from the TODO list below
+there's a lot left... to do...
 
 ## Licence
 
