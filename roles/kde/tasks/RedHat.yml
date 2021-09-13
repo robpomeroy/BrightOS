@@ -1,5 +1,6 @@
 ---
-# KDE for CentoS 8.1 needs the EPEL repository. But note there are broken dependencies.
+# KDE for CentoS 8.1 needs the EPEL repository. But note there are broken
+# dependencies (as at March 2020).
 - name: Add EPEL repository
   dnf:
     name: epel-release

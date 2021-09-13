@@ -72,17 +72,11 @@ This work is licensed under GNU General Public License v3.0. See the
 
 ## Choice of base OS
 
-An ideal scenario would be to generalise this project so that it could work with
-almost any mainstream flavour GNU/Linux. At present however, it isn't possible
-to install KDE on the latest version of CentOS (8.1 at the time of writing). KDE
-is preferable, due to its built in kiosk framework, which lends itself to
-creating a safely locked-down environment. So that rules out
-CentOS/RedHat/Fedora for now.
-
-Ubuntu has a lot of traction, features and support. This makes it an ideal
-starting point for this project. This Ansible playbook contains some
-RedHat-focused components; this is in the hope that KDE support becomes
-available in due course.
+To support longevity, it is sensible to choose an open base operating system
+with a good track record and long-term prospects. At the same time, to give
+end users a degree of choice, it is helpful to select operating systems from
+more than one family of Linux. This playbook therefore targets Ubuntu, based on
+Debian, and Oracle Linux, based on Red Hat.
 
 ## Accessibility guidelines
 

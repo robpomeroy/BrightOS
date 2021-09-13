@@ -5,23 +5,15 @@
 You will need a machine from which to run Ansible. In addition, your target
 machine should meet the following requirements:
 
-* Ubuntu installed (preferably minimal, for the cleanest effects; I use Ubuntu
-  Server, 20.04)
-* OpenSSH installed (with Ubuntu, you can select this as an option during O/S
-  installation)
-* A user account set up, with a password and sudo capability (I use 'ansible';
-  Ubuntu automatically sets up sudo)
-* Public/private keys set up for this user (TODO: document this)
-* The latest version of Python installed (installed by default with Ubuntu
-  Server)
+* Ubuntu or Orcale Linux installed (preferably minimal, for the cleanest; I use
+  Ubuntu Server, 20.04 and Oracle Linux 8)
+* OpenSSH installed
+* A user account set up, with a password and sudo capability
+* Public/private keys set up for this user
+* The latest version of Python and Pip installed
 * An internet connection, to download the necessary additional packages
 
-Having installed your base operating system, it is recommended to run update
-fully; e.g. under Ubuntu:
-
-    sudo -i
-    apt update
-    apt -y upgrade
+Having installed your base operating system, it is recommended to update fully.
 
 ## Setup and run
 

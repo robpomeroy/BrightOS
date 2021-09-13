@@ -3,5 +3,5 @@ ansible_python_interpreter=/usr/bin/python3
 
 [targets]
 # Amend as required, based on how the host[s] you're configuring
-172.16.1.11 system_hostname=snl-ubuntu
-#10.0.0.109 system_hostname=snl-centos
+192.168.101.150 system_hostname=snl-ol8
+192.168.101.151 system_hostname=snl-u20
