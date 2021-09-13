@@ -2,6 +2,7 @@
 - name: Install minimal Gnome components
   dnf:
     name:
+      - gdm
       - gnome-session
     state: latest
 
