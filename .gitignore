@@ -1,1 +1,4 @@
 *.retry
+
+# Directory to store private things scuh as personal SSH setup
+/private
