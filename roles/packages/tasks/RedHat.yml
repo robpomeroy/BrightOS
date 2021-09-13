@@ -1,1 +1,46 @@
 ---
+# EPEL offers the excellent Micro editor and other useful packages
+- name: Enable the EPEL Repository
+  dnf:
+    name: epel-release
+    state: latest
+    update_cache: yes
+  when: ansible_facts['distribution']!='OracleLinux'
+    
+# Oracle has a different name for their version of EPEL
+- name: Enable the Oracle Linux EPEL Repository
+  dnf:
+    name: oracle-epel-release-el8
+    state: latest
+    update_cache: yes
+  when: ansible_facts['distribution']=='OracleLinux'
+
+# Note: fzf depends on perl and git
+- name: Install preferred packages
+  dnf:
+    name:
+      - git         # Needed, to install fzf
+      - micro       # Great text editor: https://github.com/zyedidia/micro
+      - perl        # Required by fzf
+      - python3     # Keeps Python up to date
+      - python3-pip # Keeps Pip up to date
+      - tmux        # "terminal multiplexer": https://github.com/tmux/tmux
+    state: latest
+    update_cache: yes
+
+# fzf is really useful, but isn't included in Red Hat's repos (not even EPEL).
+# You could install via snap, but there's not official release and no guarantee
+# the snap would be up to date. So we install from GitHub.
+- name: Clone fzf from GitHub
+  ansible.builtin.git:
+    repo: https://github.com/junegunn/fzf.git
+    depth: 1
+    dest: /opt/fzf
+    version: HEAD
+  register: fzfInstall
+
+- name: Install fzf
+  command:
+      cmd: /opt/fzf/install --no-key-bindings --no-completion --no-update-rc
+      chdir: /opt/fzf
+  when: fzfInstall.changed

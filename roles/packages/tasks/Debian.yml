@@ -1,7 +1,12 @@
 ---
-#- name: Install simple, no config packages
-#  apt:
-#    name: ['ansible', 'python-apt'] # not convinced we need to install these; check with full reinstall
-#    state: latest
-#  tags:
-#    - init
+# Note: fzf needs perl (and git for the installation)
+- name: Install preferred packages
+  apt:
+    name:
+      - fzf         # Fuzzy find - very useful: https://github.com/junegunn/fzf
+      - micro       # Great text editor: https://github.com/zyedidia/micro
+      - python3     # Keeps Python up to date
+      - python3-pip # Keeps Pip up to date
+      - tmux        # "terminal multiplexer": https://github.com/tmux/tmux
+    state: latest
+    update_cache: yes

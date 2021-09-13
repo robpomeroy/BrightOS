@@ -25,8 +25,20 @@
       tags:
         - init
 
-  # Additional roles, including third party requirements
   roles:
+    # Security, including external hardening roles
+    - role: devsec.hardening.os_hardening
+      tags:
+        - security
+    - role: devsec.hardening.ssh_hardening
+      vars:
+        sftp_enabled: true # Ansible prefers to use SFTP to copy files
+        sftp_chroot: false
+      tags:
+        - security
+    - role: selinux
+      tags: security
+
     - role: packages
       tags:
         - init

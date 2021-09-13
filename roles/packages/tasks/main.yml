@@ -1,3 +1,23 @@
+---
 - name: Include task list appropriate for OS family (Debian/RedHat)
   include: "{{ ansible_os_family }}.yml"  
 
+- name: Copy .fzf.bash for root and ansible playbook users
+  copy:
+    src: .fzf.bash
+    dest: '{{ item }}/.fzf.bash'
+    mode: 0644
+  with_items:
+    - /root
+    - /home/{{ ansible_ssh_user }}
+
+# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+- name: Ensure fzf.bash is loaded for root and ansible playbook user
+  lineinfile:
+    path: "{{ item }}/.bashrc"
+    # Double backslashes needed, since backslash is a special character in YAML
+    regexp: "\\[ -f ~/\\.fzf\\.bash \\] && source ~/\\.fzf\\.bash"
+    line: "[ -f ~/.fzf.bash ] && source ~/.fzf.bash"
+  with_items:
+    - /root
+    - "/home/{{ ansible_ssh_user }}"

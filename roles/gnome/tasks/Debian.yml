@@ -1,0 +1,6 @@
+---
+- name: Install minimal Gnome components
+  apt:
+    name:
+      - gnome-session
+    state: latest

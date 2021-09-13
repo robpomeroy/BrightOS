@@ -1,0 +1,23 @@
+---
+# Ansible management of SE flags depends on these
+- name: Install Python packages needed for SELinux 
+  dnf:
+    name:
+      - python3-libselinux
+      - python3-libsemanage
+    state: latest
+
+- name: Install SELinux management packages
+  dnf:
+    name:
+      - policycoreutils-python-utils
+      - setools-console
+      - setroubleshoot-server
+    state: latest
+    update_cache: yes
+
+- name: Set SELinux to enforcing mode (targeted policy)
+  selinux:
+    policy: targeted
+    # Choose enforcing or permissive; reboot needed when changing
+    state: enforcing

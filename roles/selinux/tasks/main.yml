@@ -1,0 +1,10 @@
+---
+# Generally to debug SELinux problems, see /var/log/audit and /var/log/messages.
+- name: Include task list appropriate for OS family (Debian/RedHat)
+  include: "{{ ansible_os_family }}.yml"  
+
+#- name: Enable httpd_can_network_connect, persistent
+#  ansible.posix.seboolean:
+#    name: httpd_can_network_connect
+#    state: yes
+#    persistent: yes

@@ -2,3 +2,5 @@
 # The DevSec OS & SSH hardening playbooks
 - src: dev-sec.os-hardening
 - src: dev-sec.ssh-hardening
+# Posix required for SELinux role
+- src: ansible.posix

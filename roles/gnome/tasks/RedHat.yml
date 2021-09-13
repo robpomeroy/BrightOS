@@ -1,0 +1,18 @@
+---
+- name: Install minimal Gnome components
+  dnf:
+    name:
+      - gnome-session
+    state: latest
+
+# With Red Hat distros, merely installing the bare Gnome environment doesn't
+# result in automatic boot to GUI. For this we need to change the default
+# target of systemd.
+- name: Get default systemd target
+  command: systemctl get-default
+  register: default_target
+  changed_when: false
+
+- name: Change default target to graphical.target
+  command: systemctl set-default graphical.target
+  when: default_target.stdout_lines[0] != "graphical.target"
