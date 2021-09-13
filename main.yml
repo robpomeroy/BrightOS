@@ -36,7 +36,7 @@
     - role: user
       tags:
         - init
-    - role: kde
+    - role: gnome
       tags:
         - desktop
 #    - role: proxy

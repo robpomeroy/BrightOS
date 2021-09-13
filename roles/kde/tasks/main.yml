@@ -1,4 +1,7 @@
 ---
+# NOTE: deprecating the KDE role. Was only using it becase of kiosk mocde, which
+# turns out to be poorly documented/supported. Switching to Gnome/dconf
+# restrictions.
 - name: Include task list appropriate for OS family (Debian/RedHat)
   include: "{{ ansible_os_family }}.yml"  
 

@@ -95,6 +95,7 @@ not necessarily meet all guidelines.
 
 ## TODO
  
+* Implement restricted shell: https://ostechnix.com/how-to-limit-users-access-to-the-linux-system/
 * Security hardening
     * AppArmor or SELinux
     * Firewall
