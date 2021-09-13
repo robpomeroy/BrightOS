@@ -2,8 +2,7 @@
 - name: Install minimal Gnome components
   dnf:
     name:
-      - gdm
-      - gnome-session
+      - "@GNOME"
     state: latest
 
 # With Red Hat distros, merely installing the bare Gnome environment doesn't
