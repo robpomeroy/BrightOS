@@ -21,6 +21,7 @@
     name:
       - git         # Needed, to install fzf
       - micro       # Great text editor: https://github.com/zyedidia/micro
+      - mlocate     # File finder: https://pagure.io/mlocate
       - perl        # Required by fzf
       - python3     # Keeps Python up to date
       - python3-pip # Keeps Pip up to date
