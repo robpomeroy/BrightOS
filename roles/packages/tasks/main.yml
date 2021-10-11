@@ -9,7 +9,7 @@
     mode: 0644
   with_items:
     - /root
-    - /home/{{ ansible_ssh_user }}
+    - /home/{{ lookup('env', 'USER') }}
 
 # [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 - name: Ensure fzf.bash is loaded for root and ansible playbook user
@@ -20,4 +20,4 @@
     line: "[ -f ~/.fzf.bash ] && source ~/.fzf.bash"
   with_items:
     - /root
-    - "/home/{{ ansible_ssh_user }}"
+    - /home/{{ lookup('env', 'USER') }}
