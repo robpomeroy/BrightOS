@@ -1,6 +1,9 @@
 ---
-# The DevSec OS & SSH hardening playbooks
-- src: dev-sec.os-hardening
-- src: dev-sec.ssh-hardening
-# Posix required for SELinux role
-- src: ansible.posix
+roles:
+  # The DevSec OS & SSH hardening playbooks
+  - name: dev-sec.os-hardening
+  - name: dev-sec.ssh-hardening
+  
+collections:
+  # Posix required for SELinux role
+  - name: ansible.posix
