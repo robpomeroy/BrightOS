@@ -22,44 +22,29 @@
     - name: Set time zone
       timezone:
         name: "{{ server_timezone }}"
-      tags:
-        - init
+      tags: [timezone, init]
 
   roles:
     # Security, including external hardening roles
     - role: dev-sec.os-hardening
-      tags:
-        - security
+      tags: [devsecos, security]
     - role: dev-sec.ssh-hardening
       vars:
         sftp_enabled: true # Ansible prefers to use SFTP to copy files
         sftp_chroot: false
-      tags:
-        - security
+      tags: [devsecssh, security]
     - role: selinux
-      tags: security
+      tags: [selinux, security]
 
     - role: packages
-      tags:
-        - init
+      tags: [packages, init]
     - role: name
-      tags:
-        - init
+      tags: [name, init]
     - role: user
-      tags:
-        - init
+      tags: [user, init]
     - role: gnome
-      tags:
-        - desktop
+      tags: [gnome, desktop]
 #    - role: proxy
 #      tags:
 #        - security
 #        - proxy
-#    - role: dev-sec.os-hardening
-#      tags:
-#        - security
-#    - role: dev-sec.ssh-hardening
-#      vars:
-#        sftp_enabled: true
-#      tags:
-#        - security
