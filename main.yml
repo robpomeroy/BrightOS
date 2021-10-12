@@ -27,10 +27,10 @@
 
   roles:
     # Security, including external hardening roles
-    - role: devsec.hardening.os_hardening
+    - role: dev-sec.os-hardening
       tags:
         - security
-    - role: devsec.hardening.ssh_hardening
+    - role: dev-sec.ssh-hardening
       vars:
         sftp_enabled: true # Ansible prefers to use SFTP to copy files
         sftp_chroot: false
