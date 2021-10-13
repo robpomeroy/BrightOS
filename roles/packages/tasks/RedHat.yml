@@ -30,7 +30,7 @@
     update_cache: yes
 
 # fzf is really useful, but isn't included in Red Hat's repos (not even EPEL).
-# You could install via snap, but there's not official release and no guarantee
+# You could install via snap, but there's no official release and no guarantee
 # the snap would be up to date. So we install from GitHub.
 - name: Clone fzf from GitHub
   ansible.builtin.git:
