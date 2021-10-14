@@ -4,12 +4,27 @@
     name: "{{ snl_user }}"
     state: present
 
+# This will generate a warning about not using a hashed password, which is fine
 - name: Create SNL default user (which logs in automatically) with no password
   user:
     name: "{{ snl_user }}"
     group: "{{ snl_user }}"
     state: present
-    shell: /usr/sbin/nologin
+    # Gnome will not start properly on RHEL distributions if you set shell to
+    # /usr/sbin/nologin.
+    shell: /bin/bash
+    # This is a null password, generated with:
+    #     ansible all -i localhost, -m debug -a "msg={{ '' | password_hash('sha512', 'saltForThis') }}"
+    # (on the Ansible control node).
+    # You could alternatively use the known working null hash of "U6aMy0wojraho"
+    # but doing this:
+    #    password: U6aMy0wojraho
+    # causing Ansible to generate a warning.
+    password: "$6$saltForThis$ths/FAG0wM2Lkn8XAlS3pDLXoEsWAuQTw2z8uZQOkgZueFQWX9fCsgfTu6ZVMSrvMzkb52emoI3f6WG3.VbTH."
+    # This null password should not expire
+    password_expire_max: -1
+    # This prevents the user from changing the password; minimum age ~ 274 years
+    password_expire_min: 99999
 
 - name: Include task list appropriate for OS family (Debian/RedHat)
   include: "{{ ansible_os_family }}.yml"  

@@ -4,6 +4,7 @@
   apt:
     name:
       - fzf         # Fuzzy find - very useful: https://github.com/junegunn/fzf
+      - htop        # Superior to top: https://github.com/htop-dev/htop
       - micro       # Great text editor: https://github.com/zyedidia/micro
       - mlocate     # File finder: https://pagure.io/mlocate
       - python3     # Keeps Python up to date
@@ -11,3 +12,10 @@
       - tmux        # "terminal multiplexer": https://github.com/tmux/tmux
     state: latest
     update_cache: yes
+
+# hv_kvp_daemon isn't needed (usually) and causes a delay on VM boot
+- name: Disable Hyper-V Key Value Pair daemon
+  service:
+    name: hv-kvp-daemon
+    enabled: no
+    state: stopped

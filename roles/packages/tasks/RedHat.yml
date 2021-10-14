@@ -20,6 +20,7 @@
   dnf:
     name:
       - git         # Needed, to install fzf
+      - htop        # Superior to top: https://github.com/htop-dev/htop
       - micro       # Great text editor: https://github.com/zyedidia/micro
       - mlocate     # File finder: https://pagure.io/mlocate
       - perl        # Required by fzf
