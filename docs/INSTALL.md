@@ -24,8 +24,9 @@ In brief (TODO: expand):
 2. In the `ansible.cfg` file, specify your username on the machine to be
    configured and the path for `private_key_file`
 3. Enter your target machine[s] DNS name[s] or IP address[es] into `inventory`
-4. On your Ansible control machine, run `ansible-galaxy install -r
-   requirements.yml` to pull down the required external roles
+4. On your Ansible control machine, run
+   `ansible-galaxy install -r requirements.yml` to pull down the required
+   external roles
 5. Run `ansible-playbook main.yml --ask-become-pass` (once you've run the
    playbook, the default sudo group is given passwordless sudo, so you can drop
    the "`--ask-become-pass`" after that)
