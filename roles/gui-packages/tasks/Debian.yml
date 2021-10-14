@@ -3,7 +3,7 @@
   apt:
     name:
       - gcompris-qt
-      - gcompris-data
+      - gcompris-qt-data
       - tuxpaint
       - tuxpaint-data
     state: latest
