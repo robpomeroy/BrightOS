@@ -4,19 +4,3 @@
     name:
       - gnome-session
     state: latest
-
-- name: Enable GDM's automatic login feature
-  community.general.ini_file:
-    path: /etc/gdm3/custom.conf
-    section: daemon
-    option: AutomaticLoginEnable
-    value: "True"
-    no_extra_spaces: yes
-
-- name: Enable automatic login for SNL user
-  community.general.ini_file:
-    path: /etc/gdm3/custom.conf
-    section: daemon
-    option: AutomaticLogin
-    value: "{{ snl_user }}"
-    no_extra_spaces: yes

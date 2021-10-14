@@ -1,6 +1,22 @@
 - name: Include task list appropriate for OS family (Debian/RedHat)
   include: "{{ ansible_os_family }}.yml"  
 
+- name: Enable GDM's automatic login feature
+  community.general.ini_file:
+    path: "/etc/gdm{{ (ansible_os_family == 'RedHat') | ternary('', '3') }}/custom.conf"
+    section: daemon
+    option: AutomaticLoginEnable
+    value: "True"
+    no_extra_spaces: yes
+
+- name: Enable automatic login for SNL user
+  community.general.ini_file:
+    path: "/etc/gdm{{ (ansible_os_family == 'RedHat') | ternary('', '3') }}/custom.conf"
+    section: daemon
+    option: AutomaticLogin
+    value: "{{ snl_user }}"
+    no_extra_spaces: yes
+
 - name: Disable Gnome Initial Setup screen
   ini_file:
     path: /etc/xdg/autostart/gnome-initial-setup-first-login.desktop

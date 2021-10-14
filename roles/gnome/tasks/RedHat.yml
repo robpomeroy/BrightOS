@@ -16,19 +16,3 @@
 - name: Change default target to graphical.target
   command: systemctl set-default graphical.target
   when: default_target.stdout_lines[0] != "graphical.target"
-
-- name: Enable GDM's automatic login feature
-  community.general.ini_file:
-    path: /etc/gdm/custom.conf
-    section: daemon
-    option: AutomaticLoginEnable
-    value: "True"
-    no_extra_spaces: yes
-
-- name: Enable automatic login for SNL user
-  community.general.ini_file:
-    path: /etc/gdm/custom.conf
-    section: daemon
-    option: AutomaticLogin
-    value: "{{ snl_user }}"
-    no_extra_spaces: yes
