@@ -27,6 +27,8 @@
   roles:
     # Security, including external hardening roles
     - role: dev-sec.os-hardening
+      vars:
+        os_filesystem_whitelist: squashfs # Needed for Snaps
       tags: [devsecos, security]
     - role: dev-sec.ssh-hardening
       vars:
@@ -44,6 +46,8 @@
       tags: [user, init]
     - role: gnome
       tags: [gnome, desktop]
+    - role: gui-packages
+      tags: [gui-packages, desktop]
 #    - role: proxy
 #      tags:
 #        - security

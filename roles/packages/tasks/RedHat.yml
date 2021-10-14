@@ -15,6 +15,24 @@
     update_cache: yes
   when: ansible_facts['distribution']=='OracleLinux'
 
+# CodeReady repo is needed for certain packages
+- name: Enable the Red Hat CodeReady Repository
+  ini_file:
+    dest: /etc/yum.repos.d/redhat.repo
+    section: codeready-builder-for-rhel-8-x86_64-rpms
+    option: enabled
+    value: "1"
+    no_extra_spaces: yes
+  when: ansible_facts['distribution']!='OracleLinux'
+- name: Enable the Oracle CodeReady Repository
+  ini_file:
+    dest: /etc/yum.repos.d/oracle-linux-ol8.repo
+    section: ol8_codeready_builder
+    option: enabled
+    value: "1"
+    no_extra_spaces: yes
+  when: ansible_facts['distribution']=='OracleLinux'
+
 # Note: fzf depends on perl and git
 - name: Install preferred packages
   dnf:

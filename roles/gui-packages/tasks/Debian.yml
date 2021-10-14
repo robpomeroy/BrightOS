@@ -1,0 +1,10 @@
+---
+- name: Install GUI packages
+  apt:
+    name:
+      - gcompris-qt
+      - gcompris-data
+      - tuxpaint
+      - tuxpaint-data
+    state: latest
+    update_cache: yes
