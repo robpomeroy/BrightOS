@@ -1,2 +1,13 @@
 - name: Include task list appropriate for OS family (Debian/RedHat)
   include: "{{ ansible_os_family }}.yml"  
+
+- name: Disable Gnome Initial Setup screen
+  ini_file:
+    path: /etc/xdg/autostart/gnome-initial-setup-first-login.desktop
+    section: Desktop Entry
+    option: X-GNOME-Autostart-enabled
+    value: "false"
+    owner: root
+    group: root
+    mode: 0644
+    no_extra_spaces: yes
