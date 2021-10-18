@@ -1,0 +1,41 @@
+---
+- name: Install the 'user' dconf profile
+  copy:
+    src: user
+    dest: /etc/dconf/profile/user
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create dconf 'local' db directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+    - /etc/dconf/db/local.d
+    - /etc/dconf/db/local.d/locks
+
+- name: Copy dconf key settings files
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/dconf/db/local.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - 00-session
+  notify: Update dconf databases
+
+- name: Copy dconf lock files
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/dconf/db/local.d/locks/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - session
+  notify: Update dconf databases

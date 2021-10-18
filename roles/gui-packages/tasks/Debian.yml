@@ -4,6 +4,7 @@
     name:
       - gcompris-qt
       - gcompris-qt-data
+      - ktuberling
       - tuxpaint
       - tuxpaint-data
     state: latest

@@ -46,6 +46,9 @@
       tags: [user, init]
     - role: gnome
       tags: [gnome, desktop]
+    # dconf is used to lock down the desktop
+    - role: dconf
+      tags: [dconf, desktop]
     - role: gui-packages
       tags: [gui-packages, desktop]
 #    - role: proxy

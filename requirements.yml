@@ -7,3 +7,5 @@ roles:
 collections:
   # Posix required for SELinux role
   - name: ansible.posix
+  # For dconf
+  - name: community.general

@@ -37,14 +37,15 @@
 - name: Install preferred packages
   dnf:
     name:
-      - git         # Needed, to install fzf
-      - htop        # Superior to top: https://github.com/htop-dev/htop
-      - micro       # Great text editor: https://github.com/zyedidia/micro
-      - mlocate     # File finder: https://pagure.io/mlocate
-      - perl        # Required by fzf
-      - python3     # Keeps Python up to date
-      - python3-pip # Keeps Pip up to date
-      - tmux        # "terminal multiplexer": https://github.com/tmux/tmux
+      - git            # Needed, to install fzf
+      - htop           # Superior to top: https://github.com/htop-dev/htop
+      - micro          # Great text editor: https://github.com/zyedidia/micro
+      - mlocate        # File finder: https://pagure.io/mlocate
+      - perl           # Required by fzf
+      - python3        # Keeps Python up to date
+      - python3-pip    # Keeps Pip up to date
+      - python3-psutil # Required, to Ansible manage dconf
+      - tmux           # "terminal multiplexer": https://github.com/tmux/tmux
     state: latest
     update_cache: yes
 

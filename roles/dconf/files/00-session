@@ -1,0 +1,3 @@
+[org/gnome/desktop/session]
+# Disable lock screen timeout
+idle-delay=0
