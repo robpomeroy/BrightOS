@@ -93,10 +93,11 @@ not necessarily meet all guidelines.
 
 ## TODO
  
+* Detailed dconf lockdown. Paths of interest:
+    * org.gnome.desktop.a11y (accessibility)
+    * org.gnome.desktop.privacy
+    * system.proxy
 * Implement restricted shell: https://ostechnix.com/how-to-limit-users-access-to-the-linux-system/
-* Security hardening
-    * AppArmor or SELinux
-    * Firewall
 * Built-in web proxy for safe surfing (squid + E2guardian)
 * Generalise for GNU/Linuxes other than Ubuntu
 * Games & apps

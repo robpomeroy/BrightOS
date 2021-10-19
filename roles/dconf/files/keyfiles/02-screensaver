@@ -1,0 +1,5 @@
+[org/gnome/desktop/screensaver]
+lock-enabled=false
+# Harmless for this key to exist on non-Ubuntu systems
+ubuntu-lock-on-suspend=false
+user-switch-enabled=false

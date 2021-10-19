@@ -1,0 +1,7 @@
+# Lock lockdown settings
+/org/gnome/desktop/lockdown/disable-command-line
+/org/gnome/desktop/lockdown/disable-lock-screen
+/org/gnome/desktop/lockdown/disable-log-out
+/org/gnome/desktop/lockdown/disable-user-switching
+/org/gnome/desktop/lockdown/user-administration-disabled
+

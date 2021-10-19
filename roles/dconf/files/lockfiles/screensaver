@@ -1,0 +1,4 @@
+# Lock screensaver settings
+/org/gnome/desktop/screensaver/lock-enabled
+/org/gnome/desktop/screensaver/ubuntu-lock-on-suspend
+/org/gnome/desktop/screensaver/user-switch-enabled

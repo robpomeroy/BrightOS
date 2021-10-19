@@ -1,0 +1,7 @@
+[org/gnome/software]
+download-updates-notify=false
+enable-repos-dialog=false
+first-run=false
+prompt-for-nonfree=false
+show-nonfree-prompt=false
+show-nonfree-ui=false
