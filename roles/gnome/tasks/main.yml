@@ -27,3 +27,19 @@
     group: root
     mode: 0644
     no_extra_spaces: yes
+
+# Not strictly Gnome-related, but no need for a separate role just for this
+- name: Create /etc/X11/xorg.conf.d directory
+  file:
+    path: /etc/X11/xorg.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+- name: Disable switching virtual terminals
+  copy:
+    src: 10-xorg.conf
+    dest: /etc/X11/xorg.conf.d/10-xorg.conf
+    owner: root
+    group: root
+    mode: 0644
