@@ -28,6 +28,7 @@
     mode: 0644
     no_extra_spaces: yes
 
+# The applications listed may or may not be installed (depending on distro)
 - name: Hide unnecessary application icons
   ini_file:
     path: "/usr/share/applications/{{ item }}"
@@ -35,7 +36,6 @@
     option: NoDisplay
     value: "true"
     no_extra_spaces: yes
-    create: no
   loop:
     - byobu.desktop
     - htop.desktop
