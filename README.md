@@ -59,8 +59,10 @@ Why this playbook? Why this approach?
 
 ## Progress/state of development
 
-We're a long way from production-ready. You'll see from the TODO list below
-there's a lot left... to do...
+The playbook converts a minimal Ubuntu 20.04 or Oracle Linux 8 installation into
+a simple, passwordless, Gnome-based desktop environment, with a few applications
+installed. It is ready for testing and feedback, but there is much work left to
+do, as can be seen from the TODO list below.
 
 ## Licence
 
@@ -94,16 +96,16 @@ not necessarily meet all guidelines.
 
 ## TODO
  
-* Detailed dconf lockdown. Paths of interest:
-    * org.gnome.desktop.a11y (accessibility)
-    * org.gnome.desktop.privacy
-    * system.proxy
-* Implement restricted shell: https://ostechnix.com/how-to-limit-users-access-to-the-linux-system/
 * Built-in web proxy for safe surfing (squid + E2guardian)
 * Games & apps
     * TuxMath
     * KDE Edu Suite
     * Tux Paint
+* Detailed dconf lockdown. Paths of interest:
+    * org.gnome.desktop.a11y (accessibility)
+    * org.gnome.desktop.privacy
+    * system.proxy
+* Implement restricted shell: https://ostechnix.com/how-to-limit-users-access-to-the-linux-system/
 * Project-specific customisation
     * Plymouth boot screen
     * Desktop background
