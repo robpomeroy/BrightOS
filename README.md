@@ -74,7 +74,8 @@ To support longevity, it is sensible to choose an open base operating system
 with a good track record and long-term prospects. At the same time, to give
 end users a degree of choice, it is helpful to select operating systems from
 more than one family of Linux. This playbook therefore targets Ubuntu, based on
-Debian, and Oracle Linux, based on Red Hat.
+Debian, and Oracle Linux, based on Red Hat. It may run on other related distros,
+but I have not tested that.
 
 ## Accessibility guidelines
 
@@ -99,10 +100,7 @@ not necessarily meet all guidelines.
     * system.proxy
 * Implement restricted shell: https://ostechnix.com/how-to-limit-users-access-to-the-linux-system/
 * Built-in web proxy for safe surfing (squid + E2guardian)
-* Generalise for GNU/Linuxes other than Ubuntu
 * Games & apps
-    * KTuberling/Potato Guy
-    * GCompris
     * TuxMath
     * KDE Edu Suite
     * Tux Paint

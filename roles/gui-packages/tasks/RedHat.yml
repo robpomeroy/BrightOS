@@ -54,8 +54,14 @@
     - SDL_Pango-0.1.2-21.el8.x86_64.rpm
     - tuxpaint-0.9.26-1.el8.x86_64.rpm
 
-- name: Install GUI snap packages
+- name: Install GUI snap packages (slow process!)
   community.general.snap:
     name:
       - gcompris
       - ktuberling
+
+- name: Install GUI packages
+  dnf:
+    name:
+      - firefox
+    state: latest

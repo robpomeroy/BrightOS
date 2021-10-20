@@ -28,6 +28,20 @@
     mode: 0644
     no_extra_spaces: yes
 
+- name: Hide unnecessary application icons
+  ini_file:
+    path: "/usr/share/applications/{{ item }}"
+    section: "Desktop Entry"
+    option: NoDisplay
+    value: "true"
+    no_extra_spaces: yes
+    create: no
+  loop:
+    - byobu.desktop
+    - htop.desktop
+    - info.desktop
+    - vim.desktop
+
 # Not strictly Gnome-related, but no need for a separate role just for this
 - name: Create /etc/X11/xorg.conf.d directory
   file:

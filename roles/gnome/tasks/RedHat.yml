@@ -1,13 +1,59 @@
 ---
-- name: Install Gnome
+# Installing the "@Workstation" group gives us Gnome, but also a lot of other
+# packages we probably don't need. So we install Gnome components individually.
+- name: Install packages for Gnome
   dnf:
     name:
-      - "@Workstation"
+      - at-spi2-atk
+      - at-spi2-core
+      - dconf
+      - fprintd-pam
+      - gdm
+      - glib-networking
+      - gnome-bluetooth
+      - gnome-calculator
+      - gnome-classic-session
+      - gnome-initial-setup
+      - gnome-getting-started-docs
+      - gnome-session
+      - gnome-settings-daemon
+      - gnome-shell
+      - gnome-themes-standard
+      - initial-setup-gui
+      - libcanberra-gtk3 # GTK bindings for sound event library
+      - librsvg2 # SVG library
+      - libsane-hpaio # SANE driver for HP MFD scanners
+      - mesa-dri-drivers
+      - mousetweaks
+      - nautilus
+      - polkit
+      - sane-backends-drivers-scanners
+      # Other packages that may also be of interest:
+      #- baobab # Disk Usage Analyzer
+      #- eog # Eye of Gnome image viewer
+      #- evince # Document viewer
+      #- evince-nautilus
+      #- file-roller # Gnome Archive Manager
+      #- gnome-control-center
+      #- gnome-disk-utility
+      #- gnome-font-viewer
+      #- gnome-logs
+      #- gnome-session-wayland-session
+      #- gnome-session-xsession
+      #- gvfs-afc
+      #- gvfs-afp
+      #- gvfs-archive
+      #- gvfs-fuse
+      #- gvfs-goa
+      #- gvfs-gphoto2
+      #- gvfs-mtp
+      #- gvfs-smb
+      #- nautilus-sendto
     state: latest
 
-# With Red Hat distros, merely installing the bare Gnome environment doesn't
-# result in automatic boot to GUI. For this we need to change the default
-# target of systemd.
+# With Red Hat-based distros, merely installing the bare Gnome environment
+# doesn't result in automatic boot to GUI. For this we need to change the
+# default target of systemd.
 - name: Get default systemd target
   command: systemctl get-default
   register: default_target

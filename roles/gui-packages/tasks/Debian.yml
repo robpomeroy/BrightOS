@@ -2,6 +2,7 @@
 - name: Install GUI packages
   apt:
     name:
+      - firefox
       - gcompris-qt
       - gcompris-qt-data
       - ktuberling

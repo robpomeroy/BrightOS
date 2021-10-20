@@ -1,0 +1,12 @@
+---
+- name: Start firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Start ufw
+  service:
+    name: ufw
+    state: started
+    enabled: yes

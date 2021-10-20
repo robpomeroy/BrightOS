@@ -1,0 +1,27 @@
+---
+## ESSENTIALS
+
+# Firewalld is available by default, but just to be sure:
+- name: Install firewalld
+  dnf:
+    name: firewalld
+    state: latest
+    update_cache: yes
+  notify: Start firewalld
+
+- name: Allow SSH through firewall
+  firewalld:
+    service: ssh
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+## ALL OTHER RULES
+
+# - name: Allow HTTP and HTTPS through firewall
+#   firewalld:
+#     service: '{{ item }}'
+#     state: enabled
+#     permanent: yes
+#     immediate: yes
+#   loop: [http, https]

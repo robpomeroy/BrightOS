@@ -1,0 +1,26 @@
+---
+## ESSENTIALS
+
+- name: Install ufw
+  apt:
+    name: ufw
+    state: latest
+    update_cache: yes
+  notify: Start ufw
+
+- name: Allow SSH through firewall
+  ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Enable ufw
+  ufw:
+    state: enabled
+
+## ALL OTHER RULES
+
+# - name: Allow HTTP and HTTPS through firewall
+#   ufw:
+#     rule: allow
+#     port: "{{ item }}"
+#   loop: [http, https]

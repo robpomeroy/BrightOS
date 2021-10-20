@@ -37,6 +37,8 @@
       tags: [devsecssh, security]
     - role: selinux
       tags: [selinux, security]
+    - role: firewall
+      tags: [firewall, security]
 
     - role: packages
       tags: [packages, init]

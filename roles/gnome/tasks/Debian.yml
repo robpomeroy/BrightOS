@@ -1,6 +1,9 @@
 ---
-- name: Install minimal Gnome components
+- name: Install Gnome
   apt:
     name:
+      - gnome-calculator
       - gnome-session
+      - gnome-themes-standard
+      - nautilus
     state: latest
