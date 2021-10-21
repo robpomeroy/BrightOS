@@ -1,0 +1,3 @@
+# Lock power settings
+org.gnome.settings-daemon.plugins.power.sleep-inactive-ac-timeout
+org.gnome.settings-daemon.plugins.power.sleep-inactive-ac-type

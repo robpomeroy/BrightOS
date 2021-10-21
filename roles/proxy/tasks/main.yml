@@ -1,4 +1,49 @@
 ---
+# The proxy will be for local access only, so no firewall configuration required
 - name: Include task list appropriate for OS family (Debian/RedHat)
   include: "{{ ansible_os_family }}.yml"  
 
+- name: Copy config file
+  template:
+    src: privoxy.config.j2
+    dest: /etc/privoxy/config
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable privoxy
+  service:
+    name: privoxy
+    enabled: yes
+    state: started
+
+- name: Configure environment-wide proxy
+  lineinfile:
+    path: /etc/environment
+    regex: "^{{ item }}="
+    line: "{{ item }}=http://127.0.0.1:8118"
+  loop:
+    - http_proxy
+    - https_proxy
+
+- name: Disable proxy for local addresses
+  lineinfile:
+    path: /etc/environment
+    regex: "^no_proxy="
+    line: no_proxy=localhost,127.0.0.1
+
+- name: Create Firefox policies directory
+  file:
+    path: /etc/firefox/policies
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Set Firefox proxy policy
+  copy:
+    src: firefox.policies.json
+    dest: /etc/firefox/policies/policies.json
+    owner: root
+    group: root
+    mode: 0644

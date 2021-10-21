@@ -1,0 +1,11 @@
+{
+  "policies": {
+    "Proxy": {
+      "Mode": "manual",
+      "Locked": true,
+      "HTTPProxy": "127.0.0.1:8118",
+      "UseHTTPProxyForAllProtocols": true,
+      "UseProxyForDNS": false
+    }
+  }
+}

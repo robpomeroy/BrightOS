@@ -96,7 +96,7 @@ not necessarily meet all guidelines.
 
 ## TODO
  
-* Built-in web proxy for safe surfing (squid + E2guardian)
+* Built-in content filter/proxy for safe surfing (privoxy)
 * Games & apps
     * TuxMath
     * KDE Edu Suite

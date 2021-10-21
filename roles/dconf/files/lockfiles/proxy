@@ -1,0 +1,6 @@
+# Lock proxy settings
+org.gnome.system.proxy.mode
+org.gnome.system.proxy.http.host
+org.gnome.system.proxy.http.port
+org.gnome.system.proxy.https.host
+org.gnome.system.proxy.https.port

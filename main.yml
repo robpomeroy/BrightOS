@@ -53,7 +53,5 @@
       tags: [dconf, desktop]
     - role: gui-packages
       tags: [gui-packages, desktop]
-#    - role: proxy
-#      tags:
-#        - security
-#        - proxy
+    - role: proxy
+      tags: [proxy, security]

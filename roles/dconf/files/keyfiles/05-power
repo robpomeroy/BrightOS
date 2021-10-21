@@ -1,0 +1,4 @@
+[org/gnome/settings-daemon/plugins/power]
+# Disable sleep when on AC power - signed 32-bit integer
+sleep-inactive-ac-timeout=int32 0
+sleep-inactive-ac-type='nothing'
