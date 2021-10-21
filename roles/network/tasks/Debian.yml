@@ -1,0 +1,9 @@
+---
+- name: Configure systemd-resolved DNS
+  ini_file:
+    path: /etc/systemd/resolved.conf
+    section: Resolve
+    option: DNS
+    value: "{{ dns_servers|join(',') }}"
+    no_extra_spaces: yes
+  notify: Restart systemd-resolved

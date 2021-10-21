@@ -1,3 +1,20 @@
 ---
 - name: Include task list appropriate for OS family (Debian/RedHat)
   include: "{{ ansible_os_family }}.yml"  
+
+- name: Create Firefox policies directory
+  file:
+    path: /etc/firefox/policies
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+# Firefox polices documented here: https://github.com/mozilla/policy-templates
+- name: Install central Firefox policy
+  template:
+    src: firefox.policies.json.j2
+    dest: /etc/firefox/policies/policies.json
+    owner: root
+    group: root
+    mode: 0644

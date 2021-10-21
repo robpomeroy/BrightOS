@@ -2,3 +2,8 @@
 # Edit the following to suit you
 server_timezone: Europe/London # For acceptable entries here, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 snl_user: snl                  # This is the name of the user that logs in automatically
+
+# OpenDNS FamilyShield addresses: 208.67.222.123, 208.67.220.123
+# FamilyShield is free and blocks adult content.
+dns_servers: [208.67.222.123, 208.67.220.123]
+doh_server: https://doh.familyshield.opendns.com/dns-query

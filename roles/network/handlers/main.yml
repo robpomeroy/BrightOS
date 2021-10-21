@@ -1,0 +1,10 @@
+---
+- name: Restart NetworkManager
+  service:
+    name: NetworkManager
+    state: restarted
+
+- name: Restart systemd-resolved
+  service:
+    name: systemd-resolved
+    state: restarted

@@ -40,10 +40,12 @@
     - role: firewall
       tags: [firewall, security]
 
-    - role: packages
-      tags: [packages, init]
     - role: name
       tags: [name, init]
+    - role: network
+      tags: [network, init]
+    - role: packages
+      tags: [packages, init]
     - role: user
       tags: [user, init]
     - role: gnome

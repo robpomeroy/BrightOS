@@ -31,19 +31,3 @@
     path: /etc/environment
     regex: "^no_proxy="
     line: no_proxy=localhost,127.0.0.1
-
-- name: Create Firefox policies directory
-  file:
-    path: /etc/firefox/policies
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-
-- name: Set Firefox proxy policy
-  copy:
-    src: firefox.policies.json
-    dest: /etc/firefox/policies/policies.json
-    owner: root
-    group: root
-    mode: 0644

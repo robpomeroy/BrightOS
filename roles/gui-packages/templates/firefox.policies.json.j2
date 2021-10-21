@@ -1,5 +1,10 @@
 {
   "policies": {
+    "DNSOverHTTPS": {
+      "Enabled":  true,
+      "ProviderURL": "{{ doh_server }}",
+      "Locked": true
+    },
     "Proxy": {
       "Mode": "manual",
       "Locked": true,
