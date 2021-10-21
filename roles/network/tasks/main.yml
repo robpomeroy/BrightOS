@@ -1,3 +1,9 @@
 ---
 - name: Include task list appropriate for OS family (Debian/RedHat)
   include: "{{ ansible_os_family }}.yml" 
+
+- name: Override DHCP DNS servers
+  lineinfile:
+    path: /etc/dhcp/dhclient.conf
+    regex: "^supersede domain-name-servers"
+    line: "supersede domain-name-servers {{ dns_servers|join(',') }}"
