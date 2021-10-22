@@ -1,0 +1,3 @@
+---
+- name: Run abp2privoxy
+  command: /usr/local/bin/abp2privoxy.sh

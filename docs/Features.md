@@ -15,6 +15,9 @@ provide truly unsupervised category-based protection for users.
 Allow-/block-listing is an option, but that requires a lot of maintenance.
 Suggestions for improvement in this area are welcome.
 
+We run a daily script to add a selection of Adblock Plus lists to Privoxy's
+filters. These mainly reduce adverts and known malware domains.
+
 ## Web browsing
 
 Firefox (if `firefox_install` is enabled in `config.yml`) is installed with a

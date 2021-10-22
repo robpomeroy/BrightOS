@@ -11,6 +11,23 @@
     group: root
     mode: 0644
 
+- name: Copy Adblock Plus to Privoxy conversion script
+  copy:
+    src: abp2privoxy.sh
+    dest: /usr/local/bin/abp2privoxy.sh
+    owner: root
+    group: root
+    mode: 0700
+  notify: Run abp2privoxy
+
+- name: Create daily abp2privoxy cron job
+  copy:
+    src: abp2privoxy.cron
+    dest: /etc/cron.daily/abp2privoxy
+    owner: root
+    group: root
+    mode: 0755
+  
 - name: Enable privoxy
   service:
     name: privoxy

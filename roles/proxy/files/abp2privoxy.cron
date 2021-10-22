@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+#
+# Run Adblock Plus to Privoxy conversion script
+
+/usr/local/bin/abp2privoxy.sh
+
+EXITVALUE=$?
+if [ $EXITVALUE != 0 ]; then
+    /usr/bin/logger -t abp2privoxy "ALERT exited abnormally with [$EXITVALUE]"
+fi
+exit $EXITVALUE
