@@ -6,4 +6,4 @@
   lineinfile:
     path: /etc/dhcp/dhclient.conf
     regex: "^supersede domain-name-servers"
-    line: "supersede domain-name-servers {{ dns_servers|join(',') }}"
+    line: "supersede domain-name-servers {{ dns_servers|join(',') }};"

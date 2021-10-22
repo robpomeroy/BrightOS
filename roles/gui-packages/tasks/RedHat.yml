@@ -60,8 +60,14 @@
       - gcompris
       - ktuberling
 
-- name: Install GUI packages
+- name: Install Firefox
   dnf:
-    name:
-      - firefox
+    name: firefox
     state: latest
+  when: firefox_install == true
+
+- name: Uninstall Firefox
+  dnf:
+    name: firefox
+    state: absent
+  when: firefox_install != true

@@ -1,9 +1,61 @@
 {
   "policies": {
+    "AppAutoUpdate": true,
+    "BackgroundAppUpdate": true,
+    "BlockAboutAddons": true,
+    "BlockAboutConfig": true,
+    "BlockAboutProfiles": true,
+    "Certificates": {
+      "ImportEnterpriseRoots": true
+    },
+    "DisableSecurityBypass": {
+      "InvalidCertificate": true,
+      "SafeBrowsing": true
+    },
     "DNSOverHTTPS": {
       "Enabled":  true,
       "ProviderURL": "{{ doh_server }}",
       "Locked": true
+    },
+    "EnableTrackingProtection": {
+      "Value": true,
+      "Locked": true,
+      "Cryptomining": true,
+      "Fingerprinting": true
+    },
+    "FlashPlugin": {
+      "Default": false,
+      "Locked": true
+    },
+    "Homepage": {
+      "URL": "{{ firefox_default_homepage }}",
+      "Locked": false,
+      "StartPage": "previous-session"
+    },
+    "InstallAddonsPermission": {
+      "Default": false
+    },
+    "Permissions": {
+      "Camera": {
+        "BlockNewRequests": {{ (firefox_allow_camera == 'yes') | ternary('false', 'true') }},
+        "Locked": {{ (firefox_allow_camera == 'yes') | ternary('false', 'true') }}
+      },
+      "Microphone": {
+        "BlockNewRequests": {{ (firefox_allow_microphone == 'yes') | ternary('false', 'true') }},
+        "Locked": {{ (firefox_allow_microphone == 'yes') | ternary('false', 'true') }}
+      },
+      "Notifications": {
+        "BlockNewRequests": true,
+        "Locked": true
+      },
+      "Autoplay": {
+        "Default": "block-audio-video",
+        "Locked": false
+      }
+    },
+    "PopupBlocking": {
+      "Default": true,
+      "Locked": false
     },
     "Proxy": {
       "Mode": "manual",

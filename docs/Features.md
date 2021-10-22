@@ -14,3 +14,9 @@ time, there is no obvious open source content filtering solution that would
 provide truly unsupervised category-based protection for users.
 Allow-/block-listing is an option, but that requires a lot of maintenance.
 Suggestions for improvement in this area are welcome.
+
+## Web browsing
+
+Firefox (if `firefox_install` is enabled in `config.yml`) is installed with a
+sane set of privacy-/security-preserving parameters. Review the policy file at
+`role\gui-packages\templates\firefox.policies.json.j2` for details.

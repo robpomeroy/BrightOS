@@ -2,7 +2,6 @@
 - name: Install GUI packages
   apt:
     name:
-      - firefox
       - gcompris-qt
       - gcompris-qt-data
       - ktuberling
@@ -10,3 +9,15 @@
       - tuxpaint-data
     state: latest
     update_cache: yes
+
+- name: Install Firefox
+  apt:
+    name: firefox
+    state: latest
+  when: firefox_install == true
+
+- name: Uninstall Firefox
+  apt:
+    name: firefox
+    state: absent
+  when: firefox_install != true

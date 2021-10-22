@@ -4,18 +4,9 @@
 - hosts: all
   become: true
 
-  # The main config file should not be edited
+  # Edit the config file to suit your particular requirements
   vars_files:
-    - default.config.yml
-
-  # End users of this playbook can amend the contents of config.yml to suit their requirements.
-  # The config.yml file could also override settings in default.config.yml.
-  pre_tasks:
-    - include_vars: "{{ item }}"
-      with_fileglob:
-        - "{{ playbook_dir }}/config.yml"
-      tags:
-        - always
+    - config.yml
 
   # Simple tasks that don't merit a role
   tasks:
