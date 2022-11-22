@@ -59,8 +59,8 @@ Why this playbook? Why this approach?
 
 ## Progress/state of development
 
-The playbook converts a minimal Ubuntu 20.04 or Oracle Linux 8 installation into
-a simple, passwordless, Gnome-based desktop environment, with a few applications
+The playbook converts a minimal Ubuntu 22.04 or AlmaLinux 9 installation into a
+simple, passwordless, Gnome-based desktop environment, with a few applications
 installed. It is ready for testing and feedback, but there is much work left to
 do, as can be seen from the TODO list below.
 
@@ -76,7 +76,7 @@ To support longevity, it is sensible to choose an open base operating system
 with a good track record and long-term prospects. At the same time, to give
 end users a degree of choice, it is helpful to select operating systems from
 more than one family of Linux. This playbook therefore targets Ubuntu, based on
-Debian, and Oracle Linux, based on Red Hat. It may run on other related distros,
+Debian, and AlmaLinux, based on Red Hat. It may run on other related distros,
 but I have not tested that.
 
 ## Accessibility guidelines

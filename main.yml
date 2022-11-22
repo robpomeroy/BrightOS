@@ -8,24 +8,42 @@
   vars_files:
     - config.yml
 
+  pre_tasks:
+    # Several roles need to know the "real" Ansible user. These pre-tasks make
+    # that possible.
+    - name: Get currently logged-in user
+      become: false
+      command: whoami
+      register: whoami_output
+      changed_when: false
+      tags: always
+    - name: Make currently logged-in user available as "playbook_user" variable
+      set_fact:
+        playbook_user: "{{ whoami_output.stdout }}"  
+      tags: always
+
   # Simple tasks that don't merit a role
   tasks:
     - name: Set time zone
       timezone:
         name: "{{ server_timezone }}"
       tags: [timezone, init]
+    # - name: Show OS version
+    #   debug:
+    #     var: ansible_facts['distribution']
+    #   tags: [debug_os]
 
   roles:
     # Security, including external hardening roles
-    - role: dev-sec.os-hardening
+    - role: devsec.hardening.os_hardening
       vars:
         os_filesystem_whitelist: squashfs # Needed for Snaps
-      tags: [devsecos, security]
-    - role: dev-sec.ssh-hardening
+      tags: [osharden, devsec, security]
+    - role: devsec.hardening.ssh_hardening
       vars:
         sftp_enabled: true # Ansible prefers to use SFTP to copy files
         sftp_chroot: false
-      tags: [devsecssh, security]
+      tags: [sshharden, devsec, security]
     - role: selinux
       tags: [selinux, security]
     - role: firewall

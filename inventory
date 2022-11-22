@@ -1,7 +1,4 @@
-[all:vars]
-ansible_python_interpreter=/usr/bin/python3
-
 [targets]
-# Amend as required, based on how the host[s] you're configuring
-192.168.101.150 system_hostname=snl-ol8
-192.168.101.151 system_hostname=snl-u20
+# Amend as required, based on the host[s] you're configuring
+snl-al9.lan.pomeroy.me system_hostname=snl-al9
+snl-u22.lan.pomeroy.me system_hostname=snl-u22

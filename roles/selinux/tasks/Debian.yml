@@ -8,12 +8,11 @@
     state: latest
 
 - name: Install SELinux management packages
-  apt:
+  package:
     name:
       - policycoreutils-python-utils
       - setools
     state: latest
-    update_cache: yes
 
 - name: Set SELinux to enforcing mode (default policy)
   selinux:

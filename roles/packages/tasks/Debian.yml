@@ -1,5 +1,6 @@
 ---
 # Note: fzf needs perl (and git for the installation)
+# This is the one time we update the cache (so must use apt rather than package)
 - name: Install preferred packages
   apt:
     name:
@@ -14,9 +15,14 @@
     state: latest
     update_cache: yes
 
+- name: Populate service facts
+  ansible.builtin.service_facts:
+  changed_when: false
+
 # hv_kvp_daemon isn't needed (usually) and causes a delay on VM boot
 - name: Disable Hyper-V Key Value Pair daemon
   service:
     name: hv-kvp-daemon
     enabled: no
     state: stopped
+  when: ansible_facts.services['hv-kvp-daemon.service'] is defined

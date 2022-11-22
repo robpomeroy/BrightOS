@@ -1,11 +1,8 @@
 ---
-roles:
-  # The DevSec OS & SSH hardening playbooks
-  - name: dev-sec.os-hardening
-  - name: dev-sec.ssh-hardening
-  
 collections:
   # Posix required for SELinux role
   - name: ansible.posix
   # For dconf
   - name: community.general
+  # The DevSec OS & SSH hardening playbooks
+  - name: devsec.hardening  

@@ -1,6 +1,6 @@
 ---
 - name: Install GUI packages
-  apt:
+  package:
     name:
       - gcompris-qt
       - gcompris-qt-data
@@ -8,7 +8,6 @@
       - tuxpaint
       - tuxpaint-data
     state: latest
-    update_cache: yes
 
 - name: Install Firefox
   apt:

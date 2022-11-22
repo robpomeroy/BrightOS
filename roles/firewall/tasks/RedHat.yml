@@ -3,10 +3,9 @@
 
 # Firewalld is available by default, but just to be sure:
 - name: Install firewalld
-  dnf:
+  package:
     name: firewalld
     state: latest
-    update_cache: yes
   notify: Start firewalld
 
 - name: Allow SSH through firewall

@@ -1,3 +1,0 @@
----
-- name: Load squashfs kernel module
-  command: modprobe squashfs

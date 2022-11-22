@@ -2,10 +2,9 @@
 ## ESSENTIALS
 
 - name: Install ufw
-  apt:
+  package:
     name: ufw
     state: latest
-    update_cache: yes
   notify: Start ufw
 
 - name: Allow SSH through firewall

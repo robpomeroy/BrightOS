@@ -1,5 +1,6 @@
 ---
 # EPEL offers the excellent Micro editor and other useful packages
+# This is the one time we update the cache (so must use dnf rather than package)
 - name: Enable the EPEL Repository
   dnf:
     name: epel-release
@@ -8,9 +9,10 @@
   when: ansible_facts['distribution']!='OracleLinux'
     
 # Oracle has a different name for their version of EPEL
+# This is the one time we update the cache (so must use dnf rather than package)
 - name: Enable the Oracle Linux EPEL Repository
   dnf:
-    name: oracle-epel-release-el8
+    name: oracle-epel-release-el9
     state: latest
     update_cache: yes
   when: ansible_facts['distribution']=='OracleLinux'
@@ -19,35 +21,44 @@
 - name: Enable the Red Hat CodeReady Repository
   ini_file:
     dest: /etc/yum.repos.d/redhat.repo
-    section: codeready-builder-for-rhel-8-x86_64-rpms
+    section: codeready-builder-for-rhel-9-x86_64-rpms
     option: enabled
     value: "1"
     no_extra_spaces: yes
-  when: ansible_facts['distribution']!='OracleLinux'
+  when: ansible_facts['distribution']=='RedHat'
 - name: Enable the Oracle CodeReady Repository
   ini_file:
-    dest: /etc/yum.repos.d/oracle-linux-ol8.repo
-    section: ol8_codeready_builder
+    dest: /etc/yum.repos.d/oracle-linux-ol9.repo
+    section: ol9_codeready_builder
     option: enabled
     value: "1"
     no_extra_spaces: yes
   when: ansible_facts['distribution']=='OracleLinux'
+- name: Enable the AlmaLinux CodeReady Repository
+  ini_file:
+    dest: /etc/yum.repos.d/almalinux-crb.repo
+    section: crb
+    option: enabled
+    value: "1"
+    no_extra_spaces: yes
+  when: ansible_facts['distribution']=='AlmaLinux'
 
-# Note: fzf depends on perl and git
+# Note: fzf depends on perl and git. The installation needs tar, go and curl.
 - name: Install preferred packages
-  dnf:
+  package:
     name:
+      - curl           # Needed, to install fzf
       - git            # Needed, to install fzf
       - htop           # Superior to top: https://github.com/htop-dev/htop
-      - micro          # Great text editor: https://github.com/zyedidia/micro
+      # - micro          # Great text editor: https://github.com/zyedidia/micro - not in the RHEL repos (yet?)
       - mlocate        # File finder: https://pagure.io/mlocate
       - perl           # Required by fzf
       - python3        # Keeps Python up to date
       - python3-pip    # Keeps Pip up to date
       - python3-psutil # Required, to Ansible manage dconf
+      - tar            # Needed, to install fzf
       - tmux           # "terminal multiplexer": https://github.com/tmux/tmux
     state: latest
-    update_cache: yes
 
 # fzf is really useful, but isn't included in Red Hat's repos (not even EPEL).
 # You could install via snap, but there's no official release and no guarantee
