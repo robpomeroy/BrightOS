@@ -9,6 +9,7 @@ Ansible playbook, applied to a minimal Ubuntu or AlmaLinux installation.
 I encourage you to read about the [Mission](docs/Mission.md).
 
 -- [Rob Pomeroy](https://pomeroy.me/contact "contact me via my website") |
+[Mastodon](https://infosec.exchange/@robpomeroy "follow me on Mastodon") |
 [Twitter](https://twitter.com/robpomeroy "reach me on Twitter") |
 [LinkedIn](https://linkedin/com/in/robpomeroy "connect via LinkedIn")
 

@@ -8,6 +8,4 @@ I am grateful to the following:
 * The folks at [TurgenSec](https://turgensec.com/) for their suggestions and
   support.
 
--- [Rob Pomeroy](https://pomeroy.me/contact "contact me via my website") |
-[Twitter](https://twitter.com/robpomeroy "reach me on Twitter") |
-[LinkedIn](https://linkedin/com/in/robpomeroy "connect via LinkedIn")
+-- Rob
