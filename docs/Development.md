@@ -44,19 +44,19 @@ help anyone wishing to dive in:
 * [Ansible modules index](https://docs.ansible.com/ansible/latest/modules/modules_by_category.html)
 
 Additionally, see how this project is structured. There are a few files in the
-root, but most of the 'work' sits under the ```roles``` directory. Different
-aspects of the Special Needs Linux configuration are split up into separate
+root, but most of the 'work' sits under the `roles` directory. Different
+aspects of the BrightOS configuration are split up into separate
 'roles'. So we have a role for installing and configuring the KDE desktop, a
 role that sets up the main user of the system, a role that configures the
 system's name, and so on. (Some of these roles may change or be refactored as
 the project matures.)
 
-## Contributing code to Special Needs Linux
+## Contributing code to BrightOS
 
 Anyone is welcome to fork the entire project and set off on their own. That's
 the beauty of open source - you can do what you like (except turn it into a
 commercial package). If you come up with something special, we hope you'll
-contribute that back to the original Special Needs Linux project, but there's no
+contribute that back to the original BrightOS project, but there's no
 obligation to do so.
 
 To work on this project, get in touch with Rob (see the README), who will set
@@ -67,7 +67,7 @@ developed on a separate branch and submitted for approval as a pull request.
 
 Rob will be the first to admit he has virtually no graphics design skills and no
 marketing ability. Whatsoever. All contributions are very welcome - desktop
-backgrounds, a project icon, web design, etc. Drop a note to Rob (see the README
-for contact details) and we'll work from there.
+backgrounds, a project icon, web design, etc. Drop a note to Rob (see the
+[README](../README.md) for contact details) and we'll work from there.
 
-Thanks for your interest in Special Needs Linux!
+Thanks for your interest in BrightOS!

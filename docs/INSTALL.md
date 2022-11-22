@@ -2,11 +2,12 @@
 
 ## Prerequisites
 
-You will need a machine from which to run Ansible. In addition, your target
-machine should meet the following requirements:
+You will need a machine from which to run Ansible (the "Ansible control"
+machine). In addition, your target machine should meet the following
+requirements:
 
-* Ubuntu or AlmaLinux installed (preferably minimal, for the cleanest; I use
-  Ubuntu Server, 22.04 and AlmaLinux 8)
+* Ubuntu or AlmaLinux installed (preferably minimal, for the cleanest resulst; I
+  use Ubuntu Server 22.04 and AlmaLinux 9)
 * OpenSSH installed
 * A user account set up, with a password and sudo capability
 * Public/private keys set up for this user
@@ -34,7 +35,8 @@ In brief (TODO: expand):
 The final step will take some considerable time, particularly during the
 installation of packages. Unfortunately Ansible does not have good facilities
 for showing progress during package installation. Patience will usually be
-rewarded; the installation make take some hours.
+rewarded; the installation make take minutes or hours, depending on the speed of
+your internet connection and hardware.
 
 Note: for advanced use (e.g. during further development of the playbook), you
 can use `[--skip-tags "tag1"] [--tags "tag2"]` to skip or target specific
