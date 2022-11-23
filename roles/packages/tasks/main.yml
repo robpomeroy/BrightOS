@@ -64,7 +64,7 @@
 ##########################
 
 - name: Check if we're a VMware guest
-  command: dmesg | grep -qi 'kernel.*vmware'
+  shell: dmesg | grep -qi 'kernel.*vmware'
   register: vmware_guest
   ignore_errors: true
   changed_when: false
@@ -76,7 +76,7 @@
   when: vmware_guest.rc == 0
 
 - name: Check if we're running under QEMU
-  command: dmesg | grep -qi qemu
+  shell: dmesg | grep -qi qemu
   register: qemu_guest
   ignore_errors: true
   changed_when: false
