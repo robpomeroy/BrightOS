@@ -10,7 +10,7 @@
     name:
       - curl
       - git
-      - go
+      - golang
       - perl
       - tar
     state: latest
