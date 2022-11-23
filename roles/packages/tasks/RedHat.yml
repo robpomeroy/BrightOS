@@ -43,22 +43,11 @@
     no_extra_spaces: yes
   when: ansible_facts['distribution']=='AlmaLinux'
 
-# Note: fzf depends on perl and git. The installation needs tar, go and curl.
-- name: Install preferred packages
-  package:
-    name:
-      - curl           # Needed, to install fzf
-      - git            # Needed, to install fzf
-      - htop           # Superior to top: https://github.com/htop-dev/htop
-      # - micro          # Great text editor: https://github.com/zyedidia/micro - not in the RHEL repos (yet?)
-      - mlocate        # File finder: https://pagure.io/mlocate
-      - perl           # Required by fzf
-      - python3        # Keeps Python up to date
-      - python3-pip    # Keeps Pip up to date
-      - python3-psutil # Required, to Ansible manage dconf
-      - tar            # Needed, to install fzf
-      - tmux           # "terminal multiplexer": https://github.com/tmux/tmux
-    state: latest
+# - name: Install preferred packages
+#   package:
+#     name:
+#       # - micro # Great text editor: https://github.com/zyedidia/micro - not in the RHEL repos (yet?)
+#     state: latest
 
 # fzf is really useful, but isn't included in Red Hat's repos (not even EPEL).
 # You could install via snap, but there's no official release and no guarantee

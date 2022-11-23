@@ -1,6 +1,19 @@
 ---
-- name: Include task list appropriate for OS family (Debian/RedHat)
-  include: "{{ ansible_os_family }}.yml"  
+####################
+# fzf dependencies #
+####################
+
+# Note: fzf depends on perl and git. The installation needs tar, go and curl.
+# fzf itself is installed via the OS-specific files
+- name: Install fzf dependencies
+  package:
+    name:
+      - curl
+      - git
+      - go
+      - perl
+      - tar
+    state: latest
 
 - name: Copy .fzf.bash for root and playbook users
   copy:
@@ -21,3 +34,74 @@
   with_items:
     - /root
     - /home/{{ playbook_user }}
+
+
+########################
+# OS-specific packages #
+########################
+
+- name: Include task list appropriate for OS family (Debian/RedHat)
+  include: "{{ ansible_os_family }}.yml"  
+
+
+###############################################
+# Packages with same names on all OS families #
+###############################################
+
+- name: Install common packages (available for all OS families)
+  package:
+    name:
+      - htop           # Superior to top: https://github.com/htop-dev/htop
+      - mlocate        # File finder: https://pagure.io/mlocate
+      - python3          # Keeps Python up to date
+      - python3-pip      # Keeps Pip up to date
+      - python3-psutil   # Required, to Ansible manage dconf
+      - tmux           # "terminal multiplexer": https://github.com/tmux/tmux
+
+
+##########################
+# Virtual machine agents #
+##########################
+
+- name: Check if we're a VMware guest
+  command: dmesg | grep -qi 'kernel.*vmware'
+  register: vmware_guest
+  ignore_errors: true
+  changed_when: false
+  failed_when: false
+
+- name: Install VMware tools
+  package:
+    name: [open-vm-tools, open-vm-tools-desktop]
+  when: vmware_guest.rc == 0
+
+- name: Check if we're running under QEMU
+  command: dmesg | grep -qi qemu
+  register: qemu_guest
+  ignore_errors: true
+  changed_when: false
+  failed_when: false  
+
+- name: Install QEMU agent
+  package:
+    name: [qemu-guest-agent]
+  when: qemu_guest.rc == 0
+
+- name: Enable and start QEMU guest agent service
+  service:
+    name: qemu-guest-agent
+    enabled: yes
+    state: started
+  when: qemu_guest.rc == 0
+
+- name: Populate service facts
+  ansible.builtin.service_facts:
+  changed_when: false
+
+# hv_kvp_daemon isn't needed (usually) and causes a delay on VM boot
+- name: Disable Hyper-V Key Value Pair daemon
+  service:
+    name: hv-kvp-daemon
+    enabled: no
+    state: stopped
+  when: ansible_facts.services['hv-kvp-daemon.service'] is defined
