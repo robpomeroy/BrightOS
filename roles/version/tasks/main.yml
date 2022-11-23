@@ -15,7 +15,7 @@
 
 - name: Drop playbook version file
   copy:
-    content: "Most recent tag: {{ git_tag.stdout }}; most recent commit: ({{ git_commit.stdout }})\n"
+    content: "Most recent tag: {{ git_tag.stdout }}; most recent commit: {{ git_commit.stdout }}\n"
     dest: /etc/playbook_version
     owner: root
     group: root
