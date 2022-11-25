@@ -1,5 +1,11 @@
-# Development
+# Getting involved
 
+## Progress/state of development
+
+The playbook converts a minimal Ubuntu 22.04 or AlmaLinux 9 installation into a
+simple, passwordless, Gnome-based desktop environment, with a few applications
+installed. It is ready for testing and feedback, but there is much work left to
+do, as can be seen from the TODO list below.
 ## Introduction to orchestration
 
 You may be a developer, or Linux sysadmin, but new to orchestration. As an
