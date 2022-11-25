@@ -9,6 +9,14 @@
     value: "True"
     no_extra_spaces: yes
 
+- name: Suppress gnome-initial-setup application
+  community.general.ini_file:
+    path: "/etc/gdm{{ (ansible_os_family == 'RedHat') | ternary('', '3') }}/custom.conf"
+    section: daemon
+    option: InitialSetupEnable
+    value: "False"
+    no_extra_spaces: yes
+
 - name: Enable automatic login for SNL user
   community.general.ini_file:
     path: "/etc/gdm{{ (ansible_os_family == 'RedHat') | ternary('', '3') }}/custom.conf"
@@ -18,7 +26,7 @@
     no_extra_spaces: yes
 
 - name: Disable Gnome Initial Setup screen
-  ini_file:
+  community.general.ini_file:
     path: /etc/xdg/autostart/gnome-initial-setup-first-login.desktop
     section: Desktop Entry
     option: X-GNOME-Autostart-enabled
@@ -30,7 +38,7 @@
 
 # The applications listed may or may not be installed (depending on distro)
 - name: Hide unnecessary application icons
-  ini_file:
+  community.general.ini_file:
     path: "/usr/share/applications/{{ item }}"
     section: "Desktop Entry"
     option: NoDisplay
