@@ -17,9 +17,11 @@ specialist bath for Morgan comes in at £10,000, or thereabouts.)
 
 It does not have to be costly, to meet computing needs. This open source (free!)
 repository contains an [Ansible](https://www.ansible.com/) playbook for
-customising Linux to help users with special needs. The aim of this project is
-to create an Ansible build that converts a Linux installation into something
-suitable for users (particularly children) with special needs.
+customising Linux to help users with special needs. The initial aim of this
+project is to create an Ansible build that converts a Linux installation into
+something suitable for users (particularly children) with special needs. Later,
+we may take a more direct approach, creating a Linux distribution with
+installer.
 
 Why Linux rather than Windows? Several reasons:
 
@@ -32,6 +34,11 @@ Why Linux rather than Windows? Several reasons:
   developers and picked up knowledge of orchestration and text-based
   configuration. It's much easier for me to achieve this project's goals with
   Linux.
+
+I'm personally most interested in the protection of users with learning
+difficulties. So the focus here is on safety and on enabling carers to control
+the system for the intended user. Spin-offs or bespoke configuration may be
+appropriate, to target other user groups, but that is not my initial objective.
 
 # Goals
 

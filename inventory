@@ -1,4 +1,3 @@
 [targets]
-# Amend as required, based on the host[s] you're configuring
 snl-al9.lan.pomeroy.me system_hostname=snl-al9
 snl-u22.lan.pomeroy.me system_hostname=snl-u22

@@ -2,3 +2,7 @@
 
 # Directory to store private things such as personal SSH setup
 /private
+
+# Don't commit personal versions of these files
+inventory
+config.yml

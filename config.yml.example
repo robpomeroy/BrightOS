@@ -1,0 +1,18 @@
+---
+# Copy this file to config.yml and edit to suit you.
+server_timezone: Europe/London # For acceptable entries here, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+snl_user: snl                  # This is the name of the user that logs in automatically
+
+# OpenDNS FamilyShield addresses: 208.67.222.123, 208.67.220.123
+# FamilyShield is free and blocks adult content.
+dns_servers: [208.67.222.123, 208.67.220.123]
+doh_server: https://doh.familyshield.opendns.com/dns-query
+
+# If you install Firefox, the user will be able to access the internet. Although
+# there is some protection from OpenDNS (above), we cannot guarantee online
+# safety. If this is a concern, either supervise use of the system, or set
+# firefox_install to anything other than yes/true.
+firefox_install: yes
+firefox_default_homepage: https://duckduckgo.com
+firefox_allow_camera: no # Anything other than yes/true disables
+firefox_allow_microphone: no # Anything other than yes/true disables

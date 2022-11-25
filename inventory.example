@@ -1,0 +1,5 @@
+[targets]
+# Amend as required, based on the host[s] you're configuring, and rename this
+# file to "inventory".
+snl-al9.yourlan.yourdomain system_hostname=snl-al9
+snl-u22.yourlan.yourdomain system_hostname=snl-u22

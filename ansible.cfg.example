@@ -1,0 +1,12 @@
+# Copy this file to ansible.cfg and edit to suit you.
+# See https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg
+[defaults]
+inventory = ./inventory
+remote_user = yourname
+private_key_file =  ~/.ssh/yourkey
+
+# This gives us longer to enter the private key's passphrase (if any)
+timeout = 30 
+
+[ssh_connection]
+pipelining = True
