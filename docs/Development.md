@@ -46,7 +46,7 @@ help anyone wishing to dive in:
 Additionally, see how this project is structured. There are a few files in the
 root, but most of the 'work' sits under the `roles` directory. Different
 aspects of the BrightOS configuration are split up into separate
-'roles'. So we have a role for installing and configuring the KDE desktop, a
+'roles'. So we have a role for installing and configuring the Gnome desktop, a
 role that sets up the main user of the system, a role that configures the
 system's name, and so on. (Some of these roles may change or be refactored as
 the project matures.)
@@ -55,19 +55,19 @@ the project matures.)
 
 Anyone is welcome to fork the entire project and set off on their own. That's
 the beauty of open source - you can do what you like (except turn it into a
-commercial package). If you come up with something special, we hope you'll
+commercial package). If you come up with something special, I hope you'll
 contribute that back to the original BrightOS project, but there's no
 obligation to do so.
 
-To work on this project, get in touch with Rob (see the README), who will set
+To work on this project, get in touch with me (see the README), and I will set
 you up as a Github collaborator. All additions to the project should be
-developed on a separate branch and submitted for approval as a pull request.
+developed on branches and submitted for approval as pull requests.
 
 ## Contributing anything else
 
-Rob will be the first to admit he has virtually no graphics design skills and no
+I will be the first to admit I have virtually no graphics design skills and no
 marketing ability. Whatsoever. All contributions are very welcome - desktop
-backgrounds, a project icon, web design, etc. Drop a note to Rob (see the
+backgrounds, project icons, web design, etc. Drop me a note (see the
 [README](../README.md) for contact details) and we'll work from there.
 
 Thanks for your interest in BrightOS!
