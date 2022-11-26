@@ -3,8 +3,9 @@
 ![BrightOS logo - Tux mascot in wheelchair with lightbulb](images/BrightOS.png)
 
 Welcome to the BrightOS project, which aims to create a GNU/Linux distribution
-suitable for people with special needs. Initially, this is through the use of an
-Ansible playbook, applied to a minimal Ubuntu or AlmaLinux installation.
+suitable for people with learning difficulties. Initially, this is through the
+use of an Ansible playbook, applied to a minimal Ubuntu or AlmaLinux
+installation.
 
 I encourage you to read about the [Mission](docs/Mission.md).
 

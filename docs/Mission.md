@@ -1,10 +1,10 @@
 # Introduction
 
-The world of special needs is largely unseen - until you are thrust into it.
-This is the position my wife and I found ourselves in, in 2004, when she gave
-birth to our twins Morgan and James. Due to a [condition during
+The world of disability is largely unseen - until you are thrust into it. This
+is the position my wife and I found ourselves in, in 2004, when she gave birth
+to our twins Morgan and James. Due to a [condition during
 pregnancy](https://en.wikipedia.org/wiki/Twin-to-twin_transfusion_syndrome) our
-boys both have profound special needs. Morgan has severe spastic cerebral palsy,
+boys both have profound disabilities. Morgan has severe spastic cerebral palsy,
 is quadriplegic and vision impaired. James has severe learning difficulties, is
 on the autistic spectrum and suffers from anxiety.
 
@@ -17,11 +17,11 @@ specialist bath for Morgan comes in at £10,000, or thereabouts.)
 
 It does not have to be costly, to meet computing needs. This open source (free!)
 repository contains an [Ansible](https://www.ansible.com/) playbook for
-customising Linux to help users with special needs. The initial aim of this
-project is to create an Ansible build that converts a Linux installation into
-something suitable for users (particularly children) with special needs. Later,
-we may take a more direct approach, creating a Linux distribution with
-installer.
+customising Linux to help users with learning difficulties. The initial aim of
+this project is to create an Ansible build that converts a Linux installation
+into something suitable for users (particularly children) with learning
+difficulties. Later, we may take a more direct approach, creating a Linux
+distribution with installer.
 
 Why Linux rather than Windows? Several reasons:
 
@@ -74,17 +74,17 @@ but I have not tested that.
 # Sources for other ideas
 
 There are some existing child-friendly Linux distributions. These do not focus
-on the needs of users with special needs (a cause dear to my heart) and many of
-them suffer from a lack of ongoing maintenance. Nevertheless, they are very
-useful sources of inspiration for this project.
+on the needs of users with learning difficulties (a cause dear to my heart) and
+many of them suffer from a lack of ongoing maintenance. Nevertheless, they are
+very useful sources of inspiration for this project.
 
 * Ubermix: still under active development; focused on children and education
-  (but not special needs); has some strong features including "20 second quick
+  (but not learning difficulties); has some strong features including "20 second quick
   recovery mechanism"
 * Elementary Linux OS: mature, actively developed OS built on Ubuntu/Gnome;
-  focused on education and ease-of-use, but not aimed at special needs
+  focused on education and ease-of-use, but not aimed at learning difficulties
 * Debian Edu/Skolelinux: a mature project; last release Jul 2019 after a
-  two-year hiatus; focus is education rather than special needs
+  two-year hiatus; focus is education rather than learning difficulties
 * DoudouLinux: the OS I currently use for my son James (on a machine that is not
   network-connected); apparently abandoned in 2015
 * Edubuntu: was a benchmark at one point, but now seems to be obsolete; the
@@ -93,7 +93,7 @@ useful sources of inspiration for this project.
 * openSUSE-Edu Li-f-e: some good packages and features; project stalled in 2016;
   an[Ubuntu version
   exists](https://sourceforge.net/projects/cyberorg-home/files/Li-f-e/) but its
-  future is not clear; not aimed at special needs
+  future is not clear; not aimed at learning difficulties
 * LinuxKidX: last updated in 2016, seems to have been abandoned
 * UberStudent: aimed at secondary and higher education; last release 2015
 * Educado: particularly interesting due to its inclusion of parental controls;
@@ -103,4 +103,4 @@ useful sources of inspiration for this project.
 * Leeenux Kids: a child-friendly version of Leeenux, a *non-free* OS that
   specifically targets netbooks (like the Asus Eee PC); less generalised from a
   hardware perspective than most other Linux distributions; documentation about
-  Kids version is scant; not focused on special needs
+  Kids version is scant; not focused on learning difficulties
