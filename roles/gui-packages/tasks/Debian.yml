@@ -1,6 +1,6 @@
 ---
 - name: Install GUI packages
-  package:
+  ansible.builtin.package:
     name:
       - gcompris-qt
       - gcompris-qt-data
@@ -10,13 +10,13 @@
     state: latest
 
 - name: Install Firefox
-  apt:
+  ansible.builtin.apt:
     name: firefox
     state: latest
   when: firefox_install == true
 
 - name: Uninstall Firefox
-  apt:
+  ansible.builtin.apt:
     name: firefox
     state: absent
   when: firefox_install != true

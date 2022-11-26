@@ -13,19 +13,19 @@
     # that possible.
     - name: Get currently logged-in user
       become: false
-      command: whoami
+      ansible.builtin.command: whoami
       register: whoami_output
       changed_when: false
       tags: always
     - name: Make currently logged-in user available as "playbook_user" variable
-      set_fact:
+      ansible.builtin.set_fact:
         playbook_user: "{{ whoami_output.stdout }}"  
       tags: always
 
   # Simple tasks that don't merit a role
   tasks:
     - name: Set time zone
-      timezone:
+      community.general.timezone:
         name: "{{ server_timezone }}"
       tags: [timezone, init]
     # - name: Show OS version

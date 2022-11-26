@@ -1,6 +1,6 @@
 ---
 - name: Install default Plymouth splash screen
-  apt:
+  ansible.builtin.apt:
     name: plymouth-theme-ubuntu-logo
     state: latest
   notify:

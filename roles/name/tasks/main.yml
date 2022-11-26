@@ -1,11 +1,11 @@
 ---
 - name: Set hostname
-  hostname:
+  ansible.builtin.hostname:
     name: "{{ system_hostname }}"
 
 # TODO: do we wish to enable the use of a domain?
 #- name: Configure domain name
-#  lineinfile:
+#  ansible.builtin.lineinfile:
 #    path: /etc/hosts
 #    regexp: '^127\.0\.1\.1'
 #    state: present

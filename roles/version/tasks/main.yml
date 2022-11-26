@@ -1,20 +1,20 @@
 ---
 - name: Get most recent git commit
-  command: git log -n 1 --pretty=format:%h
+  ansible.builtin.command: git log -n 1 --pretty=format:%h
   delegate_to: localhost
   register: git_commit
   changed_when: false
   failed_when: false
 
 - name: Get most recent git tag
-  command: git describe --abbrev=0 --tags
+  ansible.builtin.command: git describe --abbrev=0 --tags
   delegate_to: localhost
   register: git_tag
   changed_when: false
   failed_when: false
 
 - name: Drop playbook version file
-  copy:
+  ansible.builtin.copy:
     content: "Most recent tag: {{ git_tag.stdout }}; most recent commit: {{ git_commit.stdout }}\n"
     dest: /etc/playbook_version
     owner: root

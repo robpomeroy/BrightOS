@@ -1,6 +1,6 @@
 ---
 - name: Configure systemd-resolved DNS
-  ini_file:
+  community.general.ini_file:
     path: /etc/systemd/resolved.conf
     section: Resolve
     option: DNS

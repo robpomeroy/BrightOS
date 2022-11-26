@@ -1,5 +1,5 @@
 - name: Give passwordless sudo to the 'wheel' group (validate with visudo program)
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/sudoers
     state: present
     regexp: '^%wheel'

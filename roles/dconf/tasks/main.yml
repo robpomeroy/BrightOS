@@ -1,7 +1,7 @@
 ---
 # To review dconf settings, install the graphical dconf Editor.
 - name: Install the 'user' dconf profile
-  copy:
+  ansible.builtin.copy:
     src: user
     dest: /etc/dconf/profile/user
     owner: root
@@ -9,7 +9,7 @@
     mode: 0644
 
 - name: Create dconf 'local' db directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: root
@@ -20,7 +20,7 @@
     - /etc/dconf/db/local.d/locks
 
 - name: Copy dconf key settings files
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "/etc/dconf/db/local.d/{{ item | basename }}"
     owner: root
@@ -30,7 +30,7 @@
   notify: Update dconf databases
 
 - name: Copy dconf lock files
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "/etc/dconf/db/local.d/locks/{{ item | basename }}"
     owner: root

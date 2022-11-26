@@ -1,10 +1,10 @@
 ---
 - name: Run dconf update
-  command: dconf update
+  ansible.builtin.command: dconf update
   listen: Update dconf databases
 
 - name: Set permissions on local database
-  file:
+  ansible.builtin.file:
     path: /etc/dconf/db/local
     mode: 0644
   listen: Update dconf databases

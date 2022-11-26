@@ -1,5 +1,5 @@
 ---
 - name: Install privoxy
-  apt:
+  ansible.builtin.apt:
     name: privoxy
     state: latest

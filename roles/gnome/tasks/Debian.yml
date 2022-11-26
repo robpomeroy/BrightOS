@@ -1,6 +1,6 @@
 ---
 - name: Install Gnome
-  apt:
+  ansible.builtin.apt:
     name:
       - gnome-calculator
       - gnome-session

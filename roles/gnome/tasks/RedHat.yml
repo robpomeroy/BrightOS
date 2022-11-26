@@ -2,7 +2,7 @@
 # Installing the "@Workstation" group gives us Gnome, but also a lot of other
 # packages we probably don't need. So we install Gnome components individually.
 - name: Install packages for Gnome
-  package:
+  ansible.builtin.package:
     name:
       - at-spi2-atk
       - at-spi2-core
@@ -53,10 +53,10 @@
 # doesn't result in automatic boot to GUI. For this we need to change the
 # default target of systemd.
 - name: Get default systemd target
-  command: systemctl get-default
+  ansible.builtin.command: systemctl get-default
   register: default_target
   changed_when: false
 
 - name: Change default target to graphical.target
-  command: systemctl set-default graphical.target
+  ansible.builtin.command: systemctl set-default graphical.target
   when: default_target.stdout_lines[0] != "graphical.target"
