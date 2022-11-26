@@ -1,5 +1,5 @@
 ---
 - name: Install privoxy
-  dnf:
+  ansible.builtin.dnf:
     name: privoxy
     state: latest

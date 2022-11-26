@@ -1,12 +1,12 @@
 ---
 - name: Create SNL user's group (same name as user account)
-  group:
+  ansible.builtin.group:
     name: "{{ snl_user }}"
     state: present
 
 # This will generate a warning about not using a hashed password, which is fine
 - name: Create SNL default user (which logs in automatically) with no password
-  user:
+  ansible.builtin.user:
     name: "{{ snl_user }}"
     group: "{{ snl_user }}"
     state: present
@@ -27,4 +27,4 @@
     password_expire_min: 99999
 
 - name: Include task list appropriate for OS family (Debian/RedHat)
-  include: "{{ ansible_os_family }}.yml"  
+  ansible.builtin.include: "{{ ansible_os_family }}.yml"  

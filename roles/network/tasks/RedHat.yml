@@ -1,6 +1,6 @@
 ---
 - name: Disable NetworkManager DNS configuration
-  ini_file:
+  community.general.ini_file:
     path: /etc/NetworkManager/NetworkManager.conf
     section: main
     option: dns
@@ -10,10 +10,10 @@
 
 # We need NetworkManager to restart before we attempt to change resolv.conf
 - name: Flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Configure DNS settings
-  template:
+  ansible.builtin.template:
     src: resolv.conf.j2
     dest: /etc/resolv.conf
     owner: root

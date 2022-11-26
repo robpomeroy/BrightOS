@@ -3,13 +3,13 @@
 
 # Firewalld is available by default, but just to be sure:
 - name: Install firewalld
-  package:
+  ansible.builtin.package:
     name: firewalld
     state: latest
   notify: Start firewalld
 
 - name: Allow SSH through firewall
-  firewalld:
+  ansible.builtin.firewalld:
     service: ssh
     state: enabled
     permanent: yes
@@ -18,7 +18,7 @@
 ## ALL OTHER RULES
 
 # - name: Allow HTTP and HTTPS through firewall
-#   firewalld:
+#   ansible.builtin.firewalld:
 #     service: '{{ item }}'
 #     state: enabled
 #     permanent: yes

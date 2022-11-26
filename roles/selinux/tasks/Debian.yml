@@ -1,21 +1,21 @@
 ---
 # Ansible management of SE flags depends on these
 - name: Install Python packages needed for SELinux 
-  apt:
+  ansible.builtin.apt:
     name:
       - python3-selinux
       - python3-semanage
     state: latest
 
 - name: Install SELinux management packages
-  package:
+  ansible.builtin.package:
     name:
       - policycoreutils-python-utils
       - setools
     state: latest
 
 - name: Set SELinux to enforcing mode (default policy)
-  selinux:
+  ansible.builtin.selinux:
     policy: default
     # Choose enforcing or permissive; reboot needed when changing
     state: enforcing

@@ -2,7 +2,7 @@
 # EPEL offers the excellent Micro editor and other useful packages
 # This is the one time we update the cache (so must use dnf rather than package)
 - name: Enable the EPEL Repository
-  dnf:
+  ansible.builtin.dnf:
     name: epel-release
     state: latest
     update_cache: yes
@@ -11,7 +11,7 @@
 # Oracle has a different name for their version of EPEL
 # This is the one time we update the cache (so must use dnf rather than package)
 - name: Enable the Oracle Linux EPEL Repository
-  dnf:
+  ansible.builtin.dnf:
     name: oracle-epel-release-el9
     state: latest
     update_cache: yes
@@ -19,7 +19,7 @@
 
 # CodeReady repo is needed for certain packages
 - name: Enable the Red Hat CodeReady Repository
-  ini_file:
+  community.general.ini_file:
     dest: /etc/yum.repos.d/redhat.repo
     section: codeready-builder-for-rhel-9-x86_64-rpms
     option: enabled
@@ -27,7 +27,7 @@
     no_extra_spaces: yes
   when: ansible_facts['distribution']=='RedHat'
 - name: Enable the Oracle CodeReady Repository
-  ini_file:
+  community.general.ini_file:
     dest: /etc/yum.repos.d/oracle-linux-ol9.repo
     section: ol9_codeready_builder
     option: enabled
@@ -35,7 +35,7 @@
     no_extra_spaces: yes
   when: ansible_facts['distribution']=='OracleLinux'
 - name: Enable the AlmaLinux CodeReady Repository
-  ini_file:
+  community.general.ini_file:
     dest: /etc/yum.repos.d/almalinux-crb.repo
     section: crb
     option: enabled
@@ -61,7 +61,7 @@
   register: fzfInstall
 
 - name: Install fzf
-  command:
+  ansible.builtin.command:
       cmd: /opt/fzf/install --no-key-bindings --no-completion --no-update-rc
       chdir: /opt/fzf
   when: fzfInstall.changed

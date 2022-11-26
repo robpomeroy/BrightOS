@@ -1,5 +1,5 @@
 - name: Include task list appropriate for OS family (Debian/RedHat)
-  include: "{{ ansible_os_family }}.yml"  
+  ansible.builtin.include: "{{ ansible_os_family }}.yml"  
 
 - name: Enable GDM's automatic login feature
   community.general.ini_file:
@@ -52,14 +52,14 @@
 
 # Not strictly Gnome-related, but no need for a separate role just for this
 - name: Create /etc/X11/xorg.conf.d directory
-  file:
+  ansible.builtin.file:
     path: /etc/X11/xorg.conf.d
     state: directory
     owner: root
     group: root
     mode: 0755
 - name: Disable switching virtual terminals
-  copy:
+  ansible.builtin.copy:
     src: 10-xorg.conf
     dest: /etc/X11/xorg.conf.d/10-xorg.conf
     owner: root

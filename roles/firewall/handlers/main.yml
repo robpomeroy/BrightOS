@@ -1,12 +1,12 @@
 ---
 - name: Start firewalld
-  service:
+  ansible.builtin.service:
     name: firewalld
     state: started
     enabled: yes
 
 - name: Start ufw
-  service:
+  ansible.builtin.service:
     name: ufw
     state: started
     enabled: yes

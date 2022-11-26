@@ -2,24 +2,24 @@
 ## ESSENTIALS
 
 - name: Install ufw
-  package:
+  ansible.builtin.package:
     name: ufw
     state: latest
   notify: Start ufw
 
 - name: Allow SSH through firewall
-  ufw:
+  ansible.builtin.ufw:
     rule: allow
     name: OpenSSH
 
 - name: Enable ufw
-  ufw:
+  ansible.builtin.ufw:
     state: enabled
 
 ## ALL OTHER RULES
 
 # - name: Allow HTTP and HTTPS through firewall
-#   ufw:
+#   ansible.builtin.ufw:
 #     rule: allow
 #     port: "{{ item }}"
 #   loop: [http, https]

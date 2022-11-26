@@ -1,7 +1,7 @@
 ---
 # This is the one time we update the cache (so must use apt rather than package)
 - name: Install preferred packages
-  apt:
+  ansible.builtin.apt:
     name:
       - fzf   # Fuzzy find - very useful: https://github.com/junegunn/fzf
       - micro # Great text editor: https://github.com/zyedidia/micro

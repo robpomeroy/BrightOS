@@ -1,10 +1,10 @@
 ---
 # The proxy will be for local access only, so no firewall configuration required
 - name: Include task list appropriate for OS family (Debian/RedHat)
-  include: "{{ ansible_os_family }}.yml"  
+  ansible.builtin.include: "{{ ansible_os_family }}.yml"  
 
 - name: Copy config file
-  template:
+  ansible.builtin.template:
     src: privoxy.config.j2
     dest: /etc/privoxy/config
     owner: root
@@ -12,7 +12,7 @@
     mode: 0644
 
 - name: Copy Adblock Plus to Privoxy conversion script
-  copy:
+  ansible.builtin.copy:
     src: abp2privoxy.sh
     dest: /usr/local/bin/abp2privoxy.sh
     owner: root
@@ -21,7 +21,7 @@
   notify: Run abp2privoxy
 
 - name: Create daily abp2privoxy cron job
-  copy:
+  ansible.builtin.copy:
     src: abp2privoxy.cron
     dest: /etc/cron.daily/abp2privoxy
     owner: root
@@ -29,13 +29,13 @@
     mode: 0755
   
 - name: Enable privoxy
-  service:
+  ansible.builtin.service:
     name: privoxy
     enabled: yes
     state: started
 
 - name: Configure environment-wide proxy
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/environment
     regex: "^{{ item }}="
     line: "{{ item }}=http://127.0.0.1:8118"
@@ -44,7 +44,7 @@
     - https_proxy
 
 - name: Disable proxy for local addresses
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/environment
     regex: "^no_proxy="
     line: no_proxy=localhost,127.0.0.1
