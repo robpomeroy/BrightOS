@@ -26,7 +26,7 @@
     owner: root
     group: root
     mode: 0644
-  with_fileglob: keyfiles/*
+  loop: "{{ 'keyfiles/*' | realpath | fileglob }}"
   notify: Update dconf databases
 
 - name: Copy dconf lock files
@@ -36,5 +36,5 @@
     owner: root
     group: root
     mode: 0644
-  with_fileglob: lockfiles/*
+  loop: "{{ 'lockfiles/*' | realpath | fileglob }}"
   notify: Update dconf databases
