@@ -19,3 +19,4 @@
     policy: default
     # Choose enforcing or permissive; reboot needed when changing
     state: enforcing
+  notify: reboot

@@ -1,0 +1,28 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: install Gnome & dconf
+      ansible.builtin.apt:
+        name: [
+          "gnome-core",
+          "dconf-cli",
+          "dconf-editor",
+          "ubuntustudio-menu",
+        ]
+        state: present
+        update_cache: true
+      become: true
+      when: ansible_os_family == 'Debian'
+
+    - name: install Gnome & dconf
+      ansible.builtin.dnf:
+        name: [
+          "gnome-core",
+          "dconf",
+          "dconf-editor",
+        ]
+        state: present
+        update_cache: true
+      become: true
+      when: ansible_os_family == 'RedHat'

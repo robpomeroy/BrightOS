@@ -1,7 +1,7 @@
 ---
 # The proxy will be for local access only, so no firewall configuration required
 - name: Include task list appropriate for OS family (Debian/RedHat)
-  ansible.builtin.include: "{{ ansible_os_family }}.yml"  
+  ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"  
 
 - name: Copy config file
   ansible.builtin.template:

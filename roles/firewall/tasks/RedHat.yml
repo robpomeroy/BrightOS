@@ -6,7 +6,12 @@
   ansible.builtin.package:
     name: firewalld
     state: latest
-  notify: Start firewalld
+
+- name: Start firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: started
+    enabled: yes
 
 - name: Allow SSH through firewall
   ansible.builtin.firewalld:

@@ -1,0 +1,42 @@
+---
+dependency:
+  name: galaxy
+  enabled: false
+driver:
+  name: vagrant
+lint: |
+  set -e
+  yamllint .
+  ansible-lint -x no-loop-var-prefix,command-instead-of-module,package-latest
+platforms:
+  # Check out the documentation at
+  # https://github.com/ansible-community/molecule-vagrant#documentation
+  # for more platform parameters.
+  - name: vm-runner
+    box: almalinux/9
+    memory: 1024
+    # List of raw Vagrant `config` options.
+    # provider_raw_config_args:
+    #   - "customize [ 'modifyvm', :id, '--natdnshostresolver1', 'on' ]"
+    # Dictionary of `config` options.
+    config_options:
+      ssh.keep_alive: yes
+      ssh.remote_user: "'ubuntu'"
+provisioner:
+  name: ansible
+  log: true
+  # config_options:
+  #   defaults:
+  #     # https://stackoverflow.com/questions/57435811/ansible-molecule-pass-multiple-vault-ids
+  #     vault_identity_list: "@$HOME/.ansible/roles/passfile_0.pass, @$HOME/.ansible/roles/passfile_1.pass"
+  vvv: false
+  env:
+    ANSIBLE_ROLES_PATH: "roles/"
+  playbooks:
+    # create: ../resources/playbooks/create.yml
+    # destroy: ../resources/playbooks/destroy.yml
+    converge: ../resources/playbooks/converge.yml
+    # prepare: ../resources/playbooks/prepare.yml
+    verify: ../resources/playbooks/verify.yml
+verifier:
+  name: ansible
