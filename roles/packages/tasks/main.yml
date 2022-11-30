@@ -63,40 +63,55 @@
 # Virtual machine agents #
 ##########################
 
-- name: Check if we're a VMware guest
-  ansible.builtin.shell: dmesg | grep -qi 'kernel.*vmware'
-  register: vmware_guest
-  ignore_errors: true
-  changed_when: false
-  failed_when: false
+# - VMware ESXi   -> "VMware"
+# - Qemu          -> "kvm"
+# - VirtualBox    -> "virtualbox"
 
 - name: Install VMware tools
   ansible.builtin.package:
     name: [open-vm-tools, open-vm-tools-desktop]
-  when: vmware_guest.rc == 0
+  when:    # implicit AND when passing a list
+    - ansible_facts.virtualization_role == "guest"
+    - ansible_facts.virtualization_type == "VMware"
 
-- name: Check if we're running under QEMU
-  ansible.builtin.shell: dmesg | grep -qi qemu
-  register: qemu_guest
-  ignore_errors: true
-  changed_when: false
-  failed_when: false  
+- name: VirtualBox guest utils
+  block:
+    - name: install VirtualBox guest utils
+      ansible.builtin.package:
+        name: [
+          "virtualbox-guest-utils",
+          "virtualbox-guest-x11",
+        ]
+    - name: activate VirtualBox guest utils kernel modules (otherwise we'd have to reboot)
+      community.general.modprobe:
+        name: "{{ item }}"
+      loop:
+        - "vboxguest"
+        - "vboxsf"
+        - "vboxvideo"
+  when:    # implicit AND when passing a list
+    - ansible_facts.virtualization_role == "guest"
+    - ansible_facts.virtualization_type == "virtualbox"
+    - ansible_facts.lsb.id == "Ubuntu"    # packages are not available for AlmaLinux
 
-- name: Install QEMU agent
-  ansible.builtin.package:
-    name: [qemu-guest-agent]
-  when: qemu_guest.rc == 0
-
-# This will fail if the VM hasn't been fully shutdown and then started after
-# installing qemu-guest-agent. Reboot is NOT enough.
-# Hence, we'll ignore_errors for this task that WILL happen on the first run.
-- name: Enable and start QEMU guest agent service
-  ansible.builtin.service:
-    name: qemu-guest-agent
-    enabled: yes
-    state: started
-  when: qemu_guest.rc == 0
-  ignore_errors: true
+- name: QEMU agent
+  block:
+    - name: Install QEMU agent
+      ansible.builtin.package:
+        name: [qemu-guest-agent]
+        
+    # This will fail if the VM hasn't been fully shutdown and then started after
+    # installing qemu-guest-agent. Reboot is NOT enough.
+    # Hence, we'll ignore_errors for this task that WILL happen on the first run.
+    - name: Enable and start QEMU guest agent service
+      ansible.builtin.service:
+        name: qemu-guest-agent
+        enabled: yes
+        state: started
+      ignore_errors: true
+  when:    # implicit AND when passing a list
+    - ansible_facts.virtualization_role == "guest"
+    - ansible_facts.virtualization_type == "kvm"
 
 - name: Populate service facts
   ansible.builtin.service_facts:
