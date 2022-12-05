@@ -69,6 +69,9 @@ To work on this project, get in touch with me (see the README), and I will set
 you up as a Github collaborator. All additions to the project should be
 developed on branches and submitted for approval as pull requests.
 
+If you are working in Windows, please refer to the
+[Windows development](Windows%20development.md) document.
+
 ## Contributing anything else
 
 I will be the first to admit I have virtually no graphics design skills and no
