@@ -75,8 +75,7 @@ virtualenv -p python3 ansible
 To use that environment in future:
 
 ```
-cd ~/venv
-source ./ansible/bin/activate
+source ~/venv/ansible/bin/activate
 
 # One-time action to install the required Python modules into this virtual environment
 pip install ansible-builder ansible-lint ansible-navigator jmespath docker molecule molecule-docker molecule-vagrant pyvmomi PyYAML testinfra yamllint
