@@ -1,7 +1,7 @@
 ---
 - name: Set hostname
   ansible.builtin.hostname:
-    name: "{{ system_hostname }}"
+    name: "{{ system_hostname | default('vm-runner') }}"
 
 # TODO: do we wish to enable the use of a domain?
 #- name: Configure domain name
@@ -10,4 +10,3 @@
 #    regexp: '^127\.0\.1\.1'
 #    state: present
 #    line: '127.0.1.1        {{ system_hostname }}.{{ ad_domain }}        {{ system_hostname }}'
-

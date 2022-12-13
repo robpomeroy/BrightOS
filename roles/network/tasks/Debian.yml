@@ -4,6 +4,7 @@
     path: /etc/systemd/resolved.conf
     section: Resolve
     option: DNS
-    value: "{{ dns_servers|join(',') }}"
+    value: "{{ dns_servers | join(',') }}"
     no_extra_spaces: yes
+    mode: "0644"
   notify: Restart systemd-resolved

@@ -1,7 +1,13 @@
 ---
-# Some Red Hat/AlmaLinux packages are only available as snaps
+# Some Red Hat/AlmaLinux packages are only available as snaps, so we have to
+# add the EPEL repo and install snapd to use them.
+- name: Install EPEL repository
+  ansible.builtin.dnf:
+    name: "epel-release"
+    state: latest
+
 - name: Install Snap
-  dnf:
+  ansible.builtin.dnf:
     name: snapd
     state: latest
   register: snapd_installed
@@ -12,16 +18,17 @@
 #   when: snapd_installed is changed
 
 - name: Enable snapd socket
-  systemd:
+  ansible.builtin.systemd:
     name: snapd
     enabled: yes
     state: started
 
 - name: Download Tux Paint RPM
-  get_url:
+  ansible.builtin.get_url:
     url: http://z1.plala.jp/tuxpaint/el9/repo/tuxpaint-release-9-1.el9.noarch.rpm
     dest: /tmp/tuxpaint-release-9-1.el9.noarch.rpm
     checksum: sha256:d14807093ede49f87f4bc4c96c983d0f74e754891b086133f61d47659b127b4f
+    mode: "0644"
 
 # - name: Download SDL_image library (needed for Tux Paint)
 #   get_url:
@@ -48,7 +55,7 @@
 #     checksum: sha1:2e823b261c3116efc359eeaf8c86999ff3084244
 
 - name: Install Tux Paint packages
-  dnf:
+  ansible.builtin.dnf:
     name: /tmp/{{ item }}
     disable_gpg_check: yes
     state: present
@@ -66,19 +73,19 @@
 #       - gcompris
 
 - name: Install GUI packages
-  package:
+  ansible.builtin.package:
     name:
       - ktuberling
     state: latest
 
 - name: Install Firefox
-  dnf:
+  ansible.builtin.dnf:
     name: firefox
     state: latest
-  when: firefox_install == true
+  when: firefox_install
 
 - name: Uninstall Firefox
-  dnf:
+  ansible.builtin.dnf:
     name: firefox
     state: absent
-  when: firefox_install != true
+  when: not firefox_install

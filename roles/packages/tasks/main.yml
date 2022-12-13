@@ -22,7 +22,7 @@
     mode: 0644
   loop:
     - /root
-    - /home/{{ playbook_user }}
+    - /home/{{ playbook_user | default(ansible_user_id) }}
 
 # [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 - name: Ensure fzf.bash is loaded for root and playbook user
@@ -33,7 +33,7 @@
     line: "[ -f ~/.fzf.bash ] && source ~/.fzf.bash"
   loop:
     - /root
-    - /home/{{ playbook_user }}
+    - /home/{{ playbook_user | default(ansible_user_id) }}
 
 
 ########################
@@ -41,7 +41,7 @@
 ########################
 
 - name: Include task list appropriate for OS family (Debian/RedHat)
-  ansible.builtin.include: "{{ ansible_os_family }}.yml"  
+  ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"  
 
 
 ###############################################
@@ -99,12 +99,16 @@
     - name: Install QEMU agent
       ansible.builtin.package:
         name: [qemu-guest-agent]
-
+        
+    # This will fail if the VM hasn't been fully shutdown and then started after
+    # installing qemu-guest-agent. Reboot is NOT enough.
+    # Hence, we'll ignore_errors for this task that WILL happen on the first run.
     - name: Enable and start QEMU guest agent service
       ansible.builtin.service:
         name: qemu-guest-agent
         enabled: yes
         state: started
+      ignore_errors: true
   when:    # implicit AND when passing a list
     - ansible_facts.virtualization_role == "guest"
     - ansible_facts.virtualization_type == "kvm"

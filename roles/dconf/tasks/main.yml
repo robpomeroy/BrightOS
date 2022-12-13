@@ -1,4 +1,22 @@
 ---
+- name: install dconf
+  ansible.builtin.dnf:
+    name: [
+      "dconf-cli",
+      "dconf-editor",
+    ]
+    state: latest
+  when: ansible_os_family == "Debian"
+
+- name: install dconf
+  ansible.builtin.dnf:
+    name: [
+      "dconf",
+      "dconf-editor",
+    ]
+    state: latest
+  when: ansible_os_family == "RedHat"
+   
 # To review dconf settings, install the graphical dconf Editor.
 - name: Install the 'user' dconf profile
   ansible.builtin.copy:

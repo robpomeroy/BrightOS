@@ -6,6 +6,7 @@
     option: dns
     value: none
     no_extra_spaces: yes
+    mode: "0644"
   notify: Restart NetworkManager
 
 # We need NetworkManager to restart before we attempt to change resolv.conf

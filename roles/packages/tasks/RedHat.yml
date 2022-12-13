@@ -25,6 +25,7 @@
     option: enabled
     value: "1"
     no_extra_spaces: yes
+    mode: "0644"
   when: ansible_facts['distribution']=='RedHat'
 - name: Enable the Oracle CodeReady Repository
   community.general.ini_file:
@@ -33,6 +34,7 @@
     option: enabled
     value: "1"
     no_extra_spaces: yes
+    mode: "0644"
   when: ansible_facts['distribution']=='OracleLinux'
 - name: Enable the AlmaLinux CodeReady Repository
   community.general.ini_file:
@@ -41,6 +43,7 @@
     option: enabled
     value: "1"
     no_extra_spaces: yes
+    mode: "0644"
   when: ansible_facts['distribution']=='AlmaLinux'
 
 # - name: Install preferred packages
@@ -58,10 +61,10 @@
     depth: 1
     dest: /opt/fzf
     version: HEAD
-  register: fzfInstall
+  register: fzf_install
 
-- name: Install fzf
+- name: Install fzf    # noqa no-handler
   ansible.builtin.command:
-      cmd: /opt/fzf/install --no-key-bindings --no-completion --no-update-rc
-      chdir: /opt/fzf
-  when: fzfInstall.changed
+    cmd: /opt/fzf/install --no-key-bindings --no-completion --no-update-rc
+    chdir: /opt/fzf
+  when: fzf_install.changed

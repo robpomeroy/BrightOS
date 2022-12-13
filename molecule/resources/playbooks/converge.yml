@@ -1,0 +1,30 @@
+---
+- name: Converge
+  hosts: all
+  vars_files:
+    - "../../../config.yml"
+  pre_tasks:
+    - name: update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist
+      become: true
+      when: ansible_os_family == "Debian"
+    - name: update yum cache
+      ansible.builtin.yum:
+        update_cache: true
+      become: true
+      when: ansible_os_family == "RedHat"
+  roles:
+    - {role: "roles/dconf", become: true}
+    - {role: "roles/firewall", become: true}
+    - {role: "roles/gnome", become: true}
+    - {role: "roles/gui_packages", become: true}
+    - {role: "roles/name", become: true}
+    - {role: "roles/network", become: true}
+    - {role: "roles/packages", become: true}
+    - {role: "roles/plymouth", become: true}
+    - {role: "roles/proxy", become: true}
+    - {role: "roles/selinux", become: true}
+    - {role: "roles/user", become: true}
+    - {role: "roles/version", become: true}

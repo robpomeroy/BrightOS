@@ -22,4 +22,4 @@ filters. These mainly reduce adverts and known malware domains.
 
 Firefox (if `firefox_install` is enabled in `config.yml`) is installed with a
 sane set of privacy-/security-preserving parameters. Review the policy file at
-`role\gui-packages\templates\firefox.policies.json.j2` for details.
+`role\gui_packages\templates\firefox.policies.json.j2` for details.
