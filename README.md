@@ -18,7 +18,7 @@ I encourage you to read about the [Mission](docs/Mission.md).
 
 For prerequsites and usage instructions, refer to
 [docs/INSTALL](docs/INSTALL.md). To learn how to get involved in the project,
-see [docs/Development](docs/Development.md).
+see [docs/Getting involved](docs/Getting%20involved.md).
 
 ## Licence
 
