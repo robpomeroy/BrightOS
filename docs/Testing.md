@@ -46,7 +46,6 @@ If you prefer to run Ansible and Molecule from WSL, install these lightweight de
 ```bash
 # In WSL, install optional development tools
 apt install -y git python3-pip
-pip install python-vagrant
 ```
 
 ### Install Ansible and Molecule
@@ -63,7 +62,7 @@ virtualenv -p python3 brightdos-test
 source ~/venv/brightdos-test/bin/activate
 
 # Install required Python packages
-pip install ansible-builder ansible-lint ansible-navigator jmespath molecule molecule-vagrant pyvmomi PyYAML testinfra yamllint
+pip install ansible-builder ansible-lint ansible-navigator jmespath molecule molecule-vagrant python-vagrant pyvmomi PyYAML testinfra yamllint
 
 # To deactivate later, run: deactivate
 ```
