@@ -8,7 +8,6 @@
           "gnome-core",
           "dconf-cli",
           "dconf-editor",
-          "ubuntustudio-menu",
         ]
         state: present
         update_cache: true

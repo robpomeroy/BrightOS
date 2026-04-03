@@ -233,14 +233,6 @@ AlmaLinux 10 is very recent (2024/2025). If `vagrant up` fails with "box not fou
 2. **Build manually:** Use the official AlmaLinux ISO and Vagrant's `vagrant package` command (advanced).
 3. **Use AlmaLinux 9** temporarily by editing `molecule/hyperv_almalinux10/molecule.yml` and changing the `box` to `almalinux/9`.
 
-### ubuntustudio-menu Not Available
-
-`prepare.yml` installs `ubuntustudio-menu` on Ubuntu systems. If this package is unavailable in Ubuntu 24.04:
-
-1. The prepare phase will report a failure.
-2. Edit `molecule/resources/playbooks/prepare.yml` and remove `"ubuntustudio-menu",` from the Debian package list.
-3. Re-run `molecule converge`.
-
 ### Permission Denied Errors
 
 If you see permission errors, ensure:
@@ -251,8 +243,8 @@ If you see permission errors, ensure:
 
 ## Next Steps
 
-- Review the [main playbook](../../main.yml) to understand what roles are tested.
-- Expand [verify.yml](../resources/playbooks/verify.yml) with real test assertions (currently it only asserts `true`).
-- Check [config.yml.example](../../config.yml.example) and [ansible.cfg.example](../../ansible.cfg.example) to customize test settings.
+- Review the [main playbook](../main.yml) to understand what roles are tested.
+- Expand [verify.yml](../molecule/resources/playbooks/verify.yml) with real test assertions (currently it only asserts `true`).
+- Check [config.yml.example](../config.yml.example) and [ansible.cfg.example](../ansible.cfg.example) to customize test settings.
 
 For feedback or issues, consult the [Molecule documentation](https://molecule.readthedocs.io).
