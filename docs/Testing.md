@@ -56,10 +56,10 @@ Exit root (`Ctrl-D`) and set up a Python virtual environment:
 # Create virtual environment
 mkdir -p ~/venv
 cd ~/venv
-virtualenv -p python3 brightdos-test
+virtualenv -p python3 brightos-test
 
 # Activate it
-source ~/venv/brightdos-test/bin/activate
+source ~/venv/brightos-test/bin/activate
 
 # Install required Python packages
 pip install ansible-builder ansible-lint ansible-navigator jmespath molecule molecule-vagrant python-vagrant pyvmomi PyYAML testinfra yamllint
@@ -134,7 +134,7 @@ Ensure you're in the repository root and have activated your virtual environment
 
 ```bash
 cd /path/to/BrightOS
-source ~/venv/brightdos-test/bin/activate
+source ~/venv/brightos-test/bin/activate
 ```
 
 ### Full Test Cycle
