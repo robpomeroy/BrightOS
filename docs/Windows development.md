@@ -24,64 +24,16 @@ share. The only solution to that is to develop on your local (e.g. C:) drive.
 
 ## Work with Molecule (for testing the playbook)
 
-For Molecule tests, we use Docker and Vagrant/VirtualBox. VirtualBox conflicts
-with Hyper-V so Hyper-V must be disabled.
+BrightOS uses **Hyper-V and Vagrant** for isolated, reproducible testing. Hyper-V is available on Windows 10 Pro, Enterprise, Education, and later editions.
 
-- [Enable WSL](https://learn.microsoft.com/en-gb/windows/wsl/install) (version
-  2)
-- [Disable Hyper-V](https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v#how-to-disable-hyper-v)
-  (if enabled)
-- [Install VirtualBox](https://www.virtualbox.org/wiki/Downloads) & extensions
-- Install Ubuntu WSL, e.g.:
-  [Ubuntu 22.04 WSL](https://apps.microsoft.com/store/detail/ubuntu-22041-lts/9PN20MSR04DW)
-- [Install Vagrant](https://developer.hashicorp.com/vagrant/downloads) (and
-  reboot)
+We have moved away from VirtualBox because it is incompatible with Hyper-V. **Hyper-V must be enabled** on your Windows machine (it is often disabled by default to avoid conflicts with VirtualBox).
 
-Having started WSL, elevate with `sudo -i`, then proceed as follows:
+For full step-by-step setup instructions, hardware/software requirements, troubleshooting, and testing workflows, see **[Testing.md](Testing.md)**.
 
-```
-# Full upgrade
-apt update && apt -y upgrade
+**Quick summary:**
+1. [Enable Hyper-V](https://learn.microsoft.com/en-us/windows/security/requirement-based-access-control/virtualization-based-security-enable) on your Windows machine
+2. Install WSL2, Vagrant (from HashiCorp repos, not apt), and Python 3
+3. Create a Python virtual environment and install Ansible + Molecule packages
+4. Run `molecule test -s default` to begin testing
 
-# Install Python & various requirements
-apt install -y python3 python3-pip python3-dev python3-virtualenv libvirt-dev shellcheck
-
-# Install Vagrant (not from the Ubuntu repos - too old) & various modules & plugins
-wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
-apt update && apt install -y vagrant vagrant-libvirt vagrant-mutate
-pip install python-vagrant
-vagrant plugin install vagrant-disksize
-
-# Add environment variables for Vagrant (log out and in again to pick these up)
-echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> /home/${SUDO_USER}/.bashrc
-echo 'export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox:/mnt/c/Windows/System32:/mnt/c/Windows/system32/WindowsPowerShell/v1.0"' >> /home/${SUDO_USER}/.bashrc
-
-# Get the latest Ansible version
-apt-add-repository ppa:ansible/ansible
-apt install -y ansible
-```
-
-Unelevated (`Ctrl-D` to exit `sudo`), set up a Python
-[virtual environment](https://docs.python.org/3/tutorial/venv.html):
-
-```
-mkdir -p ~/venv
-cd ~/venv
-virtualenv -p python3 ansible
-```
-
-To use that environment in future:
-
-```
-source ~/venv/ansible/bin/activate
-
-# One-time action to install the required Python modules into this virtual environment
-pip install ansible-builder ansible-lint ansible-navigator jmespath docker molecule molecule-docker molecule-vagrant pyvmomi PyYAML testinfra yamllint
-```
-
-Note: to exit the virtual environment:
-
-```
-deactivate
-```
+See [Testing.md](Testing.md) for the complete guide.
