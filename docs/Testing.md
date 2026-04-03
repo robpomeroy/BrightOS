@@ -26,18 +26,26 @@ apt update && apt -y upgrade
 apt install -y python3 python3-pip python3-dev python3-virtualenv shellcheck
 ```
 
-### Install Vagrant
+### Install Vagrant on Windows Host
 
-**Do NOT use Ubuntu repositories** — they carry outdated versions. Use HashiCorp's repos instead:
+**Important:** Vagrant must be installed on your **Windows host**, not in WSL. The Hyper-V provider is Windows-only and will not work with a Linux-based Vagrant installation in WSL.
+
+Install Vagrant on Windows by downloading the installer from [HashiCorp's Vagrant downloads](https://developer.hashicorp.com/vagrant/downloads), or use Chocolatey:
+
+```powershell
+# On Windows (PowerShell as Administrator):
+choco install vagrant
+```
+
+Once installed on Windows, you can invoke Vagrant from WSL using the `VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` environment variable (see "Setup for Windows Host Access" section below).
+
+**Optional WSL setup (for Ansible and development tools only):**
+
+If you prefer to run Ansible and Molecule from WSL, install these lightweight dependencies in WSL— but **do not install Vagrant in WSL**:
 
 ```bash
-# Add HashiCorp GPG key and repository
-wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
-
-# Install Vagrant and required plugins
-apt update && apt install -y vagrant
-vagrant plugin install vagrant-mutate
+# In WSL, install optional development tools
+apt install -y git python3-pip
 pip install python-vagrant
 ```
 
@@ -62,7 +70,7 @@ pip install ansible-builder ansible-lint ansible-navigator jmespath molecule mol
 
 ### Setup for Windows Host Access (WSL2)
 
-If you're in WSL2, add this environment variable so Vagrant can access Windows Hyper-V:
+To invoke the Windows-installed Vagrant from WSL2 and allow it to access both the BrightOS repository and Windows Hyper-V infrastructure, add this environment variable to WSL:
 
 ```bash
 # Add to ~/.bashrc (within WSL):
@@ -71,6 +79,8 @@ echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc
 # Apply changes:
 source ~/.bashrc
 ```
+
+This allows the Windows Vagrant executable to seamlessly access your repository files in WSL and Hyper-V on the Windows host.
 
 ### Enable Hyper-V (Windows Host)
 
