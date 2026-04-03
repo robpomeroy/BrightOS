@@ -5,7 +5,6 @@ uses Windows with WSL. If you are working under Windows and wish to contribute
 code to this project, or to run the Molecule tests, please undertake the
 steps below.
 
-
 ## Enable symbolic links
 
 Unless you follow these steps, you may at some point encounter a message like:

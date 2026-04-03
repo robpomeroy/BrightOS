@@ -4,16 +4,17 @@ The world of disability is largely unseen - until you are thrust into it. This
 is the position my wife and I found ourselves in, in 2004, when she gave birth
 to our twins Morgan and James. Due to a [condition during
 pregnancy](https://en.wikipedia.org/wiki/Twin-to-twin_transfusion_syndrome) our
-boys both have profound disabilities. Morgan has severe spastic cerebral palsy,
-is quadriplegic and vision impaired. James has severe learning difficulties, is
-on the autistic spectrum and suffers from anxiety.
+boys both acquired profound disabilities. Morgan, who passed away in 2024, had
+severe spastic cerebral palsy, was quadriplegic and vision impaired. James has
+severe learning difficulties, is on the autistic spectrum and suffers from
+anxiety.
 
 The following years have been a massive learning experience and, I hope,
 character building! What has become abundantly apparent is that there are gaps
 in the market, for all sorts of specialist provision. And that where specialist
 provision *does* exist, applying the label "disabled" or "adapted" to any
 product or service reduces its market and increases its cost, dramatically. (A
-specialist bath for Morgan comes in at £10,000, or thereabouts.)
+specialist bath for Morgan came in at about £10,000, for example.)
 
 It does not have to be costly, to meet computing needs. This open source (free!)
 repository contains an [Ansible](https://www.ansible.com/) playbook for
@@ -26,14 +27,13 @@ distribution with installer.
 Why Linux rather than Windows? Several reasons:
 
 * **Cost.** Open source licensing allows us to distribute the finished work at
-  no cost to end users - who for the reasons above may aleady find their lives
+  no cost to end users - who for the reasons above may already find their lives
   to be expensive!
 * **Simplicity.** Using open source software as a starting point avoids becoming
   bogged down in licensing issues.
-* **Familiarity.** I've been using Linux for over twenty years. I've worked with
-  developers and picked up knowledge of orchestration and text-based
-  configuration. It's much easier for me to achieve this project's goals with
-  Linux.
+* **Familiarity.** I've been using Linux for over thirty years. I develop
+  software and use orchestration extensively. It's much easier for me to achieve
+  this project's goals with Linux.
 
 I'm personally most interested in the protection of users with learning
 difficulties. So the focus here is on safety and on enabling carers to control

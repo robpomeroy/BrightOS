@@ -2,10 +2,11 @@
 
 ## Progress/state of development
 
-The playbook converts a minimal Ubuntu 22.04 or AlmaLinux 9 installation into a
-simple, passwordless, Gnome-based desktop environment, with a few applications
-installed. It is ready for testing and feedback, but there is much work left to
-do, as can be seen from the TODO list below.
+The playbook converts a minimal Ubuntu Server 24.04 or AlmaLinux 10 installation
+into a simple, passwordless, Gnome-based desktop environment, with a few
+applications installed. It is ready for testing and feedback, but there is much
+work left to do.
+
 ## Introduction to orchestration
 
 You may be a developer, or Linux sysadmin, but new to orchestration. As an
@@ -42,12 +43,12 @@ simple project, focused in most cases on configuring a single target computer.
 So it's not necessary to learn all of Ansible's capabilities, to contribute to
 this project.
 
-Ansible is mature and well documented these days. The following resources should
-help anyone wishing to dive in:
+Ansible is mature and well documented. The following resources should help
+anyone wishing to dive in:
 
-* [Official "Get started" documentation](https://www.ansible.com/resources/get-started)
-* [Technical overview](https://www.ansible.com/overview/how-ansible-works)
-* [Ansible modules index](https://docs.ansible.com/ansible/latest/modules/modules_by_category.html)
+* [Official "Get started" documentation](https://docs.ansible.com/projects/ansible/latest/getting_started/index.html)
+* [Technical overview](https://www.redhat.com/en/ansible-collaborative/how-ansible-works)
+* [Ansible collections index](https://docs.ansible.com/collections.html)
 
 Additionally, see how this project is structured. There are a few files in the
 root, but most of the 'work' sits under the `roles` directory. Different

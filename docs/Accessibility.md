@@ -1,6 +1,6 @@
 ## Accessibility guidelines
 
-It is not possible to build a *simple* operating system that specilises in
+It is not possible to build a *simple* operating system that specialises in
 meeting *all* needs. BrightOS aims to accommodate:
 
 * Fine motor control limitations (e.g. games need not require precise mouse

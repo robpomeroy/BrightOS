@@ -11,12 +11,11 @@ In addition, your target machine(s) should meet the following
 requirements:
 
 * Ubuntu or AlmaLinux installed (preferably minimal, for the cleanest results; I
-  use Ubuntu Server 22.04 and AlmaLinux 9)
+  use Ubuntu Server 24.04 and AlmaLinux 10)
 * OpenSSH installed
 * A user account set up, with a password and sudo capability
 * Public/private keys set up for this user
-* python3 and python3-pip installed (don't be tempted to use, e.g. python39 -
-  it may not be able to import the libraries Ansible requires for operation)
+* python3 and python3-pip installed
 * An internet connection, to download the necessary additional packages
 
 Having installed your base operating system, it is recommended to update fully.
