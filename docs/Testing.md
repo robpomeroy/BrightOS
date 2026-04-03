@@ -60,14 +60,13 @@ pip install ansible-builder ansible-lint ansible-navigator jmespath molecule mol
 # To deactivate later, run: deactivate
 ```
 
-### Setup for Windows Path Access
+### Setup for Windows Host Access (WSL2)
 
-If you're in WSL2, add these environment variables so Vagrant can access Windows:
+If you're in WSL2, add this environment variable so Vagrant can access Windows Hyper-V:
 
 ```bash
 # Add to ~/.bashrc (within WSL):
 echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc
-echo 'export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox:/mnt/c/Windows/System32:/mnt/c/Windows/system32/WindowsPowerShell/v1.0"' >> ~/.bashrc
 
 # Apply changes:
 source ~/.bashrc
