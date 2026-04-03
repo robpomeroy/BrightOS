@@ -24,7 +24,7 @@ share. The only solution to that is to develop on your local (e.g. C:) drive.
 
 ## Work with Molecule (for testing the playbook)
 
-BrightOS uses **Hyper-V and Vagrant** for isolated, reproducible testing. Hyper-V is available on Windows 10 Pro, Enterprise, Education, and later editions.
+BrightOS uses **Hyper-V and Vagrant** for isolated, reproducible testing. Supported host OS is Windows 10 or later, across Home, Pro, Enterprise, and Education editions (Home edition may require Hyper-V workaround steps; see Testing.md).
 
 We have moved away from VirtualBox because it is incompatible with Hyper-V. **Hyper-V must be enabled** on your Windows machine (it is often disabled by default to avoid conflicts with VirtualBox).
 
