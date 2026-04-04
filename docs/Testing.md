@@ -246,9 +246,10 @@ AlmaLinux 10 is very recent (2024/2025). If `vagrant up` fails with "box not fou
 
 If you see permission errors, ensure:
 
-1. You're running `vagrant` commands from WSL2 with admin privileges
-2. Hyper-V is enabled and accessible
-3. The repository is on your local drive (C:), not a network share
+1. Your Windows user account has permission to manage Hyper-V (typically requires being in the Hyper-V Administrators group; see [Microsoft docs](https://learn.microsoft.com/en-us/windows/security/identity-protection/user-access-control/how-user-account-control-works))
+2. Run Vagrant from an elevated Windows command prompt or PowerShell (right-click → "Run as administrator"), or invoke from WSL with `VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` set
+3. Hyper-V is enabled and accessible
+4. The repository is on your local drive (C:), not a network share
 
 ## Next Steps
 
