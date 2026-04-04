@@ -20,7 +20,7 @@ platforms:
     memory: 2048
     config_options:
       ssh.keep_alive: yes
-      ssh.remote_user: vagrant
+      ssh.remote_user: "'vagrant'"
     # Uncomment and modify if you want to hard-code the virtual switch name:
     # provider_raw_config_args:
     #   - "switch_name=Default Switch"
