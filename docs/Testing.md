@@ -10,7 +10,7 @@ If you already have Hyper-V and Vagrant set up, jump to [Running Tests](#running
 
 ### System Requirements
 
-- **Windows 10 or later** with Hyper-V enabled (Home, Pro, Enterprise, or Education editions; Home edition requires Hyper-V workarounds)
+- **Windows 10 or later** with Hyper-V enabled (Pro, Enterprise, or Education editions are officially supported; Home may work with nonstandard Hyper-V workarounds on a best-effort basis)
 - **WSL2** ([Enable WSL](https://learn.microsoft.com/en-gb/windows/wsl/install))
 - **Administrator privileges** (for Vagrant and Hyper-V)
 
@@ -123,7 +123,7 @@ On first use, **Vagrant will interactively prompt for a Hyper-V virtual switch**
 
    ```yaml
    provider_raw_config_args:
-     - "switch_name=Default Switch"
+     - 'switch_name="Default Switch"'
    ```
 
    Replace `"Default Switch"` with your switch's name. Repeat for other scenarios.
