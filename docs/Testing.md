@@ -249,7 +249,7 @@ If Vagrant hangs when prompting for the Hyper-V switch, ensure:
 
 AlmaLinux 10 is very recent (2024/2025). If `vagrant up` fails with "box not found" or "no provider", you have options:
 
-1. **Wait for bento:** The [Bento project](https://app.vagrantup.com/bento) periodically boxes new OS releases; check if `bento/almalinux-10` is available.
+1. **Switch to Bento if available:** The [Bento project](https://app.vagrantup.com/bento) periodically boxes new OS releases; if `bento/almalinux-10` is available, edit `molecule/hyperv_almalinux10/molecule.yml` and change the `box` value from `almalinux/10` to `bento/almalinux-10`.
 2. **Build manually:** Use the official AlmaLinux ISO and Vagrant's `vagrant package` command (advanced).
 3. **Use AlmaLinux 9** temporarily by editing `molecule/hyperv_almalinux10/molecule.yml` and changing the `box` to `almalinux/9`.
 
