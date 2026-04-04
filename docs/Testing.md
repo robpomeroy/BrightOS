@@ -1,6 +1,6 @@
 # Testing with Molecule
 
-This guide covers setting up and running the Molecule test framework for the BrightOS Ansible playbook. After a few years of evolution, we now support testing exclusively via **Hyper-V on Windows**, ensuring compatibility with modern development environments.
+This guide covers setting up and running the Molecule test framework for the BrightOS Ansible playbook. The **officially supported** testing workflow uses **Hyper-V on Windows**, ensuring compatibility with modern Windows development environments. Other tools (e.g., Docker) may work locally but are not officially supported for BrightOS testing.
 
 ## Quick Start
 
