@@ -183,23 +183,34 @@ molecule lint -s default
 
 ## Advanced Usage
 
-### Vagrant Snapshots
+### Hyper-V Checkpoints
 
-Snapshots allow you to save a VM state and restore it quickly, useful for iterative development:
+The Vagrant `snapshot` subcommands are not supported by the Hyper-V provider, so they are not part of the supported BrightOS workflow.
 
-```bash
-# After 'molecule create', get the VM UUID
-vagrant global-status
+If you want a reusable VM restore point during iterative development, create a Hyper-V checkpoint instead:
 
-# Save a snapshot (replace <uuid> and <name>)
-vagrant snapshot save <uuid> <snapshot_name>
+1. Create the VM with `molecule create -s default`.
+2. Open Hyper-V Manager on Windows and locate the VM created for the scenario.
+3. Create a checkpoint from the VM's context menu before making further changes.
+4. If you need to roll back, apply the checkpoint in Hyper-V Manager, then continue with `molecule converge` or `molecule verify`.
 
-# Restore a snapshot
-vagrant snapshot restore <uuid> <snapshot_name>
+You can also manage checkpoints from an elevated PowerShell session on Windows:
 
-# Delete a snapshot
-vagrant snapshot delete <uuid> <snapshot_name>
+```powershell
+# List VMs and identify the scenario VM name
+Get-VM
+
+# Create a checkpoint
+Checkpoint-VM -Name <vm_name> -SnapshotName <checkpoint_name>
+
+# Restore a checkpoint
+Restore-VMSnapshot -VMName <vm_name> -Name <checkpoint_name>
+
+# Remove a checkpoint
+Remove-VMSnapshot -VMName <vm_name> -Name <checkpoint_name>
 ```
+
+Checkpoint names and VM names are managed by Hyper-V rather than Molecule, so verify the VM identity before applying or removing checkpoints.
 
 ### Debugging a Failed Convergence
 
