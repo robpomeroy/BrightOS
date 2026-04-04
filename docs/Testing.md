@@ -130,10 +130,18 @@ On first use, **Vagrant will interactively prompt for a Hyper-V virtual switch**
 
 ## Running Tests
 
-Ensure you're in the repository root and have activated your virtual environment:
+Before running Molecule, create a local `config.yml` in the repository root (required by `molecule/resources/playbooks/converge.yml`):
 
 ```bash
 cd /path/to/BrightOS
+cp config.yml.example config.yml
+```
+
+`config.yml` is gitignored and is intended for local machine-specific settings.
+
+Then activate your virtual environment:
+
+```bash
 source ~/venv/brightos-test/bin/activate
 ```
 
