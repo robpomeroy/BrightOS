@@ -62,7 +62,7 @@ virtualenv -p python3 brightos-test
 source ~/venv/brightos-test/bin/activate
 
 # Install required Python packages
-pip install ansible-builder ansible-lint ansible-navigator jmespath molecule molecule-vagrant python-vagrant pyvmomi PyYAML testinfra yamllint
+pip install ansible-core ansible-builder ansible-lint ansible-navigator jmespath molecule molecule-vagrant python-vagrant pyvmomi PyYAML testinfra yamllint
 
 # To deactivate later, run: deactivate
 ```
