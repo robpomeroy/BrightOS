@@ -23,7 +23,7 @@ platforms:
       ssh.remote_user: "'vagrant'"
     # Uncomment and modify if you want to hard-code the virtual switch name:
     # provider_raw_config_args:
-    #   - "switch_name=Default Switch"
+    #   - 'switch_name="Default Switch"'
 provisioner:
   name: ansible
   log: true
