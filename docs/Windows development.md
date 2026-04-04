@@ -32,8 +32,9 @@ For full step-by-step setup instructions, hardware/software requirements, troubl
 
 **Quick summary:**
 1. [Enable Hyper-V](https://learn.microsoft.com/en-us/windows/security/requirement-based-access-control/virtualization-based-security-enable) on your Windows machine
-2. Install WSL2, Vagrant (from HashiCorp's apt repository, not Ubuntu's default apt repositories), and Python 3
-3. Create a Python virtual environment and install Ansible + Molecule packages
-4. Run `molecule test -s default` to begin testing
+2. Install WSL2 and Python 3 (in WSL)
+3. Install Vagrant on your **Windows host** (via installer or Chocolatey)
+4. Create a Python virtual environment in WSL and install Ansible + Molecule packages
+5. Run `molecule test -s default` from WSL (Vagrant on Windows will be invoked automatically)
 
 See [Testing.md](Testing.md) for the complete guide.
