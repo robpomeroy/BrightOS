@@ -103,7 +103,8 @@ echo 'export PATH="$PATH:/mnt/c/Program Files/Vagrant/bin"' >> ~/.bashrc
 # Apply changes:
 source ~/.bashrc
 
-# Create a small wrapper so Molecule can find `vagrant` (not just `vagrant.exe`):
+# Create a small wrapper so Molecule can find `vagrant` (not just
+# `vagrant.exe`):
 sudo tee /usr/local/bin/vagrant >/dev/null << 'EOF'
 #!/usr/bin/env bash
 exec vagrant.exe "$@"
@@ -186,11 +187,16 @@ cp config.yml.example config.yml
 
 `config.yml` is gitignored and is intended for local machine-specific settings.
 
-Then activate your virtual environment:
+Then activate your virtual environment and install the required Ansible collections:
 
 ```bash
 source ~/venv/brightos-test/bin/activate
+ansible-galaxy collection install -r requirements.yml
 ```
+
+The Molecule Vagrant driver relies on Ansible collection content (including the
+`vagrant` action module), so this step is required before the first test run
+in a fresh environment.
 
 ### Full Test Cycle
 
@@ -306,6 +312,18 @@ If Vagrant hangs when prompting for the Hyper-V switch, ensure:
 1. You're running within WSL2 (not PowerShell)
 2. `VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` is set in your environment
 3. Your Windows host is accessible from WSL: test with `ls /mnt/c/`
+
+### could not resolve module/action 'vagrant'
+
+If Molecule fails with `couldn't resolve module/action 'vagrant'`, Ansible
+collections are missing in the active environment.
+
+1. Ensure your venv is activated in the current shell.
+2. From repository root, install collections:
+   ```bash
+   ansible-galaxy collection install -r requirements.yml
+   ```
+3. Re-run Molecule.
 
 ### Vagrant executable was not found
 
