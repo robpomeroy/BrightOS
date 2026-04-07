@@ -8,7 +8,7 @@ supported for BrightOS testing.
 
 ## Quick Start
 
-If you already have Hyper-V and Vagrant set up, jump to
+If you already have WSL, Hyper-V and Vagrant set up, jump to
 [Running Tests](#running-tests).
 
 ## Prerequisites
@@ -22,6 +22,10 @@ If you already have Hyper-V and Vagrant set up, jump to
 - **Administrator privileges** (for Vagrant and Hyper-V)
 
 ### Software Installation (WSL2)
+
+We recommend installing the Ubuntu WSL distribution, for compatibility with the
+following commands. If using AlmaLinux, adjust commands accordingly (e.g.
+using `dnf` instead of `apt`).
 
 Start WSL2 and elevate to root with `sudo -i`, then perform these once:
 
@@ -59,7 +63,7 @@ dependencies in WSL— but **do not install Vagrant in WSL**:
 
 ```bash
 # In WSL, install optional development tools
-apt install -y git python3-pip
+apt install -y git python3-pip python3-virtualenv
 ```
 
 ### Install Ansible and Molecule
@@ -93,8 +97,14 @@ variable to WSL:
 # Add to ~/.bashrc (within WSL):
 echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc
 
+# If 'vagrant' is not found in WSL, add the Windows Vagrant install path:
+echo 'export PATH="$PATH:/mnt/c/HashiCorp/Vagrant/bin"' >> ~/.bashrc
+
 # Apply changes:
 source ~/.bashrc
+
+# Verify WSL can see Windows Vagrant:
+vagrant --version
 ```
 
 This allows the Windows Vagrant executable to seamlessly access your repository
@@ -127,7 +137,8 @@ test configuration. We currently provide:
   - OS: AlmaLinux 10 (almalinux/10)
   - Use case: Red-Hat-based compatibility testing
 
-To run a specific scenario, use `-s <scenario_name>`. For example:
+To run a specific scenario, use `-s <scenario_name>`. For example, from the
+repository root:
 
 ```bash
 molecule test -s hyperv_almalinux10
@@ -287,6 +298,26 @@ If Vagrant hangs when prompting for the Hyper-V switch, ensure:
 1. You're running within WSL2 (not PowerShell)
 2. `VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` is set in your environment
 3. Your Windows host is accessible from WSL: test with `ls /mnt/c/`
+
+### Vagrant executable was not found
+
+If Molecule fails with `ERROR    vagrant executable was not found!`, WSL cannot
+find the Windows Vagrant executable yet.
+
+1. Ensure Vagrant is installed on Windows (`vagrant --version` in Windows
+   PowerShell).
+2. In WSL, ensure both `VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` and
+   `/mnt/c/HashiCorp/Vagrant/bin` are on your shell environment (see Setup for
+   Windows Host Access above).
+3. Reload your shell (`source ~/.bashrc`) and verify from WSL:
+   `vagrant --version`.
+4. Re-run Molecule once `vagrant --version` works in WSL.
+
+### Missing cleanup playbook warning
+
+`WARNING ... cleanup: Executed: Missing playbook` is expected in this repo
+because no dedicated Molecule cleanup playbook is configured. It does not mean
+`main.yml` is missing and can be ignored.
 
 ### almalinux/10 Box Not Available
 
