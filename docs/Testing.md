@@ -98,7 +98,7 @@ variable to WSL:
 echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc
 
 # If 'vagrant' is not found in WSL, add the Windows Vagrant install path:
-echo 'export PATH="$PATH:/mnt/c/HashiCorp/Vagrant/bin"' >> ~/.bashrc
+echo 'export PATH="$PATH:/mnt/c/Program Files/Vagrant/bin"' >> ~/.bashrc
 
 # Apply changes:
 source ~/.bashrc
@@ -307,8 +307,8 @@ find the Windows Vagrant executable yet.
 1. Ensure Vagrant is installed on Windows (`vagrant --version` in Windows
    PowerShell).
 2. In WSL, ensure both `VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` and
-   `/mnt/c/HashiCorp/Vagrant/bin` are on your shell environment (see Setup for
-   Windows Host Access above).
+   `/mnt/c/Program Files/Vagrant/bin` are on your shell environment (see Setup
+   for Windows Host Access above).
 3. Reload your shell (`source ~/.bashrc`) and verify from WSL:
    `vagrant --version`.
 4. Re-run Molecule once `vagrant --version` works in WSL.
