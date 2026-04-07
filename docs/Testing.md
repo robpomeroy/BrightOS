@@ -103,7 +103,15 @@ echo 'export PATH="$PATH:/mnt/c/Program Files/Vagrant/bin"' >> ~/.bashrc
 # Apply changes:
 source ~/.bashrc
 
-# Verify WSL can see Windows Vagrant:
+# Create a small wrapper so Molecule can find `vagrant` (not just `vagrant.exe`):
+sudo tee /usr/local/bin/vagrant >/dev/null << 'EOF'
+#!/usr/bin/env bash
+exec vagrant.exe "$@"
+EOF
+sudo chmod +x /usr/local/bin/vagrant
+
+# Verify WSL can see Vagrant in both forms:
+vagrant.exe --version
 vagrant --version
 ```
 
@@ -309,9 +317,25 @@ find the Windows Vagrant executable yet.
 2. In WSL, ensure both `VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` and
    `/mnt/c/Program Files/Vagrant/bin` are on your shell environment (see Setup
    for Windows Host Access above).
-3. Reload your shell (`source ~/.bashrc`) and verify from WSL:
-   `vagrant --version`.
-4. Re-run Molecule once `vagrant --version` works in WSL.
+3. Reload your shell (`source ~/.bashrc`).
+4. If `which vagrant` is still empty but `which vagrant.exe` works, create a wrapper:
+   ```bash
+   sudo tee /usr/local/bin/vagrant >/dev/null << 'EOF'
+   #!/usr/bin/env bash
+   exec vagrant.exe "$@"
+   EOF
+   sudo chmod +x /usr/local/bin/vagrant
+   ```
+5. Verify from WSL: `vagrant --version`.
+6. Re-run Molecule once `vagrant --version` works in WSL.
+
+### Molecule on Windows fails with `No module named 'fcntl'`
+
+`fcntl` is a Unix-only module, so Molecule must run under Linux/WSL Python.
+This means:
+
+1. Run `molecule ...` from WSL, not from native Windows PowerShell Python.
+2. Keep using Windows-installed `vagrant.exe` for Hyper-V, invoked from WSL.
 
 ### Missing cleanup playbook warning
 
