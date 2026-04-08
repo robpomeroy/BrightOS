@@ -5,4 +5,4 @@ collections:
   # For dconf
   - name: community.general
   # The DevSec OS & SSH hardening playbooks
-  - name: devsec.hardening  
+  - name: devsec.hardening

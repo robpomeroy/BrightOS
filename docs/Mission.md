@@ -79,8 +79,8 @@ many of them suffer from a lack of ongoing maintenance. Nevertheless, they are
 very useful sources of inspiration for this project.
 
 * Ubermix: still under active development; focused on children and education
-  (but not learning difficulties); has some strong features including "20 second quick
-  recovery mechanism"
+  (but not learning difficulties); has some strong features including "20 second
+  quick recovery mechanism"
 * Elementary Linux OS: mature, actively developed OS built on Ubuntu/Gnome;
   focused on education and ease-of-use, but not aimed at learning difficulties
 * Debian Edu/Skolelinux: a mature project; last release Jul 2019 after a

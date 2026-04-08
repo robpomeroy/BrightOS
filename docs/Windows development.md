@@ -24,26 +24,19 @@ share. The only solution to that is to develop on your local (e.g. C:) drive.
 
 ## Work with Molecule (for testing the playbook)
 
-BrightOS uses **Hyper-V and Vagrant** for isolated, reproducible testing. The
-officially supported host editions are Windows 10 or later Pro, Enterprise, and
-Education. Windows Home may work with nonstandard Hyper-V enablement steps, but
-this is best-effort and not fully supported.
-
-We have moved away from VirtualBox because it is incompatible with Hyper-V.
-**Hyper-V must be enabled** on your Windows machine (it is often disabled by
-default to avoid conflicts with VirtualBox).
-
-For full step-by-step setup instructions, hardware/software requirements,
-troubleshooting, and testing workflows, see **[Testing.md](Testing.md)**.
+BrightOS uses **Docker containers with Molecule** for isolated, reproducible
+testing. This approach works on Windows, macOS, and Linux.
 
 **Quick summary:**
-1. [Enable Hyper-V](https://learn.microsoft.com/en-us/windows/security/requirement-based-access-control/virtualization-based-security-enable)
-   on your Windows machine
-2. Install WSL2 and Python 3 (in WSL)
-3. Install Vagrant on your **Windows host** (via installer or Chocolatey)
+1. Install [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop)
+2. Enable WSL2 backend in Docker Desktop (Settings → Resources → WSL Integration)
+3. Install WSL2 and Python 3 (in WSL)
 4. Create a Python virtual environment in WSL and install Ansible + Molecule
-   packages
-5. Run `molecule test -s default` from WSL (Vagrant on Windows will be invoked
-   automatically)
+   with Docker plugin
+5. Run Molecule from WSL:
+   ```bash
+   molecule test
+   ```
 
-See [Testing.md](Testing.md) for the complete guide.
+For detailed setup instructions, hardware/software requirements,
+troubleshooting, and testing workflows, see **[Testing.md](Testing.md)**.

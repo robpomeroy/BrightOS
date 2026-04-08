@@ -1,402 +1,187 @@
 # Testing with Molecule
 
-This guide covers setting up and running the Molecule test framework for the
-BrightOS Ansible playbook. The **officially supported** testing workflow uses
-**Hyper-V on Windows**, ensuring compatibility with modern Windows development
-environments. Other tools (e.g., Docker) may work locally but are not officially
-supported for BrightOS testing.
+This guide covers setup and execution of Molecule for the BrightOS Ansible playbook.
 
-## Quick Start
+Testing uses **Docker containers** with Molecule for fast, reproducible test cycles. This approach works on Windows, macOS, and Linux without requiring Hyper-V or virtual machine configuration.
 
-If you already have WSL, Hyper-V and Vagrant set up, jump to
-[Running Tests](#running-tests).
+## Supported Execution Model
+
+Molecule runs tests in Docker containers using the default scenario:
+- **Driver**: Docker
+- **Platform**: Ubuntu 24.04
+- **Tests**: Syntax check, convergence, idempotence, verification
+
+All testing is managed from WSL2 Linux environment with Docker daemon running on Windows.
 
 ## Prerequisites
 
 ### System Requirements
 
-- **Windows 10 or later** with Hyper-V enabled (Pro, Enterprise, or Education
-  editions are officially supported; Home may work with nonstandard Hyper-V
-  workarounds on a best-effort basis)
-- **WSL2** ([Enable WSL](https://learn.microsoft.com/en-gb/windows/wsl/install))
-- **Administrator privileges** (for Vagrant and Hyper-V)
+- Windows 10 or later
+- WSL2 installed and configured
+- Docker Desktop for Windows installed and running
+- Administrator access to enable WSL2 features
 
-### Software Installation (WSL2)
+### Install Docker Desktop
 
-We recommend installing the Ubuntu WSL distribution, for compatibility with the
-following commands. If using AlmaLinux, adjust commands accordingly (e.g.
-using `dnf` instead of `apt`).
+Download and install from:
+https://www.docker.com/products/docker-desktop
 
-Start WSL2 and elevate to root with `sudo -i`, then perform these once:
+Enable WSL2 backend in Docker Desktop settings:
+Settings → Resources → WSL Integration → Enable integration with Ubuntu
 
-```bash
-# Full system upgrade
-apt update && apt -y upgrade
-
-# Install Python, development tools, and prerequisites
-apt install -y python3 python3-pip python3-dev python3-virtualenv shellcheck
-```
-
-### Install Vagrant on Windows Host
-
-**Important:** Vagrant must be installed on your **Windows host**, not in WSL.
-The Hyper-V provider is Windows-only and will not work with a Linux-based
-Vagrant installation in WSL.
-
-Install Vagrant on Windows by downloading the installer from
-[HashiCorp's Vagrant downloads](https://developer.hashicorp.com/vagrant/downloads),
-or use Chocolatey:
-
-```powershell
-# On Windows (PowerShell as Administrator):
-choco install vagrant
-```
-
-Once installed on Windows, you can invoke Vagrant from WSL using the
-`VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` environment variable (see "Setup for
-Windows Host Access" section below).
-
-**Optional WSL setup (for Ansible and development tools only):**
-
-If you prefer to run Ansible and Molecule from WSL, install these lightweight
-dependencies in WSL— but **do not install Vagrant in WSL**:
+Verify Docker is accessible from WSL:
 
 ```bash
-# In WSL, install optional development tools
-apt install -y git python3-pip python3-virtualenv
+docker ps
 ```
 
-### Install Ansible and Molecule
+### Install Linux Tooling in WSL
 
-Exit root (`Ctrl-D`) and set up a Python virtual environment:
+In WSL:
 
 ```bash
-# Create virtual environment
+sudo apt update && sudo apt -y upgrade
+sudo apt install -y python3 python3-pip python3-dev python3-virtualenv git shellcheck docker.io
+```
+
+Create Python venv for Molecule in WSL:
+
+```bash
 mkdir -p ~/venv
 cd ~/venv
 virtualenv -p python3 brightos-test
-
-# Activate it
 source ~/venv/brightos-test/bin/activate
 
-# Install required Python packages
 pip install ansible-core ansible-builder ansible-lint ansible-navigator \
-    jmespath molecule molecule-vagrant python-vagrant pyvmomi PyYAML testinfra \
-    yamllint
-
-# To deactivate later, run: deactivate
+    jmespath molecule 'molecule-plugins[docker]' pyyaml testinfra yamllint
 ```
 
-### Setup for Windows Host Access (WSL2)
+## Scenario Overview
 
-To invoke the Windows-installed Vagrant from WSL2 and allow it to access both
-the BrightOS repository and Windows Hyper-V infrastructure, add this environment
-variable to WSL:
+- `default`: Ubuntu Server 24.04 in Docker
 
-```bash
-# Add to ~/.bashrc (within WSL):
-echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc
-
-# If 'vagrant' is not found in WSL, add the Windows Vagrant install path:
-echo 'export PATH="$PATH:/mnt/c/Program Files/Vagrant/bin"' >> ~/.bashrc
-
-# Apply changes:
-source ~/.bashrc
-
-# Create a small wrapper so Molecule can find `vagrant` (not just
-# `vagrant.exe`):
-sudo tee /usr/local/bin/vagrant >/dev/null << 'EOF'
-#!/usr/bin/env bash
-exec vagrant.exe "$@"
-EOF
-sudo chmod +x /usr/local/bin/vagrant
-
-# Verify WSL can see Vagrant in both forms:
-vagrant.exe --version
-vagrant --version
-```
-
-This allows the Windows Vagrant executable to seamlessly access your repository
-files in WSL and Hyper-V on the Windows host.
-
-### Enable Hyper-V (Windows Host)
-
-Ensure Hyper-V is enabled on your Windows machine. Open PowerShell as
-Administrator and run:
-
-```powershell
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
-```
-
-If you're on Windows 10 Home, you may need to use
-[Hyper-V on Home](https://github.com/microsoft/Hyper-V-on-Windows10-Home).
-
-## Understanding Scenarios
-
-Molecule tests are organized into **scenarios**, each with a specific OS and
-test configuration. We currently provide:
-
-- **`default`** ← Run this for most development work
-  - Provider: Hyper-V
-  - OS: Ubuntu Server 24.04 (bento/ubuntu-24.04)
-  - Use case: Primary development and testing
-
-- **`hyperv_almalinux10`**
-  - Provider: Hyper-V
-  - OS: AlmaLinux 10 (almalinux/10)
-  - Use case: Red-Hat-based compatibility testing
-
-To run a specific scenario, use `-s <scenario_name>`. For example, from the
-repository root:
-
-```bash
-molecule test -s hyperv_almalinux10
-```
-
-Running `molecule test` (without `-s`) runs the `default` scenario.
-
-## Hyper-V Virtual Switch Configuration
-
-On first use, **Vagrant will interactively prompt for a Hyper-V virtual
-switch**. You can:
-
-1. **Accept the default (Recommended for most users):** Press Enter when
-   prompted; Vagrant will use the "Default Switch".
-2. **Use a named switch:** Create a switch in Hyper-V Manager beforehand, then
-   specify it when prompted.
-3. **Hard-code the switch (Advanced):** Edit `molecule/default/molecule.yml` and
-   uncomment the `provider_raw_config_args` section:
-
-   ```yaml
-   provider_raw_config_args:
-     - 'switch_name="Default Switch"'
-   ```
-
-   Replace `"Default Switch"` with your switch's name. Repeat for other
-   scenarios.
+Additional scenarios can be added by creating directories in `molecule/` with their own `molecule.yml` configurations.
 
 ## Running Tests
 
-Before running Molecule, create a local `config.yml` in the repository root
-(required by `molecule/resources/playbooks/converge.yml`):
+From WSL, activate the venv and run Molecule:
 
 ```bash
-cd /path/to/BrightOS
-cp config.yml.example config.yml
-```
-
-`config.yml` is gitignored and is intended for local machine-specific settings.
-
-Then activate your virtual environment and install the required Ansible collections:
-
-```bash
+cd /repos/BrightOS
 source ~/venv/brightos-test/bin/activate
-ansible-galaxy collection install -r requirements.yml
+
+# Full test cycle
+molecule test
+
+# Individual actions
+molecule syntax
+molecule create
+molecule converge
+molecule idempotence
+molecule verify
+molecule destroy
 ```
 
-The Molecule Vagrant driver relies on Ansible collection content (including the
-`vagrant` action module), so this step is required before the first test run
-in a fresh environment.
+## Step-by-Step Actions
 
-### Full Test Cycle
+Run Molecule actions individually for debugging:
 
 ```bash
-# Run the complete test (create, converge, idempotence, verify, destroy)
-molecule test -s default
-
-# Run against AlmaLinux 10
-molecule test -s hyperv_almalinux10
+molecule create       # Create and start container
+molecule converge     # Apply roles to container
+molecule idempotence  # Verify idempotent run
+molecule verify       # Run verify playbook
+molecule destroy      # Stop and remove container
 ```
-
-### Step-by-Step Testing
-
-For development and debugging, run phases individually:
-
-```bash
-# Create the test VM
-molecule create -s default
-
-# Run the playbook against the VM
-molecule converge -s default
-
-# Test idempotence (run the playbook twice, verify it's stable)
-molecule idempotence -s default
-
-# Run verification tests (currently just asserts true; expand as needed)
-molecule verify -s default
-
-# Clean up the VM
-molecule destroy -s default
-```
-
-### Linting
-
-Before committing, lint your code:
-
-```bash
-# Lint all YAML files and Ansible roles
-molecule lint -s default
-
-# This runs:
-# - yamllint (YAML syntax)
-# - ansible-lint (Ansible best practices, with some rules excluded)
-```
-
-## Advanced Usage
-
-### Hyper-V Checkpoints
-
-The Vagrant `snapshot` subcommands are not supported by the Hyper-V provider, so
-they are not part of the supported BrightOS workflow.
-
-If you want a reusable VM restore point during iterative development, create a
-Hyper-V checkpoint instead:
-
-1. Create the VM with `molecule create -s default`.
-2. Open Hyper-V Manager on Windows and locate the VM created for the scenario.
-3. Create a checkpoint from the VM's context menu before making further changes.
-4. If you need to roll back, apply the checkpoint in Hyper-V Manager, then
-   continue with `molecule converge` or `molecule verify`.
-
-You can also manage checkpoints from an elevated PowerShell session on Windows:
-
-```powershell
-# List VMs and identify the scenario VM name
-Get-VM
-
-# Create a checkpoint
-Checkpoint-VM -Name <vm_name> -SnapshotName <checkpoint_name>
-
-# Restore a checkpoint
-Restore-VMSnapshot -VMName <vm_name> -Name <checkpoint_name>
-
-# Remove a checkpoint
-Remove-VMSnapshot -VMName <vm_name> -Name <checkpoint_name>
-```
-
-Checkpoint names and VM names are managed by Hyper-V rather than Molecule, so
-verify the VM identity before applying or removing checkpoints.
-
-### Debugging a Failed Convergence
-
-If the playbook fails during `molecule converge`:
-
-1. **Keep the VM alive** — only run `molecule destroy` when ready to detach
-2. **SSH into the VM:**
-   ```bash
-   vagrant global-status
-   vagrant ssh <uuid>
-   ```
-   Once inside, you can inspect logs, check installed packages, and re-run
-   commands manually.
-3. **Edit the playbook** as needed, then re-run `molecule converge`.
-
-### Using molecule-docker Locally (Optional)
-
-If you prefer Docker over Hyper-V VMs (e.g., on non-Windows systems), you can
-install `molecule-docker` in your venv:
-
-```bash
-pip install molecule-docker
-```
-
-Then create a scenario using the Docker driver. This is **unsupported** for
-BrightOS development but may be useful for quick linting checks.
 
 ## Troubleshooting
 
-### Vagrant Prompt Hangs on WSL2
+### Docker daemon not accessible
 
-If Vagrant hangs when prompting for the Hyper-V switch, ensure:
+Ensure Docker daemon is running on Windows and WSL integration is enabled:
 
-1. You're running within WSL2 (not PowerShell)
-2. `VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` is set in your environment
-3. Your Windows host is accessible from WSL: test with `ls /mnt/c/`
+```bash
+docker ps
+```
 
-### could not resolve module/action 'vagrant'
+If this fails, check:
+1. Docker Desktop is running on Windows
+2. Docker Desktop → Settings → Resources → WSL Integration → Enable integration with Ubuntu
 
-If Molecule fails with `couldn't resolve module/action 'vagrant'`, Ansible
-collections are missing in the active environment.
+### Module or action not found
 
-1. Ensure your venv is activated in the current shell.
-2. From repository root, install collections:
-   ```bash
-   ansible-galaxy collection install -r requirements.yml
-   ```
-3. Re-run Molecule.
+Ensure Ansible plugins point to Molecule's molecule_plugins location:
 
-### Vagrant executable was not found
+```bash
+source ~/venv/brightos-test/bin/activate
+cd /repos/BrightOS
+python -c 'import molecule_plugins.docker as m, os; print(os.path.dirname(m.__file__))'
+```
 
-If Molecule fails with `ERROR    vagrant executable was not found!`, WSL cannot
-find the Windows Vagrant executable yet.
+Set in ansible.cfg if needed:
 
-1. Ensure Vagrant is installed on Windows (`vagrant --version` in Windows
-   PowerShell).
-2. In WSL, ensure both `VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` and
-   `/mnt/c/Program Files/Vagrant/bin` are on your shell environment (see Setup
-   for Windows Host Access above).
-3. Reload your shell (`source ~/.bashrc`).
-4. If `which vagrant` is still empty but `which vagrant.exe` works, create a wrapper:
-   ```bash
-   sudo tee /usr/local/bin/vagrant >/dev/null << 'EOF'
-   #!/usr/bin/env bash
-   exec vagrant.exe "$@"
-   EOF
-   sudo chmod +x /usr/local/bin/vagrant
-   ```
-5. Verify from WSL: `vagrant --version`.
-6. Re-run Molecule once `vagrant --version` works in WSL.
+```ini
+[defaults]
+library = /path/to/site-packages/molecule_plugins/docker/modules:~/.ansible/plugins/modules
+action_plugins = /path/to/site-packages/molecule_plugins/docker/plugins/action:~/.ansible/plugins/action
+```
 
-### Molecule on Windows fails with `No module named 'fcntl'`
+### Container fails to start
 
-`fcntl` is a Unix-only module, so Molecule must run under Linux/WSL Python.
-This means:
+Check for Docker resource constraints or conflicts. Restart Docker and retry:
 
-1. Run `molecule ...` from WSL, not from native Windows PowerShell Python.
-2. Keep using Windows-installed `vagrant.exe` for Hyper-V, invoked from WSL.
+```bash
+docker system prune -a  # Warning: removes all unused images/containers
+molecule test
+```
 
-### Missing cleanup playbook warning
+### Slow performance on Windows
 
-`WARNING ... cleanup: Executed: Missing playbook` is expected in this repo
-because no dedicated Molecule cleanup playbook is configured. It does not mean
-`main.yml` is missing and can be ignored.
+Docker on Windows (via WSL2) can be slower than native Linux Docker. Consider:
+- Closing unused applications to free memory
+- Increasing Docker Desktop memory allocation (Settings → Resources → Memory)
+- Running tests during off-peak machine usage
 
-### almalinux/10 Box Not Available
+## Advanced Usage
 
-AlmaLinux 10 is very recent (2024/2025). If `vagrant up` fails with "box not
-found" or "no provider", you have options:
+### Custom Scenarios
 
-1. **Switch to Bento if available:** The
-   [Bento project](https://app.vagrantup.com/bento) periodically boxes new OS
-   releases; if `bento/almalinux-10` is available, edit
-   `molecule/hyperv_almalinux10/molecule.yml` and change the `box` value from
-   `almalinux/10` to `bento/almalinux-10`.
-2. **Build manually:** Use the official AlmaLinux ISO and Vagrant's
-   `vagrant package` command (advanced).
-3. **Use AlmaLinux 9** temporarily by editing
-   `molecule/hyperv_almalinux10/molecule.yml` and changing the `box` to
-   `almalinux/9`.
+Create additional scenarios by adding directories to `molecule/`:
 
-### Permission Denied Errors
+```bash
+mkdir -p molecule/custom-scenario
+cp molecule/default/molecule.yml molecule/custom-scenario/
+```
 
-If you see permission errors, ensure:
+Edit `molecule/custom-scenario/molecule.yml` to customize:
+- Base image (e.g., `rockylinux:9`, `debian:12`)
+- Container name
+- Volumes or environment variables
 
-1. Your Windows user account has permission to manage Hyper-V (typically
-   requires being in the Hyper-V Administrators group; see
-   [Microsoft docs](https://learn.microsoft.com/en-us/windows/security/identity-protection/user-access-control/how-user-account-control-works))
-2. Run Vagrant from an elevated Windows command prompt or PowerShell
-   (right-click → "Run as administrator"), or invoke from WSL with
-   `VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1` set
-3. Hyper-V is enabled and accessible
-4. The repository is on your local drive (C:), not a network share
+Run custom scenario:
+
+```bash
+molecule test -s custom-scenario
+```
+
+### Debugging Container
+
+SSH into a running container for manual inspection:
+
+```bash
+# List running containers
+docker ps
+
+# Execute shell in container
+docker exec -it vm-runner bash
+
+# Or use Molecule's interactive mode
+molecule login
+```
 
 ## Next Steps
 
-- Review the [main playbook](../main.yml) to understand what roles are tested.
-- Expand [verify.yml](../molecule/resources/playbooks/verify.yml) with real test
-  assertions (currently it only asserts `true`).
-- Check [config.yml.example](../config.yml.example) and
-  [ansible.cfg.example](../ansible.cfg.example) to customize test settings.
-
-For feedback or issues, consult the
-[Molecule documentation](https://molecule.readthedocs.io).
+- Review [main.yml](../main.yml) to understand tested roles
+- Expand [molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml) with real assertions
+- Tune [ansible.cfg](../ansible.cfg) for your environment
