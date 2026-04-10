@@ -1,4 +1,4 @@
-user-manual /usr/share/doc/privoxy/{{ (ansible_os_family == 'RedHat') | ternary('doc/webserver/', '') }}user-manual
+user-manual /usr/share/doc/privoxy/{{ (ansible_facts['os_family'] == 'RedHat') | ternary('doc/webserver/', '') }}user-manual
 confdir /etc/privoxy
 logdir /var/log/privoxy
 actionsfile match-all.action # Actions that are applied to all sites and maybe overruled later on.

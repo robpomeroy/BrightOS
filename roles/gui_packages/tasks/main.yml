@@ -1,6 +1,6 @@
 ---
 - name: Include task list appropriate for OS family (Debian/RedHat)
-  ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"  
+  ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml"  
 
 - name: Create Firefox policies directory
   ansible.builtin.file:

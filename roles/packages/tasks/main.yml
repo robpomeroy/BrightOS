@@ -17,12 +17,12 @@
 
 - name: Copy .fzf.bash for root and playbook users
   ansible.builtin.copy:
-    src: "{{ ansible_os_family }}.fzf.bash"
+    src: "{{ ansible_facts['os_family'] }}.fzf.bash"
     dest: '{{ item }}/.fzf.bash'
     mode: 0644
   loop:
     - /root
-    - /home/{{ playbook_user | default(ansible_user_id) }}
+    - "{{ '/root' if (playbook_user | default(ansible_user_id)) == 'root' else '/home/' ~ (playbook_user | default(ansible_user_id)) }}"
 
 # [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 - name: Ensure fzf.bash is loaded for root and playbook user
@@ -33,7 +33,7 @@
     line: "[ -f ~/.fzf.bash ] && source ~/.fzf.bash"
   loop:
     - /root
-    - /home/{{ playbook_user | default(ansible_user_id) }}
+    - "{{ '/root' if (playbook_user | default(ansible_user_id)) == 'root' else '/home/' ~ (playbook_user | default(ansible_user_id)) }}"
 
 
 ########################
@@ -41,7 +41,7 @@
 ########################
 
 - name: Include task list appropriate for OS family (Debian/RedHat)
-  ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"  
+  ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml"  
 
 
 ###############################################
@@ -52,11 +52,19 @@
   ansible.builtin.package:
     name:
       - htop           # Superior to top: https://github.com/htop-dev/htop
-      - mlocate        # File finder: https://pagure.io/mlocate
+      - "{{ 'plocate' if ansible_facts['os_family'] == 'Debian' else 'mlocate' }}"  # File finder
       - python3          # Keeps Python up to date
       - python3-pip      # Keeps Pip up to date
       - python3-psutil   # Required, to Ansible manage dconf
       - tmux           # "terminal multiplexer": https://github.com/tmux/tmux
+
+- name: Hide htop application icon
+  ansible.builtin.lineinfile:
+    path: /usr/share/applications/htop.desktop
+    regexp: '^NoDisplay='
+    insertafter: '^\[Desktop Entry\]'
+    line: 'NoDisplay=true'
+    mode: "0644"
 
 
 ##########################

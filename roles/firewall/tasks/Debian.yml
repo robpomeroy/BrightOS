@@ -10,7 +10,8 @@
 - name: Allow SSH through firewall
   ansible.builtin.ufw:
     rule: allow
-    name: OpenSSH
+    port: "22"
+    proto: tcp
 
 - name: Enable ufw
   ansible.builtin.ufw:

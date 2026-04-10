@@ -2,7 +2,9 @@
 
 This guide covers setup and execution of Molecule for the BrightOS Ansible playbook.
 
-Testing uses **Docker containers** with Molecule for fast, reproducible test cycles. This approach works on Windows, macOS, and Linux without requiring Hyper-V or virtual machine configuration.
+Testing uses **Docker containers** with Molecule for fast, reproducible test
+cycles. This approach can work on Windows, macOS, and Linux without requiring
+Hyper-V or virtual machine configuration.
 
 ## Supported Execution Model
 
@@ -11,7 +13,8 @@ Molecule runs tests in Docker containers using the default scenario:
 - **Platform**: Ubuntu 24.04
 - **Tests**: Syntax check, convergence, idempotence, verification
 
-All testing is managed from WSL2 Linux environment with Docker daemon running on Windows.
+The preferred approach (used by the project maintainer) is to test from a WSL2
+Linux environment with a Docker daemon running on Windows.
 
 ## Prerequisites
 
@@ -27,8 +30,8 @@ All testing is managed from WSL2 Linux environment with Docker daemon running on
 Download and install from:
 https://www.docker.com/products/docker-desktop
 
-Enable WSL2 backend in Docker Desktop settings:
-Settings → Resources → WSL Integration → Enable integration with Ubuntu
+Enable WSL2 backend in Docker Desktop settings: Settings → Resources → WSL
+Integration → Enable integration with Ubuntu
 
 Verify Docker is accessible from WSL:
 
@@ -42,7 +45,8 @@ In WSL:
 
 ```bash
 sudo apt update && sudo apt -y upgrade
-sudo apt install -y python3 python3-pip python3-dev python3-virtualenv git shellcheck docker.io
+sudo apt install -y python3 python3-pip python3-dev python3-virtualenv git \
+    shellcheck docker.io
 ```
 
 Create Python venv for Molecule in WSL:
@@ -55,32 +59,28 @@ source ~/venv/brightos-test/bin/activate
 
 pip install ansible-core ansible-builder ansible-lint ansible-navigator \
     jmespath molecule 'molecule-plugins[docker]' pyyaml testinfra yamllint
+
+# Install Ansible collections required for Docker driver
+ansible-galaxy collection install -r /path/to/BrightOS/requirements.yml
 ```
 
 ## Scenario Overview
 
 - `default`: Ubuntu Server 24.04 in Docker
 
-Additional scenarios can be added by creating directories in `molecule/` with their own `molecule.yml` configurations.
+Additional scenarios can be added by creating directories in `molecule/` with
+their own `molecule.yml` configurations.
 
 ## Running Tests
 
 From WSL, activate the venv and run Molecule:
 
 ```bash
-cd /repos/BrightOS
+cd /path/to/BrightOS
 source ~/venv/brightos-test/bin/activate
 
 # Full test cycle
 molecule test
-
-# Individual actions
-molecule syntax
-molecule create
-molecule converge
-molecule idempotence
-molecule verify
-molecule destroy
 ```
 
 ## Step-by-Step Actions
@@ -88,11 +88,12 @@ molecule destroy
 Run Molecule actions individually for debugging:
 
 ```bash
-molecule create       # Create and start container
 molecule converge     # Apply roles to container
-molecule idempotence  # Verify idempotent run
-molecule verify       # Run verify playbook
+molecule create       # Create and start container
 molecule destroy      # Stop and remove container
+molecule idempotence  # Verify idempotent run
+molecule syntax       # Check playbook syntax
+molecule verify       # Run verify playbook
 ```
 
 ## Troubleshooting
@@ -107,7 +108,8 @@ docker ps
 
 If this fails, check:
 1. Docker Desktop is running on Windows
-2. Docker Desktop → Settings → Resources → WSL Integration → Enable integration with Ubuntu
+2. Docker Desktop → Settings → Resources → WSL Integration → Enable integration
+   with Ubuntu
 
 ### Module or action not found
 
@@ -115,11 +117,11 @@ Ensure Ansible plugins point to Molecule's molecule_plugins location:
 
 ```bash
 source ~/venv/brightos-test/bin/activate
-cd /repos/BrightOS
+cd /path/to/BrightOS
 python -c 'import molecule_plugins.docker as m, os; print(os.path.dirname(m.__file__))'
 ```
 
-Set in ansible.cfg if needed:
+Set in `ansible.cfg` if needed:
 
 ```ini
 [defaults]
@@ -139,6 +141,7 @@ molecule test
 ### Slow performance on Windows
 
 Docker on Windows (via WSL2) can be slower than native Linux Docker. Consider:
+
 - Closing unused applications to free memory
 - Increasing Docker Desktop memory allocation (Settings → Resources → Memory)
 - Running tests during off-peak machine usage
@@ -154,7 +157,8 @@ mkdir -p molecule/custom-scenario
 cp molecule/default/molecule.yml molecule/custom-scenario/
 ```
 
-Edit `molecule/custom-scenario/molecule.yml` to customize:
+Edit `molecule/custom-scenario/molecule.yml` to customise:
+
 - Base image (e.g., `rockylinux:9`, `debian:12`)
 - Container name
 - Volumes or environment variables
@@ -185,3 +189,4 @@ molecule login
 - Review [main.yml](../main.yml) to understand tested roles
 - Expand [molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml) with real assertions
 - Tune [ansible.cfg](../ansible.cfg) for your environment
+

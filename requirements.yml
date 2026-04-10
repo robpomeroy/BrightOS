@@ -1,8 +1,6 @@
 ---
 collections:
-  # Posix required for SELinux role
+  - name: community.docker
+    version: ">=3.0.0"
   - name: ansible.posix
-  # For dconf
-  - name: community.general
-  # The DevSec OS & SSH hardening playbooks
-  - name: devsec.hardening
+    version: ">=1.4.0"

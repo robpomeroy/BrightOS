@@ -12,10 +12,7 @@ platforms:
   - name: vm-runner
     image: ubuntu:24.04
     pre_build_image: false
-    command: /lib/systemd/systemd-cgroup-main-init
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    cgroupns_mode: host
+    command: /bin/bash -c 'while true; do sleep 1; done'
     privileged: true
     environment:
       DEBIAN_FRONTEND: noninteractive

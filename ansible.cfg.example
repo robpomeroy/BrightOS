@@ -4,6 +4,7 @@
 inventory = ./inventory
 remote_user = yourname
 private_key_file =  ~/.ssh/yourkey
+inject_facts_as_vars = false
 
 # This gives us longer to enter the private key's passphrase (if any)
 timeout = 30 

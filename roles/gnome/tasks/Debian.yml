@@ -4,6 +4,6 @@
     name:
       - gnome-calculator
       - gnome-session
-      - gnome-themes-standard
+      - gnome-themes-extra
       - nautilus
     state: latest
