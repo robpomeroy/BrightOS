@@ -1,15 +1,18 @@
 # Testing with Molecule
 
-This directory contains Molecule test scenarios for the BrightOS playbook. Each scenario tests the playbook against a specific operating system using Vagrant and Hyper-V.
+This directory contains Molecule test scenarios for the BrightOS playbook. The
+default scenario uses Docker containers to test the playbook in an isolated,
+reproducible environment. This approach works on Windows, macOS, and Linux
+without requiring Hyper-V or virtual machine configuration.
 
 ## Available Scenarios
 
 - **`default`** — Ubuntu Server 24.04 (recommended for most development)
-- **`hyperv_almalinux10`** — AlmaLinux 10 (Red Hat compatibility)
 
 ## Getting Started
 
-See **[../docs/Testing.md](../docs/Testing.md)** for comprehensive setup and usage instructions.
+See **[../docs/Testing.md](../docs/Testing.md)** for comprehensive setup and
+usage instructions.
 
 This includes:
 - Prerequisites and software installation
@@ -17,27 +20,6 @@ This includes:
 - How to run tests (full cycle and step-by-step)
 - Troubleshooting
 - Advanced usage (snapshots, debugging, etc.)
-
-## Quick Reference
-
-From an elevated Windows PowerShell prompt at repository root:
-
-```powershell
-# One-time setup for config.yml and collections
-.\scripts\Initialize-MoleculeHyperV.ps1
-
-# Run full test cycle
-.\scripts\Invoke-MoleculeHyperV.ps1 -Action test -Scenario default
-
-# Run against AlmaLinux 10
-.\scripts\Invoke-MoleculeHyperV.ps1 -Action test -Scenario hyperv_almalinux10
-
-# Run individual phases
-.\scripts\Invoke-MoleculeHyperV.ps1 -Action create -Scenario default
-.\scripts\Invoke-MoleculeHyperV.ps1 -Action converge -Scenario default
-.\scripts\Invoke-MoleculeHyperV.ps1 -Action verify -Scenario default
-.\scripts\Invoke-MoleculeHyperV.ps1 -Action destroy -Scenario default
-```
 
 ## Scenario Structure
 

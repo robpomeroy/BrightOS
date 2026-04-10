@@ -22,7 +22,7 @@
     mode: 0644
   loop:
     - /root
-    - "{{ '/root' if (playbook_user | default(ansible_user_id)) == 'root' else '/home/' ~ (playbook_user | default(ansible_user_id)) }}"
+    - "{{ '/root' if (playbook_user | default(ansible_facts['user_id'])) == 'root' else '/home/' ~ (playbook_user | default(ansible_facts['user_id'])) }}"
 
 # [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 - name: Ensure fzf.bash is loaded for root and playbook user
@@ -33,7 +33,7 @@
     line: "[ -f ~/.fzf.bash ] && source ~/.fzf.bash"
   loop:
     - /root
-    - "{{ '/root' if (playbook_user | default(ansible_user_id)) == 'root' else '/home/' ~ (playbook_user | default(ansible_user_id)) }}"
+    - "{{ '/root' if (playbook_user | default(ansible_facts['user_id'])) == 'root' else '/home/' ~ (playbook_user | default(ansible_facts['user_id'])) }}"
 
 
 ########################
