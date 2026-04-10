@@ -1,12 +1,16 @@
 ---
 - name: Include task list appropriate for OS family (Debian/RedHat)
-  ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml" 
+  ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml"
+
+- name: Gather service facts for network handlers
+  ansible.builtin.service_facts:
+  changed_when: false
 
 - name: Override DHCP DNS servers (Debian)
   ansible.builtin.lineinfile:
     path: /etc/dhcp/dhclient.conf
     create: true
-    regex: "^supersede domain-name-servers"
+    regexp: "^supersede domain-name-servers"
     line: "supersede domain-name-servers {{ dns_servers | join(',') }};"
   when: ansible_facts['os_family'] == "Debian"
 

@@ -58,6 +58,11 @@
       - python3-psutil   # Required, to Ansible manage dconf
       - tmux           # "terminal multiplexer": https://github.com/tmux/tmux
 
+- name: Check whether htop desktop entry exists
+  ansible.builtin.stat:
+    path: /usr/share/applications/htop.desktop
+  register: htop_desktop
+
 - name: Hide htop application icon
   ansible.builtin.lineinfile:
     path: /usr/share/applications/htop.desktop
@@ -65,6 +70,7 @@
     insertafter: '^\[Desktop Entry\]'
     line: 'NoDisplay=true'
     mode: "0644"
+  when: htop_desktop.stat.exists
 
 
 ##########################
