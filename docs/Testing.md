@@ -18,6 +18,9 @@ Linux environment with a Docker daemon running on Windows.
 
 ## Prerequisites
 
+Be sure to copy `config.yml.example` to `config.yml` and update any necessary
+configuration values before running tests.
+
 ### System Requirements
 
 - Windows 10 or later

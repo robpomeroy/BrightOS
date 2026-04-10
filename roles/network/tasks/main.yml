@@ -5,6 +5,7 @@
 - name: Gather service facts for network handlers
   ansible.builtin.service_facts:
   changed_when: false
+  failed_when: false  # Don't fail under Docker without systemd etc.
 
 - name: Override DHCP DNS servers (Debian)
   ansible.builtin.lineinfile:
@@ -12,6 +13,9 @@
     create: true
     regexp: "^supersede domain-name-servers"
     line: "supersede domain-name-servers {{ dns_servers | join(',') }};"
+    owner: root
+    group: root
+    mode: "0644"
   when: ansible_facts['os_family'] == "Debian"
 
 # from /etc/sysconfig/network-scripts/readme-ifcfg-rh.txt:
