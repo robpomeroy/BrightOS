@@ -20,9 +20,7 @@
     src: "{{ ansible_facts['os_family'] }}.fzf.bash"
     dest: '{{ item }}/.fzf.bash'
     mode: 0644
-  loop:
-    - /root
-    - "{{ '/root' if (playbook_user | default(ansible_facts['user_id'])) == 'root' else '/home/' ~ (playbook_user | default(ansible_facts['user_id'])) }}"
+  loop: "{{ ['/root', ('/root' if (playbook_user | default(ansible_facts['user_id'])) == 'root' else '/home/' ~ (playbook_user | default(ansible_facts['user_id'])))] | unique }}"
 
 # [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 - name: Ensure fzf.bash is loaded for root and playbook user
@@ -31,9 +29,7 @@
     # Double backslashes needed, since backslash is a special character in YAML
     regexp: "\\[ -f ~/\\.fzf\\.bash \\] && source ~/\\.fzf\\.bash"
     line: "[ -f ~/.fzf.bash ] && source ~/.fzf.bash"
-  loop:
-    - /root
-    - "{{ '/root' if (playbook_user | default(ansible_facts['user_id'])) == 'root' else '/home/' ~ (playbook_user | default(ansible_facts['user_id'])) }}"
+  loop: "{{ ['/root', ('/root' if (playbook_user | default(ansible_facts['user_id'])) == 'root' else '/home/' ~ (playbook_user | default(ansible_facts['user_id'])))] | unique }}"
 
 
 ########################
