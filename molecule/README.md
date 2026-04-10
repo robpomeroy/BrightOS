@@ -16,10 +16,9 @@ usage instructions.
 
 This includes:
 - Prerequisites and software installation
-- Hyper-V virtual switch configuration
 - How to run tests (full cycle and step-by-step)
 - Troubleshooting
-- Advanced usage (snapshots, debugging, etc.)
+- Advanced usage (debugging, logs, and step-by-step runs)
 
 ## Scenario Structure
 

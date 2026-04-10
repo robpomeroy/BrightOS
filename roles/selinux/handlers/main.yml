@@ -1,4 +1,6 @@
 ---
 - name: reboot
   ansible.builtin.reboot:
-  when: ansible_facts.virtualization_type != 'docker'
+  when:
+    - ansible_facts.virtualization_type is defined
+    - ansible_facts.virtualization_type != 'docker'

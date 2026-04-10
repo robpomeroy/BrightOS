@@ -1,4 +1,4 @@
-This directory contains shared playbooks and a shared Dockerfile.
+This directory contains shared playbooks.
 
 Visit
 https://molecule.readthedocs.io/en/latest/examples.html#sharing-across-scenarios
