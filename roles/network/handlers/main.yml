@@ -3,8 +3,14 @@
   ansible.builtin.service:
     name: NetworkManager
     state: restarted
+  when:
+    - ansible_facts.services is defined
+    - ansible_facts.services['NetworkManager.service'] is defined
 
 - name: Restart systemd-resolved
   ansible.builtin.service:
     name: systemd-resolved
     state: restarted
+  when:
+    - ansible_facts.services is defined
+    - ansible_facts.services['systemd-resolved.service'] is defined

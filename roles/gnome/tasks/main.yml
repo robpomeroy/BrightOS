@@ -1,9 +1,9 @@
 - name: Include task list appropriate for OS family (Debian/RedHat)
-  ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"  
+  ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml"  
 
 - name: Enable GDM's automatic login feature
   community.general.ini_file:
-    path: "/etc/gdm{{ (ansible_os_family == 'RedHat') | ternary('', '3') }}/custom.conf"
+    path: "/etc/gdm{{ (ansible_facts['os_family'] == 'RedHat') | ternary('', '3') }}/custom.conf"
     section: daemon
     option: AutomaticLoginEnable
     value: "True"
@@ -12,7 +12,7 @@
 
 - name: Suppress gnome-initial-setup application
   community.general.ini_file:
-    path: "/etc/gdm{{ (ansible_os_family == 'RedHat') | ternary('', '3') }}/custom.conf"
+    path: "/etc/gdm{{ (ansible_facts['os_family'] == 'RedHat') | ternary('', '3') }}/custom.conf"
     section: daemon
     option: InitialSetupEnable
     value: "False"
@@ -21,7 +21,7 @@
 
 - name: Enable automatic login for SNL user
   community.general.ini_file:
-    path: "/etc/gdm{{ (ansible_os_family == 'RedHat') | ternary('', '3') }}/custom.conf"
+    path: "/etc/gdm{{ (ansible_facts['os_family'] == 'RedHat') | ternary('', '3') }}/custom.conf"
     section: daemon
     option: AutomaticLogin
     value: "{{ snl_user }}"
@@ -40,19 +40,24 @@
     no_extra_spaces: yes
 
 # The applications listed may or may not be installed (depending on distro)
-- name: Hide unnecessary application icons
-  community.general.ini_file:
+- name: Check whether optional desktop entries exist
+  ansible.builtin.stat:
     path: "/usr/share/applications/{{ item }}"
-    section: "Desktop Entry"
-    option: NoDisplay
-    value: "true"
-    no_extra_spaces: yes
-    mode: "0644"
   loop:
     - byobu.desktop
-    - htop.desktop
     - info.desktop
     - vim.desktop
+  register: optional_desktop_entries
+
+- name: Hide unnecessary application icons
+  ansible.builtin.lineinfile:
+    path: "/usr/share/applications/{{ item.item }}"
+    regexp: '^NoDisplay='
+    insertafter: '^\[Desktop Entry\]'
+    line: 'NoDisplay=true'
+    mode: "0644"
+  loop: "{{ optional_desktop_entries.results }}"
+  when: item.stat.exists
 
 # Not strictly Gnome-related, but no need for a separate role just for this
 - name: Create /etc/X11/xorg.conf.d directory

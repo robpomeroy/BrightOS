@@ -1,0 +1,9 @@
+---
+- name: Cleanup
+  hosts: all
+  gather_facts: false
+  tasks:
+    # Intentionally empty cleanup hook shared across scenarios.
+    - name: No-op cleanup step
+      ansible.builtin.debug:
+        msg: "No explicit cleanup actions are defined for this scenario."

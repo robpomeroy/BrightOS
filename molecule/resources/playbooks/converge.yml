@@ -9,22 +9,22 @@
         update_cache: true
         upgrade: dist
       become: true
-      when: ansible_os_family == "Debian"
+      when: ansible_facts['os_family'] == "Debian"
     - name: update yum cache
       ansible.builtin.yum:
         update_cache: true
       become: true
-      when: ansible_os_family == "RedHat"
+      when: ansible_facts['os_family'] == "RedHat"
   roles:
-    - {role: "roles/dconf", become: true}
-    - {role: "roles/firewall", become: true}
-    - {role: "roles/gnome", become: true}
-    - {role: "roles/gui_packages", become: true}
-    - {role: "roles/name", become: true}
-    - {role: "roles/network", become: true}
-    - {role: "roles/packages", become: true}
-    - {role: "roles/plymouth", become: true}
-    - {role: "roles/proxy", become: true}
-    - {role: "roles/selinux", become: true}
-    - {role: "roles/user", become: true}
-    - {role: "roles/version", become: true}
+    - {role: "dconf", become: true}
+    - {role: "firewall", become: true}
+    - {role: "gnome", become: true}
+    - {role: "gui_packages", become: true}
+    - {role: "name", become: true}
+    - {role: "network", become: true}
+    - {role: "packages", become: true}
+    - {role: "plymouth", become: true}
+    - {role: "proxy", become: true}
+    - {role: "selinux", become: true}
+    - {role: "user", become: true}
+    - {role: "version", become: true}

@@ -1,13 +1,22 @@
 ---
 - name: Include task list appropriate for OS family (Debian/RedHat)
-  ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml" 
+  ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml"
+
+- name: Gather service facts for network handlers
+  ansible.builtin.service_facts:
+  changed_when: false
+  failed_when: false  # Don't fail under Docker without systemd etc.
 
 - name: Override DHCP DNS servers (Debian)
   ansible.builtin.lineinfile:
     path: /etc/dhcp/dhclient.conf
-    regex: "^supersede domain-name-servers"
+    create: true
+    regexp: "^supersede domain-name-servers"
     line: "supersede domain-name-servers {{ dns_servers | join(',') }};"
-  when: ansible_os_family == "Debian"
+    owner: root
+    group: root
+    mode: "0644"
+  when: ansible_facts['os_family'] == "Debian"
 
 # from /etc/sysconfig/network-scripts/readme-ifcfg-rh.txt:
 # NetworkManager stores new network profiles in keyfile format in the
@@ -25,4 +34,4 @@
 #     block: |
 #       DNS1={{ dns_servers[1] }}
 #       DNS2={{ dns_servers[2] }}
-#   when: ansible_os_family == "RedHat"
+#   when: ansible_facts['os_family'] == "RedHat"

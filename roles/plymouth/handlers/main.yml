@@ -1,8 +1,15 @@
 ---
 - name: Install the theme
-  ansible.builtin.command: update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/ubuntu-logo/ubuntu-logo.plymouth 100
+  ansible.builtin.command: update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/spinner/spinner.plymouth 100
+  listen: 'Plymouth tasks'
+
+- name: Check whether update-initramfs is available
+  ansible.builtin.stat:
+    path: /usr/sbin/update-initramfs
+  register: update_initramfs_bin
   listen: 'Plymouth tasks'
 
 - name: Update initramfs
   ansible.builtin.command: update-initramfs -u
+  when: update_initramfs_bin.stat.exists
   listen: 'Plymouth tasks'
