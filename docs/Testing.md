@@ -4,7 +4,7 @@ This guide covers setup and execution of Molecule for the BrightOS Ansible playb
 
 Testing uses **Docker containers** with Molecule for fast, reproducible test
 cycles. This approach can work on Windows, macOS, and Linux without requiring
-Hyper-V or virtual machine configuration.
+manual virtual machine configuration.
 
 ## Supported Execution Model
 
@@ -49,7 +49,7 @@ In WSL:
 ```bash
 sudo apt update && sudo apt -y upgrade
 sudo apt install -y python3 python3-pip python3-dev python3-virtualenv git \
-    shellcheck docker.io
+    shellcheck
 ```
 
 Create Python venv for Molecule in WSL:
@@ -174,7 +174,7 @@ molecule test -s custom-scenario
 
 ### Debugging Container
 
-SSH into a running container for manual inspection:
+Open a shell into a running container for manual inspection:
 
 ```bash
 # List running containers
