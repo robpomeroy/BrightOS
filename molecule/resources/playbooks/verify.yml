@@ -8,6 +8,15 @@
 
   tasks:
 
+    - name: Assert dns_servers is defined with at least one entry
+      ansible.builtin.assert:
+        that:
+          - dns_servers is defined
+          - dns_servers | length > 0
+        fail_msg: >
+          dns_servers must be defined in config.yml with at least one DNS
+          server before protective DNS verification can run
+
     # =========================================================================
     # Package presence
     # =========================================================================
