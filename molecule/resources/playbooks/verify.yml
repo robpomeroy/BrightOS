@@ -456,27 +456,28 @@
 
     # =========================================================================
     # Service registration
-    # NOTE: Asserting service state=running is unreliable in Docker containers
-    # (systemd is not the init process). We assert the unit is registered in
-    # service facts instead, which is sufficient to detect missing installs.
     # =========================================================================
 
     # NOTE: Asserting service state=running is unreliable in Docker containers
     # (systemd is not the init process, so service_facts shows no units).
-    # We assert the systemd unit file exists instead, which confirms the
-    # package was installed correctly and the service will start on boot on a
-    # real machine.
-    - name: Check privoxy systemd unit file exists
+    # Instead, we assert the systemd unit file exists in standard locations.
+    # This confirms the package was installed correctly and the service will
+    # start on boot on a real machine, without depending on the container's
+    # init system.
+    - name: Check privoxy systemd unit file in standard locations
       ansible.builtin.stat:
-        path: /lib/systemd/system/privoxy.service
-      register: privoxy_unit
+        path: "{{ item }}"
+      loop:
+        - /lib/systemd/system/privoxy.service
+        - /usr/lib/systemd/system/privoxy.service
+      register: privoxy_unit_check
 
-    - name: Assert privoxy systemd unit file exists
+    - name: Assert privoxy systemd unit file exists in at least one standard location
       ansible.builtin.assert:
-        that: privoxy_unit.stat.exists
+        that: "privoxy_unit_check.results | map(attribute='stat.exists') | select | list | length > 0"
         fail_msg: >
-          /lib/systemd/system/privoxy.service does not exist — content
-          filtering will not start on boot
+          privoxy systemd unit file not found in /lib/systemd/system/ or
+          /usr/lib/systemd/system/ — content filtering will not start on boot
 
     # =========================================================================
     # Known gaps — intentionally not asserted in this scenario
