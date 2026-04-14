@@ -26,10 +26,12 @@ repeatable system behaviour. Presently, the verify playbook does not catch
 regressions in safety or accessibility controls.
 
 Current gap:
+
 - [molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml)
   only contains a trivial assertion.
 
 Implementation tasks:
+
 - Add verification tasks for required services and files.
 - Assert protective DNS configuration is applied.
 - Assert firewall configuration is present and active where supported.
@@ -46,11 +48,13 @@ Likely files:
 - [roles/gui_packages/tasks/main.yml](../roles/gui_packages/tasks/main.yml)
 
 Definition of done:
+
 - `molecule verify` fails when a safety or accessibility control regresses.
 - Verification checks reflect actual BrightOS expectations rather than generic
   host health.
 
-#### 2. Turn accessibility goals into concrete acceptance criteria
+#### 2. Turn ac
+ cessibility goals into concrete acceptance criteria
 
 Why this matters:
 The project explicitly targets fine motor limitations, mild vision impairment,
@@ -109,7 +113,36 @@ Definition of done:
 
 ### P1: Restore feature parity for supported platforms
 
-#### 4. Resolve RedHat GUI package blockers
+#### 4. Add a RedHat-family Molecule scenario
+
+Why this matters:
+RedHat-specific verification and role logic cannot be trusted if they are never
+executed in automated tests. At present, the default Molecule scenario only
+covers Ubuntu.
+
+Current gap:
+- RedHat verification paths exist or are planned, but no Molecule scenario runs
+  them automatically.
+
+Implementation tasks:
+- Add a RedHat-family Molecule scenario using a supported target image.
+- Reuse the shared playbooks where practical so Debian and RedHat scenarios
+  validate the same core expectations.
+- Ensure the scenario is suitable for firewall, network, and GUI package
+  verification work.
+- Update test documentation to include the new scenario.
+
+Likely files:
+- [molecule/](../molecule)
+- [molecule/resources/playbooks/converge.yml](../molecule/resources/playbooks/converge.yml)
+- [molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml)
+- [docs/Testing.md](../docs/Testing.md)
+
+Definition of done:
+- RedHat-family role paths run in Molecule.
+- Verification changes for RedHat can be exercised before merge.
+
+#### 5. Resolve RedHat GUI package blockers
 
 Why this matters:
 Accessible and educational desktop software is part of the user value of
@@ -136,7 +169,7 @@ Definition of done:
 - RedHat-family installations deliver a defined minimum accessible app set.
 - The package path is automated and testable.
 
-#### 5. Define a minimum supported application set for target users
+#### 6. Define a minimum supported application set for target users
 
 Why this matters:
 The project goal is not just to configure Linux, but to make it usable and
@@ -165,7 +198,7 @@ Definition of done:
 
 ### P1: Make the project easier for carers and contributors to use safely
 
-#### 6. Expand installation documentation for non-experts
+#### 7. Expand installation documentation for non-experts
 
 Why this matters:
 If carers or helpers cannot install or validate the system reliably, the
@@ -191,7 +224,7 @@ Definition of done:
   steps.
 - The guide includes a post-install confirmation checklist.
 
-#### 7. Add CI to protect critical behaviour automatically
+#### 8. Add CI to protect critical behaviour automatically
 
 Why this matters:
 Once disability-critical checks exist, they should run automatically so they do
@@ -218,7 +251,7 @@ Definition of done:
 
 ### P2: Resolve secondary backlog items
 
-#### 8. Decide whether hostname/domain support is in scope
+#### 9. Decide whether hostname/domain support is in scope
 
 Current gap:
 - [roles/name/tasks/main.yml](../roles/name/tasks/main.yml) contains an open TODO
@@ -231,7 +264,7 @@ Implementation tasks:
 Definition of done:
 - The role reflects an intentional decision rather than an unresolved comment.
 
-#### 9. Break down ISO/distribution pipeline work into staged milestones
+#### 10. Break down ISO/distribution pipeline work into staged milestones
 
 Why this matters:
 This is important for long-term adoption by non-technical users, but it should
@@ -255,12 +288,13 @@ Definition of done:
 1. Real verification assertions.
 2. Accessibility acceptance criteria.
 3. RedHat DNS parity.
-4. RedHat accessible app path.
-5. Minimum supported application set.
-6. Expanded installation guide.
-7. CI for baseline validation.
-8. Hostname/domain decision.
-9. ISO pipeline milestones.
+4. RedHat Molecule scenario.
+5. RedHat accessible app path.
+6. Minimum supported application set.
+7. Expanded installation guide.
+8. CI for baseline validation.
+9. Hostname/domain decision.
+10. ISO pipeline milestones.
 
 ## Working Rule For Future Iterations
 

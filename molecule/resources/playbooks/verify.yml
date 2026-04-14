@@ -22,6 +22,12 @@
         fail_msg: "ufw is not installed"
       when: ansible_facts['os_family'] == "Debian"
 
+    - name: Assert firewall package is present (RedHat)
+      ansible.builtin.assert:
+        that: "'firewalld' in ansible_facts.packages"
+        fail_msg: "firewalld is not installed"
+      when: ansible_facts['os_family'] == "RedHat"
+
     - name: Assert proxy package is present
       ansible.builtin.assert:
         that: "'privoxy' in ansible_facts.packages"
@@ -59,6 +65,58 @@
         that: "'firefox' not in ansible_facts.packages"
         fail_msg: "Firefox must not be installed (firefox_install is not set) but is present"
       when: not (firefox_install | bool)
+
+    # =========================================================================
+    # Firewall state and access rules
+    # =========================================================================
+
+    - name: Read UFW status (Debian)
+      ansible.builtin.command: ufw status verbose
+      register: ufw_status
+      changed_when: false
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert UFW is active (Debian)
+      ansible.builtin.assert:
+        that: "'Status: active' in ufw_status.stdout"
+        fail_msg: >
+          UFW is not active - the firewall is installed but not enforcing rules
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert UFW allows SSH (Debian)
+      ansible.builtin.assert:
+        that:
+          - "'22/tcp' in ufw_status.stdout"
+          - "'ALLOW IN' in ufw_status.stdout"
+        fail_msg: >
+          UFW does not show the required SSH allow rule for 22/tcp
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Read firewalld state (RedHat)
+      ansible.builtin.command: firewall-cmd --state
+      register: firewalld_state
+      changed_when: false
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Assert firewalld is active (RedHat)
+      ansible.builtin.assert:
+        that: "firewalld_state.stdout == 'running'"
+        fail_msg: >
+          firewalld is not running - the firewall is installed but not active
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Read firewalld allowed services (RedHat)
+      ansible.builtin.command: firewall-cmd --list-services
+      register: firewalld_services
+      changed_when: false
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Assert firewalld allows SSH (RedHat)
+      ansible.builtin.assert:
+        that: "'ssh' in firewalld_services.stdout.split()"
+        fail_msg: >
+          firewalld does not allow the required SSH service
+      when: ansible_facts['os_family'] == "RedHat"
 
     # =========================================================================
     # Protective DNS configuration
