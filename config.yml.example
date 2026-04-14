@@ -16,3 +16,13 @@ firefox_install: yes
 firefox_default_homepage: https://duckduckgo.com
 firefox_allow_camera: no # Anything other than yes/true disables
 firefox_allow_microphone: no # Anything other than yes/true disables
+
+# Application visibility and allow/deny policy.
+# These defaults match current BrightOS behavior and can be expanded later.
+hidden_desktop_entries:
+  - byobu.desktop
+  - info.desktop
+  - vim.desktop
+  - htop.desktop
+forbidden_packages: []
+forbidden_desktop_entries: []

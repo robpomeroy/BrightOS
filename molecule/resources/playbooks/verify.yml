@@ -8,6 +8,12 @@
 
   tasks:
 
+    - name: Normalise application policy variables for verification
+      ansible.builtin.set_fact:
+        verify_hidden_desktop_entries: "{{ hidden_desktop_entries | default(['byobu.desktop', 'info.desktop', 'vim.desktop', 'htop.desktop']) }}"
+        verify_forbidden_packages: "{{ forbidden_packages | default([]) }}"
+        verify_forbidden_desktop_entries: "{{ forbidden_desktop_entries | default([]) }}"
+
     - name: Assert dns_servers is defined with at least one entry
       ansible.builtin.assert:
         that:
@@ -62,6 +68,12 @@
         - htop
         - python3-psutil
         - tmux
+
+    - name: Assert forbidden packages are absent
+      ansible.builtin.assert:
+        that: "item not in ansible_facts.packages"
+        fail_msg: "Forbidden package '{{ item }}' is installed"
+      loop: "{{ verify_forbidden_packages }}"
 
     - name: Assert Firefox is installed when firefox_install is enabled
       ansible.builtin.assert:
@@ -338,6 +350,40 @@
         fail_msg: >
           DontVTSwitch is not set in /etc/X11/xorg.conf.d/10-xorg.conf —
           users may accidentally escape the desktop environment
+
+    - name: Check configured hidden desktop entries
+      ansible.builtin.stat:
+        path: "/usr/share/applications/{{ item }}"
+      loop: "{{ verify_hidden_desktop_entries }}"
+      register: hidden_desktop_entry_stats
+
+    - name: Read configured hidden desktop entries that exist
+      ansible.builtin.slurp:
+        src: "/usr/share/applications/{{ item.item }}"
+      loop: "{{ hidden_desktop_entry_stats.results }}"
+      when: item.stat.exists
+      register: hidden_desktop_entry_contents
+
+    - name: Assert configured hidden desktop entries are hidden when present
+      ansible.builtin.assert:
+        that: "'NoDisplay=true' in (item.content | b64decode)"
+        fail_msg: >
+          Desktop entry {{ item.item.item }} exists but is not hidden with
+          NoDisplay=true
+      loop: "{{ hidden_desktop_entry_contents.results }}"
+      when: not item.skipped | default(false)
+
+    - name: Check forbidden desktop entries are absent
+      ansible.builtin.stat:
+        path: "/usr/share/applications/{{ item }}"
+      loop: "{{ verify_forbidden_desktop_entries }}"
+      register: forbidden_desktop_entry_stats
+
+    - name: Assert forbidden desktop entries are absent
+      ansible.builtin.assert:
+        that: not item.stat.exists
+        fail_msg: "Forbidden desktop entry {{ item.item }} is present"
+      loop: "{{ forbidden_desktop_entry_stats.results }}"
 
     # =========================================================================
     # dconf policy files (lockdown settings)
