@@ -20,6 +20,14 @@
     mode: 0700
   notify: Run abp2privoxy
 
+- name: Ensure /etc/cron.daily exists
+  ansible.builtin.file:
+    path: /etc/cron.daily
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
 - name: Create daily abp2privoxy cron job
   ansible.builtin.copy:
     src: abp2privoxy.cron
@@ -33,6 +41,8 @@
     name: privoxy
     enabled: yes
     state: started
+  when:
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
 - name: Configure environment-wide proxy
   ansible.builtin.lineinfile:
@@ -42,9 +52,11 @@
   loop:
     - http_proxy
     - https_proxy
+  when: ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
 - name: Disable proxy for local addresses
   ansible.builtin.lineinfile:
     path: /etc/environment
     regex: "^no_proxy="
     line: no_proxy=localhost,127.0.0.1
+  when: ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']

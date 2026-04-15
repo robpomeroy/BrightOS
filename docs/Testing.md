@@ -8,9 +8,11 @@ manual virtual machine configuration.
 
 ## Supported Execution Model
 
-Molecule runs tests in Docker containers using the default scenario:
+Molecule runs tests in Docker containers using these scenarios:
 - **Driver**: Docker
-- **Platform**: Ubuntu 24.04
+- **Platforms**:
+  - Ubuntu 24.04 (`default` scenario)
+  - AlmaLinux 9 (`almalinux9` scenario)
 - **Tests**: Syntax check, convergence, idempotence, verification
 
 The preferred approach (used by the project maintainer) is to test from a WSL2
@@ -70,6 +72,7 @@ ansible-galaxy collection install -r /path/to/BrightOS/requirements.yml
 ## Scenario Overview
 
 - `default`: Ubuntu Server 24.04 in Docker
+- `almalinux9`: AlmaLinux 9 in Docker
 
 Additional scenarios can be added by creating directories in `molecule/` with
 their own `molecule.yml` configurations.
@@ -82,21 +85,25 @@ From WSL, activate the venv and run Molecule:
 cd /path/to/BrightOS
 source ~/venv/brightos-test/bin/activate
 
-# Full test cycle
-molecule test
+# Full test cycle (default scenario)
+molecule test -s default
+
+# Full test cycle (RedHat-family scenario)
+molecule test -s almalinux9
 ```
 
 ## Step-by-Step Actions
 
-Run Molecule actions individually for debugging:
+Run Molecule actions individually for debugging (replace `default` with
+`almalinux9` to target the RedHat-family scenario):
 
 ```bash
-molecule converge     # Apply roles to container
-molecule create       # Create and start container
-molecule destroy      # Stop and remove container
-molecule idempotence  # Verify idempotent run
-molecule syntax       # Check playbook syntax
-molecule verify       # Run verify playbook
+molecule create -s default       # Create and start container
+molecule converge -s default     # Apply roles to container
+molecule idempotence -s default  # Verify idempotent run
+molecule syntax -s default       # Check playbook syntax
+molecule verify -s default       # Run verify playbook
+molecule destroy -s default      # Stop and remove container
 ```
 
 ## Verification Policy

@@ -20,4 +20,15 @@
     owner: root
     group: root
     mode: 0644
+  when:
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
+
+- name: Skip resolv.conf override in containerized environments
+  ansible.builtin.debug:
+    msg: >
+      Skipping direct /etc/resolv.conf management in containerized tests where
+      the file is Docker-managed.
+  when:
+    - ansible_facts['virtualization_type'] is defined
+    - ansible_facts['virtualization_type'] in ['docker', 'containerd', 'podman']
   

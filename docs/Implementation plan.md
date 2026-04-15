@@ -87,7 +87,7 @@ Definition of done:
 
 #### 3. Complete protective DNS support for RedHat-family systems
 
-STATUS: Debian complete. Red Hat validation TODO.
+STATUS: COMPLETE.
 
 Why this matters:
 DNS controls are one of the few current mechanisms explicitly aimed at
@@ -117,6 +117,8 @@ Definition of done:
 ### P1: Restore feature parity for supported platforms
 
 #### 4. Add a RedHat-family Molecule scenario
+
+STATUS: COMPLETE.
 
 Why this matters:
 RedHat-specific verification and role logic cannot be trusted if they are never

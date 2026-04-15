@@ -56,7 +56,11 @@
   ansible.builtin.command: systemctl get-default
   register: default_target
   changed_when: false
+  when:
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
 - name: Change default target to graphical.target
   ansible.builtin.command: systemctl set-default graphical.target
-  when: default_target.stdout_lines[0] != "graphical.target"
+  when:
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
+    - default_target.stdout_lines[0] != "graphical.target"

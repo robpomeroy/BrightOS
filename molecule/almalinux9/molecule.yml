@@ -1,0 +1,28 @@
+---
+dependency:
+  name: galaxy
+  enabled: false
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint -x no-loop-var-prefix,command-instead-of-module,package-latest
+platforms:
+  - name: vm-runner
+    image: almalinux:9
+    pre_build_image: false
+    command: /bin/bash -c 'while true; do sleep 1; done'
+    privileged: true
+provisioner:
+  name: ansible
+  log: true
+  env:
+    ANSIBLE_ROLES_PATH: "../../roles"
+  playbooks:
+    cleanup: ../resources/playbooks/cleanup.yml
+    converge: ../resources/playbooks/converge.yml
+    prepare: ../resources/playbooks/prepare.yml
+    verify: ../resources/playbooks/verify.yml
+verifier:
+  name: ansible

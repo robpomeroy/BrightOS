@@ -12,6 +12,8 @@
     name: firewalld
     state: started
     enabled: yes
+  when:
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
 - name: Allow SSH through firewall
   ansible.builtin.firewalld:
@@ -19,6 +21,8 @@
     state: enabled
     permanent: yes
     immediate: yes
+  when:
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
 ## ALL OTHER RULES
 
