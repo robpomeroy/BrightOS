@@ -1,11 +1,10 @@
----
-- name: Include task list appropriate for OS family (Debian/RedHat)
-  ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml"
-
 - name: Gather service facts for network handlers
   ansible.builtin.service_facts:
   changed_when: false
   failed_when: false  # Don't fail under Docker without systemd etc.
+
+- name: Include task list appropriate for OS family (Debian/RedHat)
+  ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml"
 
 - name: Override DHCP DNS servers (Debian)
   ansible.builtin.lineinfile:
@@ -17,21 +16,3 @@
     group: root
     mode: "0644"
   when: ansible_facts['os_family'] == "Debian"
-
-# from /etc/sysconfig/network-scripts/readme-ifcfg-rh.txt:
-# NetworkManager stores new network profiles in keyfile format in the
-# /etc/NetworkManager/system-connections/ directory.
-# 
-# Previously, NetworkManager stored network profiles in ifcfg format
-# in this directory (/etc/sysconfig/network-scripts/). However, the ifcfg
-# format is deprecated. By default, NetworkManager no longer creates
-# new profiles in this format.
-#
-# TODO: Implement this for RedHat based Linuxes based on this task.
-# - name: Override DHCP DNS servers (RedHat)
-#   ansible.builtin.blockinfile:
-#     path: "/etc/NetworkManager/system-connections/enp0s3.nmconnection"
-#     block: |
-#       DNS1={{ dns_servers[1] }}
-#       DNS2={{ dns_servers[2] }}
-#   when: ansible_facts['os_family'] == "RedHat"

@@ -20,6 +20,8 @@ current verification layer does not test those outcomes.
 
 #### 1. Replace placeholder verification with real assertions
 
+STATUS: COMPLETE.
+
 Why this matters:
 Users with learning difficulties and other disabilities need dependable,
 repeatable system behaviour. Presently, the verify playbook does not catch
@@ -28,7 +30,7 @@ regressions in safety or accessibility controls.
 Current gap:
 
 - [molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml)
-  only contains a trivial assertion.
+  only contained a trivial assertion.
 
 Implementation tasks:
 
@@ -84,6 +86,8 @@ Definition of done:
   as future work.
 
 #### 3. Complete protective DNS support for RedHat-family systems
+
+STATUS: Debian complete. Red Hat validation TODO.
 
 Why this matters:
 DNS controls are one of the few current mechanisms explicitly aimed at
