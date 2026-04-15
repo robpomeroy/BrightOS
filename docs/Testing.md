@@ -135,10 +135,15 @@ Most checks validate the real state of the test container. A stub or fixture is
 only needed if you deliberately want to exercise a hide-path for a launcher
 that never exists in the chosen Molecule image.
 
-When extending these lists, update both [config.yml.example](../config.yml.example)
-and [molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml)
-only if the verification semantics need to change. If you are only adding new
-items to the policy, updating the variables is enough.
+These lists currently define verification targets. They are consumed by
+[molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml),
+and not yet enforced generically by role logic.
+
+When extending these lists, update [config.yml.example](../config.yml.example).
+If the current roles do not already enforce the new entries, `molecule verify`
+will fail until enforcement tasks are added. Update
+[molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml)
+only when the verification semantics themselves need to change.
 
 ## Troubleshooting
 

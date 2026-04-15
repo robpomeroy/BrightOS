@@ -107,8 +107,7 @@
     - name: Assert UFW allows SSH (Debian)
       ansible.builtin.assert:
         that:
-          - "'22/tcp' in ufw_status.stdout"
-          - "'ALLOW IN' in ufw_status.stdout"
+          - "(ufw_status.stdout | regex_search('(?m)^\\s*22/tcp(\\s+\\(v6\\))?\\s+ALLOW IN\\s+')) is not none"
         fail_msg: >
           UFW does not show the required SSH allow rule for 22/tcp
       when: ansible_facts['os_family'] == "Debian"
@@ -196,12 +195,12 @@
 
     - name: Assert Privoxy is listening on localhost port 8118
       ansible.builtin.assert:
-        that: "'listen-address  127.0.0.1:8118' in (privoxy_content.content | b64decode)"
+        that: "(privoxy_content.content | b64decode | regex_search('(?m)^listen-address\\s+127\\.0\\.0\\.1:8118\\s*$')) is not none"
         fail_msg: "Privoxy is not configured to listen on 127.0.0.1:8118"
 
     - name: Assert Privoxy enforce-blocks is enabled
       ansible.builtin.assert:
-        that: "'enforce-blocks 1' in (privoxy_content.content | b64decode)"
+        that: "(privoxy_content.content | b64decode | regex_search('(?m)^enforce-blocks\\s+1\\s*$')) is not none"
         fail_msg: >
           Privoxy enforce-blocks is not enabled — blocked content may be
           accessible to vulnerable users
