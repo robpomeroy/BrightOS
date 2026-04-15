@@ -53,8 +53,7 @@ Definition of done:
 - Verification checks reflect actual BrightOS expectations rather than generic
   host health.
 
-#### 2. Turn ac
- cessibility goals into concrete acceptance criteria
+#### 2. Turn accessibility goals into concrete acceptance criteria
 
 Why this matters:
 The project explicitly targets fine motor limitations, mild vision impairment,

@@ -42,7 +42,7 @@
     owner: root
     group: root
     mode: 0644
-  loop: "{{ query('ansible.builtin.fileglob', 'keyfiles/*') }}"
+  loop: "{{ query('ansible.builtin.fileglob', role_path ~ '/files/keyfiles/*') }}"
   notify: Update dconf databases
 
 - name: Copy dconf lock files
@@ -52,5 +52,5 @@
     owner: root
     group: root
     mode: 0644
-  loop: "{{ query('ansible.builtin.fileglob', 'lockfiles/*') }}"
+  loop: "{{ query('ansible.builtin.fileglob', role_path ~ '/files/lockfiles/*') }}"
   notify: Update dconf databases

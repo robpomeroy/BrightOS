@@ -117,11 +117,14 @@
       ansible.builtin.command: firewall-cmd --state
       register: firewalld_state
       changed_when: false
+      failed_when: false
       when: ansible_facts['os_family'] == "RedHat"
 
     - name: Assert firewalld is active (RedHat)
       ansible.builtin.assert:
-        that: "firewalld_state.stdout == 'running'"
+        that:
+          - firewalld_state.rc == 0
+          - firewalld_state.stdout == 'running'
         fail_msg: >
           firewalld is not running - the firewall is installed but not active
       when: ansible_facts['os_family'] == "RedHat"
@@ -130,11 +133,14 @@
       ansible.builtin.command: firewall-cmd --list-services
       register: firewalld_services
       changed_when: false
+      failed_when: false
       when: ansible_facts['os_family'] == "RedHat"
 
     - name: Assert firewalld allows SSH (RedHat)
       ansible.builtin.assert:
-        that: "'ssh' in firewalld_services.stdout.split()"
+        that:
+          - firewalld_services.rc == 0
+          - "'ssh' in firewalld_services.stdout.split()"        
         fail_msg: >
           firewalld does not allow the required SSH service
       when: ansible_facts['os_family'] == "RedHat"
