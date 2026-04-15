@@ -87,6 +87,8 @@ Definition of done:
 
 #### 3. Complete protective DNS support for RedHat-family systems
 
+STATUS: Debian complete. Red Hat TODO.
+
 Why this matters:
 DNS controls are one of the few current mechanisms explicitly aimed at
 protecting vulnerable users from harmful content.
