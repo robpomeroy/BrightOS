@@ -13,10 +13,10 @@
   ansible.builtin.apt:
     name: firefox
     state: latest
-  when: firefox_install
+  when: firefox_install | bool
 
 - name: Uninstall Firefox
   ansible.builtin.apt:
     name: firefox
     state: absent
-  when: not firefox_install
+  when: not (firefox_install | bool)

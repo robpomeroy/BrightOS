@@ -99,6 +99,52 @@ molecule syntax       # Check playbook syntax
 molecule verify       # Run verify playbook
 ```
 
+## Verification Policy
+
+The verify playbook now checks more than simple package presence. It asserts a
+set of safety and accessibility outcomes including firewall state, DNS-related
+configuration, proxy enforcement, browser policy, GNOME lockdown settings, and
+application visibility policy.
+
+Application visibility and allow/deny checks are driven by variables in
+[config.yml.example](../config.yml.example):
+
+- `hidden_desktop_entries`: desktop launchers that should be hidden with
+    `NoDisplay=true` when they exist
+- `forbidden_packages`: packages that must not be installed
+- `forbidden_desktop_entries`: desktop launchers that must not exist
+
+The defaults in [config.yml.example](../config.yml.example) match current
+BrightOS behaviour:
+
+- `byobu.desktop`
+- `info.desktop`
+- `vim.desktop`
+- `htop.desktop`
+
+In Molecule, these checks are handled as follows:
+
+- Hidden desktop entries are checked conditionally: if the desktop file exists
+    under `/usr/share/applications`, verification asserts that it contains
+    `NoDisplay=true`
+- Forbidden packages are asserted absent via package facts
+- Forbidden desktop entries are asserted absent via file existence checks
+
+This means contributors do not need stubs just to support the policy model.
+Most checks validate the real state of the test container. A stub or fixture is
+only needed if you deliberately want to exercise a hide-path for a launcher
+that never exists in the chosen Molecule image.
+
+These lists currently define verification targets. They are consumed by
+[molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml),
+and not yet enforced generically by role logic.
+
+When extending these lists, update [config.yml.example](../config.yml.example).
+If the current roles do not already enforce the new entries, `molecule verify`
+will fail until enforcement tasks are added. Update
+[molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml)
+only when the verification semantics themselves need to change.
+
 ## Troubleshooting
 
 ### Docker daemon not accessible

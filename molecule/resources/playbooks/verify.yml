@@ -1,10 +1,500 @@
 ---
-# This is an example playbook to execute Ansible tests.
-
 - name: Verify
   hosts: all
-  gather_facts: false
+  gather_facts: true
+  become: true
+  vars_files:
+    - "../../../config.yml"
+
   tasks:
-  - name: Example assertion
-    ansible.builtin.assert:
-      that: true
+
+    - name: Normalise application policy variables for verification
+      ansible.builtin.set_fact:
+        verify_hidden_desktop_entries: "{{ hidden_desktop_entries | default(['byobu.desktop', 'info.desktop', 'vim.desktop', 'htop.desktop']) }}"
+        verify_forbidden_packages: "{{ forbidden_packages | default([]) }}"
+        verify_forbidden_desktop_entries: "{{ forbidden_desktop_entries | default([]) }}"
+
+    - name: Assert dns_servers is defined with at least one entry
+      ansible.builtin.assert:
+        that:
+          - dns_servers is defined
+          - dns_servers | length > 0
+        fail_msg: >
+          dns_servers must be defined in config.yml with at least one DNS
+          server before protective DNS verification can run
+
+    # =========================================================================
+    # Package presence
+    # =========================================================================
+
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Assert firewall package is present (Debian)
+      ansible.builtin.assert:
+        that: "'ufw' in ansible_facts.packages"
+        fail_msg: "ufw is not installed"
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert firewall package is present (RedHat)
+      ansible.builtin.assert:
+        that: "'firewalld' in ansible_facts.packages"
+        fail_msg: "firewalld is not installed"
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Assert proxy package is present
+      ansible.builtin.assert:
+        that: "'privoxy' in ansible_facts.packages"
+        fail_msg: "privoxy is not installed"
+
+    - name: Assert required accessible desktop packages are present (Debian)
+      ansible.builtin.assert:
+        that: "item in ansible_facts.packages"
+        fail_msg: "Required accessible desktop package '{{ item }}' is not installed"
+      loop:
+        - gcompris-qt
+        - ktuberling
+        - tuxpaint
+        - gnome-calculator
+        - nautilus
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert required base packages are present
+      ansible.builtin.assert:
+        that: "item in ansible_facts.packages"
+        fail_msg: "Required base package '{{ item }}' is not installed"
+      loop:
+        - htop
+        - python3-psutil
+        - tmux
+
+    - name: Assert forbidden packages are absent
+      ansible.builtin.assert:
+        that: "item not in ansible_facts.packages"
+        fail_msg: "Forbidden package '{{ item }}' is installed"
+      loop: "{{ verify_forbidden_packages }}"
+
+    - name: Assert Firefox is installed when firefox_install is enabled
+      ansible.builtin.assert:
+        that: "'firefox' in ansible_facts.packages"
+        fail_msg: "Firefox should be installed (firefox_install is set) but is not"
+      when: firefox_install | bool
+
+    - name: Assert Firefox is absent when firefox_install is disabled
+      ansible.builtin.assert:
+        that: "'firefox' not in ansible_facts.packages"
+        fail_msg: "Firefox must not be installed (firefox_install is not set) but is present"
+      when: not (firefox_install | bool)
+
+    # =========================================================================
+    # Firewall state and access rules
+    # =========================================================================
+
+    - name: Read UFW status (Debian)
+      ansible.builtin.command: ufw status verbose
+      register: ufw_status
+      changed_when: false
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert UFW is active (Debian)
+      ansible.builtin.assert:
+        that: "'Status: active' in ufw_status.stdout"
+        fail_msg: >
+          UFW is not active - the firewall is installed but not enforcing rules
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert UFW allows SSH (Debian)
+      ansible.builtin.assert:
+        that:
+          - "(ufw_status.stdout | regex_search('(?m)^\\s*22/tcp(\\s+\\(v6\\))?\\s+ALLOW IN\\s+')) is not none"
+        fail_msg: >
+          UFW does not show the required SSH allow rule for 22/tcp
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Read firewalld state (RedHat)
+      ansible.builtin.command: firewall-cmd --state
+      register: firewalld_state
+      changed_when: false
+      failed_when: false
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Assert firewalld is active (RedHat)
+      ansible.builtin.assert:
+        that:
+          - firewalld_state.rc == 0
+          - firewalld_state.stdout == 'running'
+        fail_msg: >
+          firewalld is not running - the firewall is installed but not active
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Read firewalld allowed services (RedHat)
+      ansible.builtin.command: firewall-cmd --list-services
+      register: firewalld_services
+      changed_when: false
+      failed_when: false
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Assert firewalld allows SSH (RedHat)
+      ansible.builtin.assert:
+        that:
+          - firewalld_services.rc == 0
+          - "'ssh' in firewalld_services.stdout.split()"        
+        fail_msg: >
+          firewalld does not allow the required SSH service
+      when: ansible_facts['os_family'] == "RedHat"
+
+    # =========================================================================
+    # Protective DNS configuration
+    # =========================================================================
+
+    - name: Check /etc/dhcp/dhclient.conf exists (Debian)
+      ansible.builtin.stat:
+        path: /etc/dhcp/dhclient.conf
+      register: dhclient_conf
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert /etc/dhcp/dhclient.conf exists (Debian)
+      ansible.builtin.assert:
+        that: dhclient_conf.stat.exists
+        fail_msg: "/etc/dhcp/dhclient.conf does not exist"
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Read /etc/dhcp/dhclient.conf (Debian)
+      ansible.builtin.slurp:
+        src: /etc/dhcp/dhclient.conf
+      register: dhclient_content
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert protective DNS server is configured in dhclient.conf (Debian)
+      ansible.builtin.assert:
+        that: "dns_servers[0] in (dhclient_content.content | b64decode)"
+        fail_msg: >
+          Protective DNS server {{ dns_servers[0] }} is not present in
+          /etc/dhcp/dhclient.conf — vulnerable users may use unprotected DNS
+      when: ansible_facts['os_family'] == "Debian"
+
+    # =========================================================================
+    # Proxy (Privoxy) configuration and enforcement
+    # =========================================================================
+
+    - name: Check /etc/privoxy/config exists
+      ansible.builtin.stat:
+        path: /etc/privoxy/config
+      register: privoxy_config
+
+    - name: Assert /etc/privoxy/config exists
+      ansible.builtin.assert:
+        that: privoxy_config.stat.exists
+        fail_msg: "/etc/privoxy/config does not exist"
+
+    - name: Read /etc/privoxy/config
+      ansible.builtin.slurp:
+        src: /etc/privoxy/config
+      register: privoxy_content
+
+    - name: Assert Privoxy is listening on localhost port 8118
+      ansible.builtin.assert:
+        that: "(privoxy_content.content | b64decode | regex_search('(?m)^listen-address\\s+127\\.0\\.0\\.1:8118\\s*$')) is not none"
+        fail_msg: "Privoxy is not configured to listen on 127.0.0.1:8118"
+
+    - name: Assert Privoxy enforce-blocks is enabled
+      ansible.builtin.assert:
+        that: "(privoxy_content.content | b64decode | regex_search('(?m)^enforce-blocks\\s+1\\s*$')) is not none"
+        fail_msg: >
+          Privoxy enforce-blocks is not enabled — blocked content may be
+          accessible to vulnerable users
+
+    - name: Check abp2privoxy script exists
+      ansible.builtin.stat:
+        path: /usr/local/bin/abp2privoxy.sh
+      register: abp2privoxy_script
+
+    - name: Assert abp2privoxy script exists and is executable by root only
+      ansible.builtin.assert:
+        that:
+          - abp2privoxy_script.stat.exists
+          - abp2privoxy_script.stat.mode == "0700"
+        fail_msg: "/usr/local/bin/abp2privoxy.sh is missing or has incorrect permissions"
+
+    - name: Check abp2privoxy cron job exists
+      ansible.builtin.stat:
+        path: /etc/cron.daily/abp2privoxy
+      register: abp2privoxy_cron
+
+    - name: Assert abp2privoxy daily cron job exists and is executable
+      ansible.builtin.assert:
+        that:
+          - abp2privoxy_cron.stat.exists
+          - abp2privoxy_cron.stat.executable
+        fail_msg: >
+          /etc/cron.daily/abp2privoxy is missing or not executable —
+          ad/malware filter lists will not be updated automatically
+
+    - name: Read /etc/environment
+      ansible.builtin.slurp:
+        src: /etc/environment
+      register: environment_content
+
+    - name: Assert system-wide HTTP proxy is enforced via /etc/environment
+      ansible.builtin.assert:
+        that: "'http_proxy=http://127.0.0.1:8118' in (environment_content.content | b64decode)"
+        fail_msg: >
+          System-wide HTTP proxy is not set in /etc/environment — applications
+          may bypass content filtering
+
+    # =========================================================================
+    # Firefox policy enforcement
+    # =========================================================================
+
+    - name: Check Firefox policies file exists
+      ansible.builtin.stat:
+        path: /etc/firefox/policies/policies.json
+      register: firefox_policies
+      when: firefox_install | bool
+
+    - name: Assert Firefox policies file exists
+      ansible.builtin.assert:
+        that: firefox_policies.stat.exists
+        fail_msg: "/etc/firefox/policies/policies.json does not exist"
+      when: firefox_install | bool
+
+    - name: Read Firefox policies file
+      ansible.builtin.slurp:
+        src: /etc/firefox/policies/policies.json
+      register: firefox_policies_content
+      when: firefox_install | bool
+
+    - name: Assert Firefox proxy policy routes through local Privoxy filter
+      ansible.builtin.assert:
+        that: "'127.0.0.1:8118' in (firefox_policies_content.content | b64decode)"
+        fail_msg: >
+          Firefox policy does not route through the local Privoxy filter —
+          users may access unfiltered content
+      when: firefox_install | bool
+
+    # =========================================================================
+    # GNOME lockdown and accessibility settings
+    # =========================================================================
+
+    - name: Check GDM configuration file exists (Debian)
+      ansible.builtin.stat:
+        path: /etc/gdm3/custom.conf
+      register: gdm_conf
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert GDM configuration file exists (Debian)
+      ansible.builtin.assert:
+        that: gdm_conf.stat.exists
+        fail_msg: "/etc/gdm3/custom.conf does not exist"
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Read GDM configuration file (Debian)
+      ansible.builtin.slurp:
+        src: /etc/gdm3/custom.conf
+      register: gdm_content
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert automatic login is enabled (no login barrier for target users)
+      ansible.builtin.assert:
+        that: "'AutomaticLoginEnable=True' in (gdm_content.content | b64decode)"
+        fail_msg: >
+          AutomaticLoginEnable is not set to True in /etc/gdm3/custom.conf —
+          users will be presented with a login screen they cannot navigate
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Assert automatic login is for the correct user
+      ansible.builtin.assert:
+        that: "('AutomaticLogin=' ~ snl_user) in (gdm_content.content | b64decode)"
+        fail_msg: >
+          AutomaticLogin is not set to '{{ snl_user }}' in /etc/gdm3/custom.conf
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Check gnome-initial-setup suppression file exists
+      ansible.builtin.stat:
+        path: /etc/xdg/autostart/gnome-initial-setup-first-login.desktop
+      register: gnome_setup_desktop
+
+    - name: Assert gnome-initial-setup suppression file exists
+      ansible.builtin.assert:
+        that: gnome_setup_desktop.stat.exists
+        fail_msg: >
+          /etc/xdg/autostart/gnome-initial-setup-first-login.desktop does not
+          exist — the initial setup wizard may confuse target users
+
+    - name: Read gnome-initial-setup suppression file
+      ansible.builtin.slurp:
+        src: /etc/xdg/autostart/gnome-initial-setup-first-login.desktop
+      register: gnome_setup_content
+
+    - name: Assert gnome-initial-setup is disabled
+      ansible.builtin.assert:
+        that: "'X-GNOME-Autostart-enabled=false' in (gnome_setup_content.content | b64decode)"
+        fail_msg: >
+          gnome-initial-setup is not suppressed — the setup wizard will
+          appear to users on first login
+
+    - name: Check VT switch lockout config exists
+      ansible.builtin.stat:
+        path: /etc/X11/xorg.conf.d/10-xorg.conf
+      register: xorg_conf
+
+    - name: Assert VT switch lockout config exists
+      ansible.builtin.assert:
+        that: xorg_conf.stat.exists
+        fail_msg: "/etc/X11/xorg.conf.d/10-xorg.conf does not exist"
+
+    - name: Read VT switch lockout config
+      ansible.builtin.slurp:
+        src: /etc/X11/xorg.conf.d/10-xorg.conf
+      register: xorg_content
+
+    - name: Assert virtual terminal switching is disabled
+      ansible.builtin.assert:
+        that: "'DontVTSwitch' in (xorg_content.content | b64decode)"
+        fail_msg: >
+          DontVTSwitch is not set in /etc/X11/xorg.conf.d/10-xorg.conf —
+          users may accidentally escape the desktop environment
+
+    - name: Check configured hidden desktop entries
+      ansible.builtin.stat:
+        path: "/usr/share/applications/{{ item }}"
+      loop: "{{ verify_hidden_desktop_entries }}"
+      register: hidden_desktop_entry_stats
+
+    - name: Read configured hidden desktop entries that exist
+      ansible.builtin.slurp:
+        src: "/usr/share/applications/{{ item.item }}"
+      loop: "{{ hidden_desktop_entry_stats.results }}"
+      when: item.stat.exists
+      register: hidden_desktop_entry_contents
+
+    - name: Assert configured hidden desktop entries are hidden when present
+      ansible.builtin.assert:
+        that: "'NoDisplay=true' in (item.content | b64decode)"
+        fail_msg: >
+          Desktop entry {{ item.item.item }} exists but is not hidden with
+          NoDisplay=true
+      loop: "{{ hidden_desktop_entry_contents.results }}"
+      when: not item.skipped | default(false)
+
+    - name: Check forbidden desktop entries are absent
+      ansible.builtin.stat:
+        path: "/usr/share/applications/{{ item }}"
+      loop: "{{ verify_forbidden_desktop_entries }}"
+      register: forbidden_desktop_entry_stats
+
+    - name: Assert forbidden desktop entries are absent
+      ansible.builtin.assert:
+        that: not item.stat.exists
+        fail_msg: "Forbidden desktop entry {{ item.item }} is present"
+      loop: "{{ forbidden_desktop_entry_stats.results }}"
+
+    # =========================================================================
+    # dconf policy files (lockdown settings)
+    # =========================================================================
+
+    - name: Check dconf profile exists
+      ansible.builtin.stat:
+        path: /etc/dconf/profile/user
+      register: dconf_profile
+
+    - name: Assert dconf profile exists
+      ansible.builtin.assert:
+        that: dconf_profile.stat.exists
+        fail_msg: "/etc/dconf/profile/user does not exist — dconf lockdowns are not active"
+
+    - name: Read dconf profile
+      ansible.builtin.slurp:
+        src: /etc/dconf/profile/user
+      register: dconf_profile_content
+
+    - name: Assert dconf profile references system-db local
+      ansible.builtin.assert:
+        that: "'system-db:local' in (dconf_profile_content.content | b64decode)"
+        fail_msg: >
+          /etc/dconf/profile/user does not reference system-db:local —
+          system-wide lockdown settings will not be applied
+
+    - name: Check all dconf key setting files exist
+      ansible.builtin.stat:
+        path: "/etc/dconf/db/local.d/{{ item }}"
+      loop:
+        - 00-session
+        - 01-lockdown
+        - 02-screensaver
+        - 03-login-screen
+        - 04-software
+        - 05-power
+        - 06-proxy
+      register: dconf_keyfiles
+
+    - name: Assert all dconf key setting files exist
+      ansible.builtin.assert:
+        that: item.stat.exists
+        fail_msg: >
+          dconf key file {{ item.item }} is missing from
+          /etc/dconf/db/local.d/ — some lockdown settings will not apply
+      loop: "{{ dconf_keyfiles.results }}"
+
+    - name: Check all dconf lock files exist
+      ansible.builtin.stat:
+        path: "/etc/dconf/db/local.d/locks/{{ item }}"
+      loop:
+        - lockdown
+        - login-screen
+        - power
+        - proxy
+        - screensaver
+        - session
+        - software
+      register: dconf_lockfiles
+
+    - name: Assert all dconf lock files exist
+      ansible.builtin.assert:
+        that: item.stat.exists
+        fail_msg: >
+          dconf lock file {{ item.item }} is missing from
+          /etc/dconf/db/local.d/locks/ — users may be able to override
+          system lockdown settings
+      loop: "{{ dconf_lockfiles.results }}"
+
+    # =========================================================================
+    # Service registration
+    # =========================================================================
+
+    # NOTE: Asserting service state=running is unreliable in Docker containers
+    # (systemd is not the init process, so service_facts shows no units).
+    # Instead, we assert the systemd unit file exists in standard locations.
+    # This confirms the package was installed correctly and the service will
+    # start on boot on a real machine, without depending on the container's
+    # init system.
+    - name: Check privoxy systemd unit file in standard locations
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      loop:
+        - /lib/systemd/system/privoxy.service
+        - /usr/lib/systemd/system/privoxy.service
+      register: privoxy_unit_check
+
+    - name: Assert privoxy systemd unit file exists in at least one standard location
+      ansible.builtin.assert:
+        that: "privoxy_unit_check.results | map(attribute='stat.exists') | select | list | length > 0"
+        fail_msg: >
+          privoxy systemd unit file not found in /lib/systemd/system/ or
+          /usr/lib/systemd/system/ — content filtering will not start on boot
+
+    # =========================================================================
+    # Known gaps — intentionally not asserted in this scenario
+    # =========================================================================
+
+    - name: Document known verification gaps
+      ansible.builtin.debug:
+        msg: |
+          The following checks are intentionally deferred from this scenario:
+          - dconf runtime key values: not reliably file-readable in Docker containers;
+            requires a VM-backed scenario with a running graphical session.
+          - SELinux enforcing state on Debian: reboot-dependent and not achievable
+            in a Docker container environment.
+          - RedHat DNS override (/etc/NetworkManager/...): no RedHat Molecule
+            scenario exists yet; tracked as plan item 3.

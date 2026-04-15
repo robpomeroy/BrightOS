@@ -18,4 +18,4 @@
     owner: root
     group: root
     mode: 0644
-  when: firefox_install
+  when: firefox_install | bool
