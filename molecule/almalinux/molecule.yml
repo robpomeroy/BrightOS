@@ -10,7 +10,7 @@ lint: |
   ansible-lint -x no-loop-var-prefix,command-instead-of-module,package-latest
 platforms:
   - name: vm-runner
-    image: almalinux:9
+    image: almalinux:10
     pre_build_image: false
     command: /bin/bash -c 'while true; do sleep 1; done'
     privileged: true

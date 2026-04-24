@@ -1,5 +1,191 @@
 ---
-- name: Install privoxy
+- name: Attempt to install privoxy from configured repositories
   ansible.builtin.dnf:
     name: privoxy
     state: latest
+  failed_when: false
+
+- name: Check whether privoxy package is installed
+  ansible.builtin.command: rpm -q privoxy
+  register: privoxy_rpm_query
+  changed_when: false
+  failed_when: false
+
+- name: Set whether source build fallback is required
+  ansible.builtin.set_fact:
+    proxy_build_privoxy_from_source: "{{ privoxy_rpm_query.rc != 0 }}"
+
+- name: Fail if privoxy repo install failed on non-EL10 platform
+  ansible.builtin.assert:
+    that:
+      - not proxy_build_privoxy_from_source
+    fail_msg: >
+      Failed to install privoxy from repositories. Source fallback is only
+      enabled for RedHat-family major version 10.
+  when: ansible_facts['distribution_major_version'] | int < 10
+
+- name: Install build dependencies for privoxy source build (EL10 fallback)
+  ansible.builtin.dnf:
+    name:
+      - autoconf
+      - automake
+      - gcc
+      - make
+      - pcre2-devel
+      - zlib-devel
+      - systemd-rpm-macros
+      - tar
+    state: present
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Download privoxy source archive (EL10 fallback)
+  ansible.builtin.get_url:
+    url: https://downloads.sourceforge.net/project/ijbswa/Sources/3.0.34%20%28stable%29/privoxy-3.0.34-stable-src.tar.gz
+    dest: /usr/local/src/privoxy-3.0.34-stable-src.tar.gz
+    mode: "0644"
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Download PCRE 8 source archive required by privoxy (EL10 fallback)
+  ansible.builtin.get_url:
+    url: https://downloads.sourceforge.net/project/pcre/pcre/8.45/pcre-8.45.tar.gz
+    dest: /usr/local/src/pcre-8.45.tar.gz
+    mode: "0644"
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Extract PCRE 8 source archive (EL10 fallback)
+  ansible.builtin.unarchive:
+    src: /usr/local/src/pcre-8.45.tar.gz
+    dest: /usr/local/src
+    remote_src: true
+    creates: /usr/local/src/pcre-8.45
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Build and install PCRE 8 from source (EL10 fallback)
+  ansible.builtin.shell: |
+    set -e
+    cd /usr/local/src/pcre-8.45
+    ./configure --prefix=/usr
+    make
+    make install
+  args:
+    creates: /usr/lib64/libpcre.so
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Refresh shared library cache after PCRE installation (EL10 fallback)
+  ansible.builtin.command: ldconfig
+  changed_when: false
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Extract privoxy source archive (EL10 fallback)
+  ansible.builtin.unarchive:
+    src: /usr/local/src/privoxy-3.0.34-stable-src.tar.gz
+    dest: /usr/local/src
+    remote_src: true
+    creates: /usr/local/src/privoxy-3.0.34-stable
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Ensure privoxy runtime user exists (EL10 fallback)
+  ansible.builtin.user:
+    name: privoxy
+    system: true
+    create_home: false
+    shell: /sbin/nologin
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Build and install privoxy from source (EL10 fallback)
+  ansible.builtin.shell: |
+    set -e
+    src_dir="$(find /usr/local/src -maxdepth 1 -type d -name 'privoxy-*stable*' | head -n 1)"
+    test -n "${src_dir}"
+    cd "${src_dir}"
+    rm -f config.cache
+    autoreconf -fi
+    ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+    make
+    make install
+  args:
+    creates: /usr/sbin/privoxy
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Install privoxy systemd unit (EL10 fallback)
+  ansible.builtin.copy:
+    dest: /usr/lib/systemd/system/privoxy.service
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      [Unit]
+      Description=Privacy enhancing HTTP Proxy
+      After=network.target
+
+      [Service]
+      Type=simple
+      User=privoxy
+      Group=privoxy
+      ExecStart=/usr/sbin/privoxy --no-daemon /etc/privoxy/config
+      Restart=on-failure
+
+      [Install]
+      WantedBy=multi-user.target
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Ensure privoxy configuration directory exists for source install (EL10 fallback)
+  ansible.builtin.file:
+    path: /etc/privoxy
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Install default Privoxy action and filter files (EL10 fallback)
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - src: "/usr/local/src/privoxy-3.0.34-stable/default.action"
+      dest: "/etc/privoxy/default.action"
+    - src: "/usr/local/src/privoxy-3.0.34-stable/match-all.action"
+      dest: "/etc/privoxy/match-all.action"
+    - src: "/usr/local/src/privoxy-3.0.34-stable/default.filter"
+      dest: "/etc/privoxy/default.filter"
+    - src: "/usr/local/src/privoxy-3.0.34-stable/user.action"
+      dest: "/etc/privoxy/user.action"
+    - src: "/usr/local/src/privoxy-3.0.34-stable/user.filter"
+      dest: "/etc/privoxy/user.filter"
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10
+
+- name: Reload systemd daemon after unit installation (EL10 fallback)
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when:
+    - proxy_build_privoxy_from_source
+    - ansible_facts['distribution_major_version'] | int >= 10

@@ -3,6 +3,13 @@
   hosts: all
   vars_files:
     - "../../../config.yml"
+  environment:
+    http_proxy: ""
+    https_proxy: ""
+    HTTP_PROXY: ""
+    HTTPS_PROXY: ""
+    no_proxy: ""
+    NO_PROXY: ""
   pre_tasks:
     - name: update apt cache
       ansible.builtin.apt:

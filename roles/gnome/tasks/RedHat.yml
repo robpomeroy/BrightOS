@@ -17,8 +17,6 @@
       - gnome-session
       - gnome-settings-daemon
       - gnome-shell
-      - gnome-themes-standard
-      - initial-setup-gui
       - libcanberra-gtk3 # GTK bindings for sound event library
       - librsvg2 # SVG library
       - libsane-hpaio # SANE driver for HP MFD scanners
@@ -48,6 +46,17 @@
       #- gvfs-smb
       #- nautilus-sendto
     state: latest
+
+# gnome-themes-standard and initial-setup-gui were removed in RHEL/AlmaLinux 10.
+# Install them only when available (EL9 and earlier).
+- name: Install EL9-era Gnome packages (not available on EL10+)
+  ansible.builtin.package:
+    name:
+      - gnome-themes-standard
+      - initial-setup-gui
+    state: present
+  when: ansible_facts['distribution_major_version'] | int < 10
+  ignore_errors: true
 
 # With Red Hat-based distros, merely installing the bare Gnome environment
 # doesn't result in automatic boot to GUI. For this we need to change the

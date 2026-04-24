@@ -1,7 +1,7 @@
 ---
 - name: Set hostname
   ansible.builtin.hostname:
-    name: "{{ system_hostname | default('vm-runner') }}"
+    name: "{{ system_hostname | default(ansible_facts['hostname']) }}"
   when:
     - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 

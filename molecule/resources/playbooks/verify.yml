@@ -31,6 +31,11 @@
       ansible.builtin.package_facts:
         manager: auto
 
+    - name: Check whether privoxy binary exists
+      ansible.builtin.stat:
+        path: /usr/sbin/privoxy
+      register: privoxy_binary
+
     - name: Assert firewall package is present (Debian)
       ansible.builtin.assert:
         that: "'ufw' in ansible_facts.packages"
@@ -45,7 +50,8 @@
 
     - name: Assert proxy package is present
       ansible.builtin.assert:
-        that: "'privoxy' in ansible_facts.packages"
+        that:
+          - "'privoxy' in ansible_facts.packages or privoxy_binary.stat.exists"
         fail_msg: "privoxy is not installed"
 
     - name: Assert required accessible desktop packages are present (Debian)
@@ -145,7 +151,7 @@
       ansible.builtin.assert:
         that:
           - firewalld_services.rc == 0
-          - "'ssh' in firewalld_services.stdout.split()"        
+          - "'ssh' in firewalld_services.stdout.split()"
         fail_msg: >
           firewalld does not allow the required SSH service
       when:
@@ -312,7 +318,8 @@
         fail_msg: >
           System-wide HTTP proxy is not set in /etc/environment — applications
           may bypass content filtering
-      when: ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
+      when:
+        - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
     # =========================================================================
     # Firefox policy enforcement
@@ -376,9 +383,9 @@
 
     - name: Assert automatic login is for the correct user
       ansible.builtin.assert:
-        that: "('AutomaticLogin=' ~ snl_user) in (gdm_content.content | b64decode)"
+        that: "('AutomaticLogin=' ~ bos_user) in (gdm_content.content | b64decode)"
         fail_msg: >
-          AutomaticLogin is not set to '{{ snl_user }}' in /etc/gdm3/custom.conf
+          AutomaticLogin is not set to '{{ bos_user }}' in /etc/gdm3/custom.conf
       when: ansible_facts['os_family'] == "Debian"
 
     - name: Check gnome-initial-setup suppression file exists
@@ -567,5 +574,5 @@
             requires a VM-backed scenario with a running graphical session.
           - SELinux enforcing state on Debian: reboot-dependent and not achievable
             in a Docker container environment.
-          - RedHat DNS override (/etc/NetworkManager/...): no RedHat Molecule
-            scenario exists yet; tracked as plan item 3.
+          - Some runtime service states in container scenarios are intentionally
+            validated via config/unit presence rather than live init-system state.

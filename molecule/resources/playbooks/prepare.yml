@@ -1,6 +1,13 @@
 ---
 - name: Prepare
   hosts: all
+  environment:
+    http_proxy: ""
+    https_proxy: ""
+    HTTP_PROXY: ""
+    HTTPS_PROXY: ""
+    no_proxy: ""
+    NO_PROXY: ""
   tasks:
     - name: install Gnome & dconf
       ansible.builtin.apt:
