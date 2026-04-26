@@ -285,7 +285,7 @@ Suggested use:
 
 ### Required Environment Variables
 
-Set these when running `vm_ubuntu` or `vm_almalinux10`:
+Set these when running `vm_ubuntu` or `vm_almalinux`:
 
 - `MOLECULE_VM_HOST`: VM IP address (preferred — see note below) or DNS name
 - `MOLECULE_VM_USER`: SSH username (defaults to `brightos` if omitted)

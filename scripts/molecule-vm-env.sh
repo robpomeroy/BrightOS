@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -u
-
 usage() {
   cat <<'EOF'
 Usage:
@@ -153,7 +151,7 @@ run_target() {
   if [[ "$#" -eq 0 ]]; then
     "${molecule_bin}" test -s "${MOLECULE_VM_SCENARIO}"
   else
-    "$@"
+    "${molecule_bin}" "$@"
   fi
 }
 
@@ -208,6 +206,8 @@ if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
   return 0
 fi
 
+set -u
+
 mode="${1:-}"
 
 if [[ -z "${mode}" ]]; then
@@ -220,7 +220,7 @@ case "${mode}" in
     target="${2:-}"
     env_file="${3:-.molecule-vm.env}"
     [[ -n "${target}" ]] || { usage; exit 1; }
-    load_target "${target}" "${env_file}"
+    load_target "${target}" "${env_file}" || exit 1
     print_exports
     ;;
   run)
