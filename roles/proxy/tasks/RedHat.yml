@@ -189,3 +189,4 @@
   when:
     - proxy_build_privoxy_from_source
     - ansible_facts['distribution_major_version'] | int >= 10
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']

@@ -8,10 +8,14 @@
     no_extra_spaces: yes
     mode: "0644"
   notify: Restart NetworkManager
+  when:
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
 # We need NetworkManager to restart before we attempt to change resolv.conf
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
+  when:
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
 - name: Configure DNS settings
   ansible.builtin.template:

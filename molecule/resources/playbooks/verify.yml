@@ -226,19 +226,25 @@
       ansible.builtin.stat:
         path: /etc/NetworkManager/NetworkManager.conf
       register: networkmanager_conf
-      when: ansible_facts['os_family'] == "RedHat"
+      when:
+        - ansible_facts['os_family'] == "RedHat"
+        - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
     - name: Assert NetworkManager.conf exists (RedHat)
       ansible.builtin.assert:
         that: networkmanager_conf.stat.exists
         fail_msg: "/etc/NetworkManager/NetworkManager.conf does not exist"
-      when: ansible_facts['os_family'] == "RedHat"
+      when:
+        - ansible_facts['os_family'] == "RedHat"
+        - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
     - name: Read NetworkManager.conf (RedHat)
       ansible.builtin.slurp:
         src: /etc/NetworkManager/NetworkManager.conf
       register: networkmanager_conf_content
-      when: ansible_facts['os_family'] == "RedHat"
+      when:
+        - ansible_facts['os_family'] == "RedHat"
+        - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
     - name: Assert NetworkManager DNS management is disabled (RedHat)
       ansible.builtin.assert:
@@ -248,7 +254,9 @@
         fail_msg: >
           /etc/NetworkManager/NetworkManager.conf does not disable
           NetworkManager DNS management with dns=none
-      when: ansible_facts['os_family'] == "RedHat"
+      when:
+        - ansible_facts['os_family'] == "RedHat"
+        - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
     # =========================================================================
     # Proxy (Privoxy) configuration and enforcement
