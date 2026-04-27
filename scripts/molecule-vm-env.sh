@@ -198,11 +198,17 @@ if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
 
   if [[ -z "${target}" ]]; then
     usage
+    unset target env_file
     return 1
   fi
 
-  load_target "${target}" "${env_file}" || return 1
+  if ! load_target "${target}" "${env_file}"; then
+    unset target env_file
+    return 1
+  fi
+
   print_summary "${target}"
+  unset target env_file
   return 0
 fi
 
