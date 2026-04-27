@@ -14,6 +14,7 @@
 - name: Set whether source build fallback is required
   ansible.builtin.set_fact:
     proxy_build_privoxy_from_source: "{{ privoxy_rpm_query.rc != 0 }}"
+  changed_when: false
 
 - name: Fail if privoxy repo install failed on non-EL10 platform
   ansible.builtin.assert:

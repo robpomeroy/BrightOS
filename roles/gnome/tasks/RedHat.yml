@@ -65,7 +65,7 @@
     fail_msg: >
       Expected package {{ item.item }} to be available on EL9 and earlier, but
       it is missing from configured repositories.
-  loop: "{{ el9_gnome_pkg_availability.results }}"
+  loop: "{{ el9_gnome_pkg_availability.results | default([]) }}"
   when: ansible_facts['distribution_major_version'] | int < 10
 
 - name: Install EL9-era Gnome packages (not available on EL10+)

@@ -319,6 +319,8 @@
       ansible.builtin.slurp:
         src: /etc/environment
       register: environment_content
+      when:
+        - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
     - name: Assert system-wide HTTP proxy is enforced via /etc/environment
       ansible.builtin.assert:
