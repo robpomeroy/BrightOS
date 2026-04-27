@@ -425,11 +425,16 @@ make it optional. Instead, RedHat-family EL10 targets use a strict fallback:
 
 If either repo install or source fallback fails, the run fails.
 
-For VM-backed Molecule scenarios, the `prepare` and `converge` playbooks also
-clear inherited proxy environment variables while bootstrapping packages. This
-avoids stale `/etc/environment` proxy settings on reused VMs from breaking the
-package-manager steps that must run before the local Privoxy service is
-re-established.
+For VM-backed Molecule scenarios, proxy environment clearing in `prepare` and
+`converge` is now opt-in. By default, inherited proxy variables are preserved,
+which is safer for environments that require outbound proxies.
+
+If you need to neutralize stale proxy values on reused VMs, set
+`molecule_clear_proxy_env=true` for the run, for example:
+
+```bash
+scripts/molecule-vm-env.sh run almalinux -- test -s vm_almalinux -e molecule_clear_proxy_env=true
+```
 
 ### External package mirror intermittency
 

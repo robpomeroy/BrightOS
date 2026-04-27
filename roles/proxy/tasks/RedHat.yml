@@ -44,6 +44,7 @@
   ansible.builtin.get_url:
     url: https://downloads.sourceforge.net/project/ijbswa/Sources/3.0.34%20%28stable%29/privoxy-3.0.34-stable-src.tar.gz
     dest: /usr/local/src/privoxy-3.0.34-stable-src.tar.gz
+    checksum: "sha256:e6ccbca1656f4e616b4657f8514e33a70f6697e9d7294356577839322a3c5d2c"
     mode: "0644"
   when:
     - proxy_build_privoxy_from_source
@@ -53,6 +54,7 @@
   ansible.builtin.get_url:
     url: https://downloads.sourceforge.net/project/pcre/pcre/8.45/pcre-8.45.tar.gz
     dest: /usr/local/src/pcre-8.45.tar.gz
+    checksum: "sha256:4e6ce03e0336e8b4a3d6c2b70b1c5e18590a5673a98186da90d4f33c23defc09"
     mode: "0644"
   when:
     - proxy_build_privoxy_from_source
