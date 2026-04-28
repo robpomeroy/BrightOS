@@ -75,7 +75,7 @@
   ansible.builtin.shell: |
     set -e
     cd /usr/local/src/pcre-8.45
-    ./configure --prefix=/usr
+    ./configure --prefix=/usr --libdir=/usr/lib64
     make
     make install
   args:

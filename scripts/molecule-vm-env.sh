@@ -56,7 +56,7 @@ resolve_target() {
       MOLECULE_VM_SCENARIO="vm_ubuntu"
       TARGET_PREFIX="MOLECULE_VM_UBUNTU"
       ;;
-    almalinux|alma)
+    almalinux)
       MOLECULE_VM_SCENARIO="vm_almalinux"
       TARGET_PREFIX="MOLECULE_VM_ALMALINUX"
       ;;
