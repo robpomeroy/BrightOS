@@ -192,24 +192,23 @@ run_both_targets() {
   fi
 }
 
-if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
-  target="${1:-}"
-  env_file="${2:-.molecule-vm.env}"
+sourced_mode() {
+  local target="${1:-}"
+  local env_file="${2:-.molecule-vm.env}"
 
   if [[ -z "${target}" ]]; then
     usage
-    unset target env_file
     return 1
   fi
 
-  if ! load_target "${target}" "${env_file}"; then
-    unset target env_file
-    return 1
-  fi
-
+  load_target "${target}" "${env_file}" || return 1
   print_summary "${target}"
-  unset target env_file
   return 0
+}
+
+if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+  sourced_mode "$1" "$2"
+  return $?
 fi
 
 set -u
