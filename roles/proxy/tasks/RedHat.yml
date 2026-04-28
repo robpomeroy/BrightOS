@@ -41,6 +41,14 @@
     - proxy_build_privoxy_from_source
     - ansible_facts['distribution_major_version'] | int >= 10
 
+- name: Ensure /usr/local/src exists for source downloads
+  ansible.builtin.file:
+    path: /usr/local/src
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
 - name: Download privoxy source archive (EL10 fallback)
   ansible.builtin.get_url:
     url: https://downloads.sourceforge.net/project/ijbswa/Sources/3.0.34%20%28stable%29/privoxy-3.0.34-stable-src.tar.gz
