@@ -24,12 +24,20 @@ EOF
 
 load_env_file() {
   local env_file="$1"
+  local had_allexport=0
 
   if [[ -f "${env_file}" ]]; then
+    if [[ "$-" == *a* ]]; then
+      had_allexport=1
+    fi
+
     set -a
     # shellcheck disable=SC1090
     source "${env_file}"
-    set +a
+
+    if [[ "${had_allexport}" -eq 0 ]]; then
+      set +a
+    fi
   fi
 }
 

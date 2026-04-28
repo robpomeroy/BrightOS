@@ -2,7 +2,7 @@
 - name: Define privoxy source build parameters
   ansible.builtin.set_fact:
     _privoxy_version: "3.0.34"
-    _privoxy_release: "3.0.34-stable"
+    _privoxy_release: "{{ _privoxy_version }}-stable"
 
 - name: Attempt to install privoxy from configured repositories
   ansible.builtin.dnf:
@@ -56,8 +56,8 @@
 
 - name: Download privoxy source archive (EL10 fallback)
   ansible.builtin.get_url:
-    url: https://downloads.sourceforge.net/project/ijbswa/Sources/3.0.34%20%28stable%29/privoxy-{{ _privoxy_release }}-src.tar.gz
-    dest: /usr/local/src/privoxy-{{ _privoxy_release }}-src.tar.gz
+    url: "https://downloads.sourceforge.net/project/ijbswa/Sources/{{ _privoxy_version }}%20%28stable%29/privoxy-{{ _privoxy_release }}-src.tar.gz"
+    dest: "/usr/local/src/privoxy-{{ _privoxy_release }}-src.tar.gz"
     checksum: "sha256:e6ccbca1656f4e616b4657f8514e33a70f6697e9d7294356577839322a3c5d2c"
     mode: "0644"
   when:
