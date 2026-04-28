@@ -3,7 +3,6 @@
   ansible.builtin.set_fact:
     _privoxy_version: "3.0.34"
     _privoxy_release: "3.0.34-stable"
-  run_once: true
 
 - name: Attempt to install privoxy from configured repositories
   ansible.builtin.dnf:

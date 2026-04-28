@@ -5,13 +5,14 @@
     - "../../../config.yml"
   vars:
     _molecule_clear_proxy_env: "{{ molecule_clear_proxy_env | default(false) | bool }}"
-  environment:
-    http_proxy: "{{ '' if _molecule_clear_proxy_env else omit }}"
-    https_proxy: "{{ '' if _molecule_clear_proxy_env else omit }}"
-    HTTP_PROXY: "{{ '' if _molecule_clear_proxy_env else omit }}"
-    HTTPS_PROXY: "{{ '' if _molecule_clear_proxy_env else omit }}"
-    no_proxy: "{{ '' if _molecule_clear_proxy_env else omit }}"
-    NO_PROXY: "{{ '' if _molecule_clear_proxy_env else omit }}"
+    _molecule_clear_proxy_env_vars:
+      http_proxy: ""
+      https_proxy: ""
+      HTTP_PROXY: ""
+      HTTPS_PROXY: ""
+      no_proxy: ""
+      NO_PROXY: ""
+  environment: "{{ _molecule_clear_proxy_env_vars if _molecule_clear_proxy_env else {} }}"
   pre_tasks:
     - name: update apt cache
       ansible.builtin.apt:
