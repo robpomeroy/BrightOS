@@ -231,8 +231,9 @@ case "${mode}" in
     ;;
   run)
     target="${2:-}"
+    [[ -n "${target}" ]] || { usage; exit 1; }
     env_file=".molecule-vm.env"
-    shift 2 || true
+    shift 2
     if [[ "${1:-}" != "--" && -n "${1:-}" ]]; then
       env_file="$1"
       shift
@@ -240,7 +241,6 @@ case "${mode}" in
     if [[ "${1:-}" == "--" ]]; then
       shift
     fi
-    [[ -n "${target}" ]] || { usage; exit 1; }
     run_target "${target}" "${env_file}" "$@"
     ;;
   run-both)
