@@ -1,4 +1,10 @@
 ---
+- name: Define privoxy source build parameters
+  ansible.builtin.set_fact:
+    _privoxy_version: "3.0.34"
+    _privoxy_release: "3.0.34-stable"
+  run_once: true
+
 - name: Attempt to install privoxy from configured repositories
   ansible.builtin.dnf:
     name: privoxy
@@ -51,8 +57,8 @@
 
 - name: Download privoxy source archive (EL10 fallback)
   ansible.builtin.get_url:
-    url: https://downloads.sourceforge.net/project/ijbswa/Sources/3.0.34%20%28stable%29/privoxy-3.0.34-stable-src.tar.gz
-    dest: /usr/local/src/privoxy-3.0.34-stable-src.tar.gz
+    url: https://downloads.sourceforge.net/project/ijbswa/Sources/3.0.34%20%28stable%29/privoxy-{{ _privoxy_release }}-src.tar.gz
+    dest: /usr/local/src/privoxy-{{ _privoxy_release }}-src.tar.gz
     checksum: "sha256:e6ccbca1656f4e616b4657f8514e33a70f6697e9d7294356577839322a3c5d2c"
     mode: "0644"
   when:
@@ -101,10 +107,10 @@
 
 - name: Extract privoxy source archive (EL10 fallback)
   ansible.builtin.unarchive:
-    src: /usr/local/src/privoxy-3.0.34-stable-src.tar.gz
+    src: /usr/local/src/privoxy-{{ _privoxy_release }}-src.tar.gz
     dest: /usr/local/src
     remote_src: true
-    creates: /usr/local/src/privoxy-3.0.34-stable
+    creates: /usr/local/src/privoxy-{{ _privoxy_release }}
   when:
     - proxy_build_privoxy_from_source
     - ansible_facts['distribution_major_version'] | int >= 10
@@ -122,8 +128,7 @@
 - name: Build and install privoxy from source (EL10 fallback)
   ansible.builtin.shell: |
     set -e
-    src_dir="$(find /usr/local/src -maxdepth 1 -type d -name 'privoxy-*stable*' | head -n 1)"
-    test -n "${src_dir}"
+    src_dir="/usr/local/src/privoxy-{{ _privoxy_release }}"
     cd "${src_dir}"
     rm -f config.cache
     autoreconf -fi
@@ -180,15 +185,15 @@
     group: root
     mode: "0644"
   loop:
-    - src: "/usr/local/src/privoxy-3.0.34-stable/default.action"
+    - src: "/usr/local/src/privoxy-{{ _privoxy_release }}/default.action"
       dest: "/etc/privoxy/default.action"
-    - src: "/usr/local/src/privoxy-3.0.34-stable/match-all.action"
+    - src: "/usr/local/src/privoxy-{{ _privoxy_release }}/match-all.action"
       dest: "/etc/privoxy/match-all.action"
-    - src: "/usr/local/src/privoxy-3.0.34-stable/default.filter"
+    - src: "/usr/local/src/privoxy-{{ _privoxy_release }}/default.filter"
       dest: "/etc/privoxy/default.filter"
-    - src: "/usr/local/src/privoxy-3.0.34-stable/user.action"
+    - src: "/usr/local/src/privoxy-{{ _privoxy_release }}/user.action"
       dest: "/etc/privoxy/user.action"
-    - src: "/usr/local/src/privoxy-3.0.34-stable/user.filter"
+    - src: "/usr/local/src/privoxy-{{ _privoxy_release }}/user.filter"
       dest: "/etc/privoxy/user.filter"
   when:
     - proxy_build_privoxy_from_source
