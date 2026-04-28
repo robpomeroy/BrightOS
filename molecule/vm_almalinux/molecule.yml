@@ -1,0 +1,43 @@
+---
+dependency:
+  name: galaxy
+  enabled: false
+driver:
+  name: default
+lint: |
+  set -e
+  yamllint .
+  ansible-lint -x no-loop-var-prefix,command-instead-of-module,package-latest
+scenario:
+  test_sequence:
+    - dependency
+    - cleanup
+    - prepare
+    - converge
+    - idempotence
+    - verify
+platforms:
+  - name: vm-runner
+    managed: false
+provisioner:
+  name: ansible
+  log: true
+  env:
+    ANSIBLE_ROLES_PATH: "../../roles"
+  inventory:
+    host_vars:
+      vm-runner:
+        ansible_host: "{{ lookup('env', 'MOLECULE_VM_HOST') }}"
+        ansible_user: "{{ lookup('env', 'MOLECULE_VM_USER') | default('brightos', true) }}"
+        ansible_port: "{{ lookup('env', 'MOLECULE_VM_PORT') | default('22', true) }}"
+        ansible_ssh_private_key_file: "{{ lookup('env', 'MOLECULE_VM_KEY') }}"
+        ansible_ssh_common_args: "{{ lookup('env', 'MOLECULE_VM_SSH_COMMON_ARGS') | default('-o StrictHostKeyChecking=accept-new', true) }}"
+        ansible_python_interpreter: /usr/bin/python3
+        ansible_become: true
+  playbooks:
+    cleanup: ../resources/playbooks/cleanup.yml
+    converge: ../resources/playbooks/converge.yml
+    prepare: ../resources/playbooks/prepare.yml
+    verify: ../resources/playbooks/verify.yml
+verifier:
+  name: ansible

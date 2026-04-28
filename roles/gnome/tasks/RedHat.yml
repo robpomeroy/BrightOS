@@ -17,8 +17,6 @@
       - gnome-session
       - gnome-settings-daemon
       - gnome-shell
-      - gnome-themes-standard
-      - initial-setup-gui
       - libcanberra-gtk3 # GTK bindings for sound event library
       - librsvg2 # SVG library
       - libsane-hpaio # SANE driver for HP MFD scanners
@@ -49,6 +47,36 @@
       #- nautilus-sendto
     state: latest
 
+# gnome-themes-standard and initial-setup-gui were removed in RHEL/AlmaLinux 10.
+# Validate and install them only for EL9 and earlier.
+- name: Check availability of EL9-era Gnome packages
+  ansible.builtin.command: "dnf -q list --available {{ item }}"
+  changed_when: false
+  failed_when: false
+  register: el9_gnome_pkg_availability
+  loop:
+    - gnome-themes-standard
+    - initial-setup-gui
+  when: ansible_facts['distribution_major_version'] | int < 10
+
+- name: Assert EL9-era Gnome packages are available
+  ansible.builtin.assert:
+    that:
+      - item.rc == 0
+    fail_msg: >
+      Expected package {{ item.item }} to be available on EL9 and earlier, but
+      it is missing from configured repositories.
+  loop: "{{ el9_gnome_pkg_availability.results | default([]) }}"
+  when: ansible_facts['distribution_major_version'] | int < 10
+
+- name: Install EL9-era Gnome packages (not available on EL10+)
+  ansible.builtin.package:
+    name:
+      - gnome-themes-standard
+      - initial-setup-gui
+    state: present
+  when: ansible_facts['distribution_major_version'] | int < 10
+
 # With Red Hat-based distros, merely installing the bare Gnome environment
 # doesn't result in automatic boot to GUI. For this we need to change the
 # default target of systemd.
@@ -56,7 +84,11 @@
   ansible.builtin.command: systemctl get-default
   register: default_target
   changed_when: false
+  when:
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
 - name: Change default target to graphical.target
   ansible.builtin.command: systemctl set-default graphical.target
-  when: default_target.stdout_lines[0] != "graphical.target"
+  when:
+    - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
+    - default_target.stdout_lines[0] != "graphical.target"

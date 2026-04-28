@@ -1,6 +1,16 @@
 ---
 - name: Prepare
   hosts: all
+  vars:
+    _molecule_clear_proxy_env: "{{ molecule_clear_proxy_env | default(false) | bool }}"
+    _molecule_clear_proxy_env_vars:
+      http_proxy: ""
+      https_proxy: ""
+      HTTP_PROXY: ""
+      HTTPS_PROXY: ""
+      no_proxy: ""
+      NO_PROXY: ""
+  environment: "{{ _molecule_clear_proxy_env_vars if _molecule_clear_proxy_env else {} }}"
   tasks:
     - name: install Gnome & dconf
       ansible.builtin.apt:
@@ -14,10 +24,9 @@
       become: true
       when: ansible_facts['os_family'] == 'Debian'
 
-    - name: install Gnome & dconf
+    - name: install dconf tools (RedHat)
       ansible.builtin.dnf:
         name: [
-          "gnome-core",
           "dconf",
           "dconf-editor",
         ]

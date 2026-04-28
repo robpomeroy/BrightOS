@@ -7,3 +7,7 @@
 ansible.cfg
 inventory
 config.yml
+
+# Local VM target values for Molecule VM-over-SSH scenarios
+.molecule-vm.env
+.molecule-vm-logs/

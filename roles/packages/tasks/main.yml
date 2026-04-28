@@ -8,13 +8,22 @@
 - name: Install fzf dependencies
   ansible.builtin.package:
     name:
-      - curl
+      - "{{ 'curl' if ansible_facts['os_family'] == 'Debian' else 'curl-minimal' }}"
       - git
       - golang
       - perl
       - tar
     state: latest
 
+########################
+# OS-specific packages #
+########################
+
+- name: Include task list appropriate for OS family (Debian/RedHat)
+  ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml"
+
+# This must run after the OS-specific include (which runs fzf installer) so that
+# our custom .fzf.bash overwrites any file written by fzf's own install script.
 - name: Copy .fzf.bash for root and playbook users
   ansible.builtin.copy:
     src: "{{ ansible_facts['os_family'] }}.fzf.bash"
@@ -32,14 +41,6 @@
   loop: "{{ ['/root', ('/root' if (playbook_user | default(ansible_facts['user_id'])) == 'root' else '/home/' ~ (playbook_user | default(ansible_facts['user_id'])))] | unique }}"
 
 
-########################
-# OS-specific packages #
-########################
-
-- name: Include task list appropriate for OS family (Debian/RedHat)
-  ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml"  
-
-
 ###############################################
 # Packages with same names on all OS families #
 ###############################################
@@ -48,7 +49,7 @@
   ansible.builtin.package:
     name:
       - htop           # Superior to top: https://github.com/htop-dev/htop
-      - "{{ 'plocate' if ansible_facts['os_family'] == 'Debian' else 'mlocate' }}"  # File finder
+      - plocate          # File finder (replaces mlocate on all supported distros)
       - python3          # Keeps Python up to date
       - python3-pip      # Keeps Pip up to date
       - python3-psutil   # Required, to Ansible manage dconf
