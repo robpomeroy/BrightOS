@@ -81,9 +81,9 @@
 #     name:
 #       - gcompris
 
-- name: Try to install RedHat GUI packages
+- name: Install required RedHat GUI packages
   block:
-    - name: Install GUI packages
+    - name: Install required GUI packages
       ansible.builtin.package:
         name:
           - ktuberling

@@ -52,6 +52,7 @@
 - name: Check availability of EL9-era Gnome packages
   ansible.builtin.command: "dnf -q list --available {{ item }}"
   changed_when: false
+  failed_when: false
   register: el9_gnome_pkg_availability
   loop:
     - gnome-themes-standard
