@@ -1,3 +1,5 @@
+# code: language=ansible
+---
 - name: Include task list appropriate for OS family (Debian/RedHat)
   ansible.builtin.include_tasks: "{{ ansible_facts['os_family'] }}.yml"  
 
@@ -36,28 +38,32 @@
     value: "false"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
     no_extra_spaces: yes
 
 # The applications listed may or may not be installed (depending on distro)
 - name: Check whether optional desktop entries exist
   ansible.builtin.stat:
-    path: "/usr/share/applications/{{ item }}"
+    path: "/usr/share/applications/{{ gnome_app }}"
   loop:
     - byobu.desktop
     - info.desktop
     - vim.desktop
-  register: optional_desktop_entries
+  loop_control:
+    loop_var: gnome_app
+  register: gnome_optional_desktop_entries
 
 - name: Hide unnecessary application icons
   ansible.builtin.lineinfile:
-    path: "/usr/share/applications/{{ item.item }}"
+    path: "/usr/share/applications/{{ gnome_app.item }}"
     regexp: '^NoDisplay='
     insertafter: '^\[Desktop Entry\]'
     line: 'NoDisplay=true'
     mode: "0644"
-  loop: "{{ optional_desktop_entries.results }}"
-  when: item.stat.exists
+  loop: "{{ gnome_optional_desktop_entries.results }}"
+  loop_control:
+    loop_var: gnome_app
+  when: gnome_app.stat.exists
 
 # Not strictly Gnome-related, but no need for a separate role just for this
 - name: Create /etc/X11/xorg.conf.d directory
@@ -66,11 +72,11 @@
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
 - name: Disable switching virtual terminals
   ansible.builtin.copy:
     src: 10-xorg.conf
     dest: /etc/X11/xorg.conf.d/10-xorg.conf
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"

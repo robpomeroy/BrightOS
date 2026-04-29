@@ -1,15 +1,16 @@
+# code: language=ansible
 ---
-- name: Install the theme
+- name: Install the theme # noqa: no-changed-when
   ansible.builtin.command: update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/spinner/spinner.plymouth 100
   listen: 'Plymouth tasks'
 
 - name: Check whether update-initramfs is available
   ansible.builtin.stat:
     path: /usr/sbin/update-initramfs
-  register: update_initramfs_bin
+  register: plymouth_initramfs
   listen: 'Plymouth tasks'
 
-- name: Update initramfs
+- name: Update initramfs # noqa: no-changed-when
   ansible.builtin.command: update-initramfs -u
-  when: update_initramfs_bin.stat.exists
+  when: plymouth_initramfs.stat.exists
   listen: 'Plymouth tasks'

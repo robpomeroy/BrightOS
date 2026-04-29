@@ -1,3 +1,5 @@
+# code: language=ansible
+---
 - name: Gather service facts for network handlers
   ansible.builtin.service_facts:
   changed_when: false

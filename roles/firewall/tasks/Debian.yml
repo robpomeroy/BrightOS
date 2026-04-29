@@ -1,20 +1,20 @@
+# code: language=ansible
 ---
 ## ESSENTIALS
 
 - name: Install ufw
   ansible.builtin.package:
     name: ufw
-    state: latest
   notify: Start ufw
 
 - name: Allow SSH through firewall
-  ansible.builtin.ufw:
+  community.general.ufw:
     rule: allow
     port: "22"
     proto: tcp
 
 - name: Enable ufw
-  ansible.builtin.ufw:
+  community.general.ufw:
     state: enabled
 
 ## ALL OTHER RULES

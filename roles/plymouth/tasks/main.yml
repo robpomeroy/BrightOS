@@ -1,8 +1,8 @@
+# code: language=ansible
 ---
 - name: Install default Plymouth splash screen
   ansible.builtin.apt:
     name: plymouth-theme-spinner
-    state: latest
   notify:
     - "Plymouth tasks"
   when: ansible_facts['os_family'] == "Debian"

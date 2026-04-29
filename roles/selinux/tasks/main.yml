@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 # Generally to debug SELinux problems, see /var/log/audit and /var/log/messages.
 - name: Include task list appropriate for OS family (Debian/RedHat)

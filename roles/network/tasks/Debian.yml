@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 - name: Configure systemd-resolved DNS
   community.general.ini_file:

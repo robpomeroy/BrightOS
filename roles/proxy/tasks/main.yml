@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 # The proxy will be for local access only, so no firewall configuration required
 - name: Include task list appropriate for OS family (Debian/RedHat)
@@ -17,7 +18,7 @@
     dest: /etc/privoxy/config
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
 
 - name: Copy Adblock Plus to Privoxy conversion script
   ansible.builtin.copy:
@@ -25,7 +26,7 @@
     dest: /usr/local/bin/abp2privoxy.sh
     owner: root
     group: root
-    mode: 0700
+    mode: "0700"
   notify: Run abp2privoxy
 
 - name: Ensure /etc/cron.daily exists
@@ -42,12 +43,12 @@
     dest: /etc/cron.daily/abp2privoxy
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
   
 - name: Enable privoxy
   ansible.builtin.service:
     name: privoxy
-    enabled: yes
+    enabled: true
     state: started
   when:
     - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
@@ -55,11 +56,13 @@
 - name: Configure environment-wide proxy
   ansible.builtin.lineinfile:
     path: /etc/environment
-    regex: "^{{ item }}="
-    line: "{{ item }}=http://127.0.0.1:8118"
+    regex: "^{{ proxy_conf }}="
+    line: "{{ proxy_conf }}=http://127.0.0.1:8118"
   loop:
     - http_proxy
     - https_proxy
+  loop_control:
+    loop_var: proxy_conf
   when:
     - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 

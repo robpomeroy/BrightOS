@@ -1,5 +1,6 @@
+# code: language=ansible
 ---
-- name: reboot
+- name: Reboot
   ansible.builtin.reboot:
   when:
     - ansible_facts.virtualization_type is defined

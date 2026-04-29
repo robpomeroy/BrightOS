@@ -1,4 +1,5 @@
 *.retry
+.venv/
 
 # Directory to store private things such as personal SSH setup
 /private

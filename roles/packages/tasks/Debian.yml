@@ -1,9 +1,9 @@
+# code: language=ansible
 ---
-# This is the one time we update the cache (so must use apt rather than package)
+# This is the time we update the cache (so must use apt rather than package)
 - name: Install preferred packages
   ansible.builtin.apt:
     name:
       - fzf   # Fuzzy find - very useful: https://github.com/junegunn/fzf
       - micro # Great text editor: https://github.com/zyedidia/micro
-    state: latest
-    update_cache: yes
+    update_cache: true

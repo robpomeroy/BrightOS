@@ -1,3 +1,5 @@
+# code: language=ansible
+---
 - name: Give passwordless sudo to the 'sudo' group (validate with visudo program)
   ansible.builtin.lineinfile:
     dest: /etc/sudoers

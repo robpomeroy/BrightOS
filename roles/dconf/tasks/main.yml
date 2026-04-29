@@ -1,18 +1,17 @@
+# code: language=ansible
 ---
-- name: install dconf (Debian/Ubuntu)
+- name: Install dconf (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
       - dconf-cli
       - dconf-editor
-    state: latest
   when: ansible_facts['os_family'] == "Debian"
 
-- name: install dconf (RedHat/CentOS)
+- name: Install dconf (RedHat/CentOS)
   ansible.builtin.dnf:
     name:
       - dconf
       - dconf-editor
-    state: latest
   when: ansible_facts['os_family'] == "RedHat"
    
 # To review dconf settings, install the graphical dconf Editor.
@@ -26,7 +25,7 @@
 
 - name: Create dconf 'local' db directories
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ dconf_db_dir }}"
     state: directory
     owner: root
     group: root
@@ -34,23 +33,29 @@
   loop:
     - /etc/dconf/db/local.d
     - /etc/dconf/db/local.d/locks
+  loop_control:
+    loop_var: dconf_db_dir
 
 - name: Copy dconf key settings files
   ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "/etc/dconf/db/local.d/{{ item | basename }}"
+    src: "{{ dconf_keyfile }}"
+    dest: "/etc/dconf/db/local.d/{{ dconf_keyfile | basename }}"
     owner: root
     group: root
     mode: 0644
   loop: "{{ query('ansible.builtin.fileglob', role_path ~ '/files/keyfiles/*') }}"
+  loop_control:
+    loop_var: dconf_keyfile
   notify: Update dconf databases
 
 - name: Copy dconf lock files
   ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "/etc/dconf/db/local.d/locks/{{ item | basename }}"
+    src: "{{ dconf_lockfile }}"
+    dest: "/etc/dconf/db/local.d/locks/{{ dconf_lockfile | basename }}"
     owner: root
     group: root
     mode: 0644
   loop: "{{ query('ansible.builtin.fileglob', role_path ~ '/files/lockfiles/*') }}"
+  loop_control:
+    loop_var: dconf_lockfile
   notify: Update dconf databases

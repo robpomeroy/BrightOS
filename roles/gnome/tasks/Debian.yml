@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 - name: Install Gnome
   ansible.builtin.apt:
@@ -6,4 +7,3 @@
       - gnome-session
       - gnome-themes-extra
       - nautilus
-    state: latest

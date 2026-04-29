@@ -1,20 +1,19 @@
+# code: language=ansible
 ---
 # EPEL offers the excellent Micro editor and other useful packages
-# This is the one time we update the cache (so must use dnf rather than package)
+# This is one time we update the cache (so must use dnf rather than package)
 - name: Enable the EPEL Repository
   ansible.builtin.dnf:
     name: epel-release
-    state: latest
-    update_cache: yes
+    update_cache: true
   when: ansible_facts['distribution']!='OracleLinux'
     
 # Oracle has a different name for their version of EPEL
-# This is the one time we update the cache (so must use dnf rather than package)
+# This is one time we update the cache (so must use dnf rather than package)
 - name: Enable the Oracle Linux EPEL Repository
   ansible.builtin.dnf:
     name: "oracle-epel-release-el{{ ansible_facts['distribution_major_version'] }}"
-    state: latest
-    update_cache: yes
+    update_cache: true
   when: ansible_facts['distribution']=='OracleLinux'
 
 # CodeReady repo is needed for certain packages
@@ -61,10 +60,10 @@
     depth: 1
     dest: /opt/fzf
     version: HEAD
-  register: fzf_install
+  register: packages_fzf_install
 
-- name: Install fzf    # noqa no-handler
+- name: Install fzf    # noqa: no-changed-when no-handler
   ansible.builtin.command:
     cmd: /opt/fzf/install --no-key-bindings --no-completion --no-update-rc
     chdir: /opt/fzf
-  when: fzf_install.changed
+  when: packages_fzf_install.changed

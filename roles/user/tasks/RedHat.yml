@@ -1,3 +1,5 @@
+# code: language=ansible
+---
 - name: Give passwordless sudo to the 'wheel' group (validate with visudo program)
   ansible.builtin.lineinfile:
     dest: /etc/sudoers
