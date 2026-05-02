@@ -12,7 +12,7 @@
       NO_PROXY: ""
   environment: "{{ _molecule_clear_proxy_env_vars if _molecule_clear_proxy_env else {} }}"
   tasks:
-    - name: install Gnome & dconf
+    - name: Install Gnome & dconf
       ansible.builtin.apt:
         name: [
           "gnome-core",
@@ -24,7 +24,7 @@
       become: true
       when: ansible_facts['os_family'] == 'Debian'
 
-    - name: install dconf tools (RedHat)
+    - name: Install dconf tools (RedHat)
       ansible.builtin.dnf:
         name: [
           "dconf",
