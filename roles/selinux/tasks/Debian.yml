@@ -1,7 +1,7 @@
 # code: language=ansible
 ---
 # Ansible management of SE flags depends on these
-- name: Install Python packages needed for SELinux 
+- name: Install Python packages needed for SELinux
   ansible.builtin.apt:
     name:
       - python3-selinux

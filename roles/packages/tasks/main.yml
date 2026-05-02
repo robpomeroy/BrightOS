@@ -86,13 +86,13 @@
   ansible.builtin.package:
     name: [open-vm-tools, open-vm-tools-desktop]
   when:    # implicit AND when passing a list
-    - ansible_facts.virtualization_role == "guest"
-    - ansible_facts.virtualization_type == "VMware"
+    - ansible_facts['virtualization_role'] == "guest"
+    - ansible_facts['virtualization_type'] == "kvm"
 
 - name: VirtualBox guest utils
   when:    # implicit AND when passing a list
-    - ansible_facts.virtualization_role == "guest"
-    - ansible_facts.virtualization_type == "virtualbox"
+    - ansible_facts['virtualization_role'] == "guest"
+    - ansible_facts['virtualization_type'] == "virtualbox"
     - ansible_facts['distribution'] == "Ubuntu"    # packages are not available for AlmaLinux
   block:
     - name: Install VirtualBox guest utils
