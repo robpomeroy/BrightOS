@@ -28,7 +28,7 @@
   ansible.builtin.copy:
     src: "{{ ansible_facts['os_family'] }}.fzf.bash"
     dest: '{{ packages_fzf }}/.fzf.bash'
-    mode: 0644
+    mode: "0644"
   loop: "{{ ['/root', ('/root' if (playbook_user | default(ansible_facts['user_id'])) == 'root' else '/home/' ~ (playbook_user | default(ansible_facts['user_id'])))] | unique }}"
   loop_control:
     loop_var: packages_fzf
@@ -129,10 +129,14 @@
         path: /dev/virtio-ports/org.qemu.guest_agent.0
       register: packages_qga_channel
 
-    - name: Enable and start QEMU guest agent service
+    - name: Enable QEMU guest agent service
       ansible.builtin.service:
         name: qemu-guest-agent
         enabled: true
+
+    - name: Start QEMU guest agent service
+      ansible.builtin.service:
+        name: qemu-guest-agent
         state: started
       when: packages_qga_channel.stat.exists
 
@@ -144,6 +148,6 @@
 - name: Disable Hyper-V Key Value Pair daemon
   ansible.builtin.service:
     name: hv-kvp-daemon
-    enabled: no
+    enabled: false
     state: stopped
   when: ansible_facts.services['hv-kvp-daemon.service'] is defined

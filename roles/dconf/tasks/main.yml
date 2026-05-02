@@ -21,7 +21,7 @@
     dest: /etc/dconf/profile/user
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
 
 - name: Create dconf 'local' db directories
   ansible.builtin.file:
@@ -29,7 +29,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
   loop:
     - /etc/dconf/db/local.d
     - /etc/dconf/db/local.d/locks
@@ -42,7 +42,7 @@
     dest: "/etc/dconf/db/local.d/{{ dconf_keyfile | basename }}"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   loop: "{{ query('ansible.builtin.fileglob', role_path ~ '/files/keyfiles/*') }}"
   loop_control:
     loop_var: dconf_keyfile
@@ -54,7 +54,7 @@
     dest: "/etc/dconf/db/local.d/locks/{{ dconf_lockfile | basename }}"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   loop: "{{ query('ansible.builtin.fileglob', role_path ~ '/files/lockfiles/*') }}"
   loop_control:
     loop_var: dconf_lockfile
