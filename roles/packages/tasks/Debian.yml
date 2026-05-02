@@ -1,6 +1,6 @@
 # code: language=ansible
 ---
-# This is the time we update the cache (so must use apt rather than package)
+# This is one time we update the cache (so must use apt rather than package)
 - name: Install preferred packages
   ansible.builtin.apt:
     name:
