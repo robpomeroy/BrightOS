@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 - name: Install GUI packages
   ansible.builtin.package:
@@ -7,12 +8,10 @@
       - ktuberling
       - tuxpaint
       - tuxpaint-data
-    state: latest
 
 - name: Install Firefox
   ansible.builtin.apt:
     name: firefox
-    state: latest
   when: firefox_install | bool
 
 - name: Uninstall Firefox

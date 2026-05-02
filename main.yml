@@ -1,7 +1,8 @@
 #!/usr/bin/env ansible-playbook
 ---
 # See README.md for installation & guidance
-- hosts: all
+- name: Main play
+  hosts: all
   become: true
 
   # Edit the config file to suit your particular requirements

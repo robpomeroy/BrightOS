@@ -1,5 +1,6 @@
+# code: language=ansible
 ---
-- name: Run dconf update
+- name: Run dconf update # noqa: no-changed-when
   ansible.builtin.command: dconf update
   listen: Update dconf databases
 

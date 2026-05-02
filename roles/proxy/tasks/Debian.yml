@@ -1,5 +1,5 @@
+# code: language=ansible
 ---
 - name: Install privoxy
   ansible.builtin.apt:
     name: privoxy
-    state: latest

@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 ## ESSENTIALS
 
@@ -5,7 +6,6 @@
 - name: Install firewalld
   ansible.builtin.package:
     name: firewalld
-    state: latest
 
 - name: Start firewalld
   ansible.builtin.service:
@@ -16,7 +16,7 @@
     - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
 - name: Allow SSH through firewall
-  ansible.builtin.firewalld:
+  ansible.posix.firewalld:
     service: ssh
     state: enabled
     permanent: yes
@@ -27,7 +27,7 @@
 ## ALL OTHER RULES
 
 # - name: Allow HTTP and HTTPS through firewall
-#   ansible.builtin.firewalld:
+#   ansible.posix.firewalld:
 #     service: '{{ item }}'
 #     state: enabled
 #     permanent: yes

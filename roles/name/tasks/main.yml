@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 - name: Set hostname
   ansible.builtin.hostname:

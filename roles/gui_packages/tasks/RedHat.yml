@@ -1,21 +1,20 @@
+# code: language=ansible
 ---
 # Some Red Hat/AlmaLinux packages are only available as snaps, so we have to
 # add the EPEL repo and install snapd to use them.
 - name: Install EPEL repository
   ansible.builtin.dnf:
     name: "epel-release"
-    state: latest
 
 - name: Install Snap
   ansible.builtin.dnf:
     name: snapd
-    state: latest
-  register: snapd_installed
+  register: gui_packages_snapd_installed
 
 # TODO: Squashfs module is not installed. Fix?
 # - name: Load squashfs kernel module
 #   command: modprobe squashfs
-#   when: snapd_installed is changed
+#   when: gui_packages_snapd_installed is changed
 
 - name: Enable snapd socket
   ansible.builtin.systemd:
@@ -61,14 +60,15 @@
 
     - name: Install Tux Paint packages
       ansible.builtin.dnf:
-        name: /tmp/{{ item }}
-        state: present
+        name: /tmp/{{ gui_packages_tux }}
       loop:
         # - SDL_image-1.2.12-11.el8.x86_64.rpm
         # - SDL_mixer-1.2.12-4.el8.x86_64.rpm
         # - SDL_ttf-2.0.11-6.el8.x86_64.rpm
         # - SDL_Pango-0.1.2-21.el8.x86_64.rpm
         - tuxpaint-release-9-1.el9.noarch.rpm
+      loop_control:
+        loop_var: gui_packages_tux
 
   rescue:
     - name: Warn that Tux Paint could not be installed
@@ -82,18 +82,17 @@
 #       - gcompris
 
 - name: Install required RedHat GUI packages
+  when: ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
   block:
     - name: Install required GUI packages
       ansible.builtin.package:
         name:
           - ktuberling
         state: present
-  when: ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
 - name: Install Firefox
   ansible.builtin.dnf:
     name: firefox
-    state: latest
   when: firefox_install | bool
 
 - name: Uninstall Firefox

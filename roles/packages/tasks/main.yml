@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 ####################
 # fzf dependencies #
@@ -13,7 +14,6 @@
       - golang
       - perl
       - tar
-    state: latest
 
 ########################
 # OS-specific packages #
@@ -27,18 +27,22 @@
 - name: Copy .fzf.bash for root and playbook users
   ansible.builtin.copy:
     src: "{{ ansible_facts['os_family'] }}.fzf.bash"
-    dest: '{{ item }}/.fzf.bash'
-    mode: 0644
+    dest: '{{ packages_fzf }}/.fzf.bash'
+    mode: "0644"
   loop: "{{ ['/root', ('/root' if (playbook_user | default(ansible_facts['user_id'])) == 'root' else '/home/' ~ (playbook_user | default(ansible_facts['user_id'])))] | unique }}"
+  loop_control:
+    loop_var: packages_fzf
 
 # [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 - name: Ensure fzf.bash is loaded for root and playbook user
   ansible.builtin.lineinfile:
-    path: "{{ item }}/.bashrc"
+    path: "{{ packages_fzf }}/.bashrc"
     # Double backslashes needed, since backslash is a special character in YAML
     regexp: "\\[ -f ~/\\.fzf\\.bash \\] && source ~/\\.fzf\\.bash"
     line: "[ -f ~/.fzf.bash ] && source ~/.fzf.bash"
   loop: "{{ ['/root', ('/root' if (playbook_user | default(ansible_facts['user_id'])) == 'root' else '/home/' ~ (playbook_user | default(ansible_facts['user_id'])))] | unique }}"
+  loop_control:
+    loop_var: packages_fzf
 
 
 ###############################################
@@ -58,7 +62,7 @@
 - name: Check whether htop desktop entry exists
   ansible.builtin.stat:
     path: /usr/share/applications/htop.desktop
-  register: htop_desktop
+  register: packages_htop_desktop
 
 - name: Hide htop application icon
   ansible.builtin.lineinfile:
@@ -67,7 +71,7 @@
     insertafter: '^\[Desktop Entry\]'
     line: 'NoDisplay=true'
     mode: "0644"
-  when: htop_desktop.stat.exists
+  when: packages_htop_desktop.stat.exists
 
 
 ##########################
@@ -82,47 +86,59 @@
   ansible.builtin.package:
     name: [open-vm-tools, open-vm-tools-desktop]
   when:    # implicit AND when passing a list
-    - ansible_facts.virtualization_role == "guest"
-    - ansible_facts.virtualization_type == "VMware"
+    - ansible_facts['virtualization_role'] == "guest"
+    - ansible_facts['virtualization_type'] == "VMware"
 
 - name: VirtualBox guest utils
+  when:    # implicit AND when passing a list
+    - ansible_facts['virtualization_role'] == "guest"
+    - ansible_facts['virtualization_type'] == "virtualbox"
+    - ansible_facts['distribution'] == "Ubuntu"    # packages are not available for AlmaLinux
   block:
-    - name: install VirtualBox guest utils
+    - name: Install VirtualBox guest utils
       ansible.builtin.package:
         name: [
           "virtualbox-guest-utils",
           "virtualbox-guest-x11",
         ]
-    - name: activate VirtualBox guest utils kernel modules (otherwise we'd have to reboot)
+    - name: Activate VirtualBox guest utils kernel modules (otherwise we'd have to reboot)
       community.general.modprobe:
-        name: "{{ item }}"
+        name: "{{ packages_vbox }}"
       loop:
         - "vboxguest"
         - "vboxsf"
         - "vboxvideo"
-  when:    # implicit AND when passing a list
-    - ansible_facts.virtualization_role == "guest"
-    - ansible_facts.virtualization_type == "virtualbox"
-    - ansible_facts.lsb.id == "Ubuntu"    # packages are not available for AlmaLinux
+      loop_control:
+        loop_var: packages_vbox
+
 
 - name: QEMU agent
+  when:    # implicit AND when passing a list
+    - ansible_facts['virtualization_role'] == "guest"
+    - ansible_facts['virtualization_type'] == "kvm"
   block:
     - name: Install QEMU agent
       ansible.builtin.package:
         name: [qemu-guest-agent]
         
-    # This will fail if the VM hasn't been fully shutdown and then started after
-    # installing qemu-guest-agent. Reboot is NOT enough.
-    # Hence, we'll ignore_errors for this task that WILL happen on the first run.
-    - name: Enable and start QEMU guest agent service
+    # The guest agent needs the virtio channel provided after a full power
+    # cycle. Guard service start on the channel path to avoid first-run
+    # transient failures.
+    - name: Check whether QEMU guest agent virtio channel exists
+      ansible.builtin.stat:
+        path: /dev/virtio-ports/org.qemu.guest_agent.0
+      register: packages_qga_channel
+
+    - name: Enable QEMU guest agent service
       ansible.builtin.service:
         name: qemu-guest-agent
-        enabled: yes
+        enabled: true
+
+    - name: Start QEMU guest agent service
+      ansible.builtin.service:
+        name: qemu-guest-agent
         state: started
-      ignore_errors: true
-  when:    # implicit AND when passing a list
-    - ansible_facts.virtualization_role == "guest"
-    - ansible_facts.virtualization_type == "kvm"
+      when: packages_qga_channel.stat.exists
 
 - name: Populate service facts
   ansible.builtin.service_facts:
@@ -132,6 +148,6 @@
 - name: Disable Hyper-V Key Value Pair daemon
   ansible.builtin.service:
     name: hv-kvp-daemon
-    enabled: no
+    enabled: false
     state: stopped
   when: ansible_facts.services['hv-kvp-daemon.service'] is defined

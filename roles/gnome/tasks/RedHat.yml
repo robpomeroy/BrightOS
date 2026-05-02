@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 # Installing the "@Workstation" group gives us Gnome, but also a lot of other
 # packages we probably don't need. So we install Gnome components individually.
@@ -45,28 +46,31 @@
       #- gvfs-mtp
       #- gvfs-smb
       #- nautilus-sendto
-    state: latest
 
 # gnome-themes-standard and initial-setup-gui were removed in RHEL/AlmaLinux 10.
 # Validate and install them only for EL9 and earlier.
 - name: Check availability of EL9-era Gnome packages
-  ansible.builtin.command: "dnf -q list --available {{ item }}"
+  ansible.builtin.command: "dnf -q list --available {{ gnome_pkg }}"
   changed_when: false
   failed_when: false
-  register: el9_gnome_pkg_availability
+  register: gnome_el9_pkg_availability
   loop:
     - gnome-themes-standard
     - initial-setup-gui
+  loop_control:
+    loop_var: gnome_pkg
   when: ansible_facts['distribution_major_version'] | int < 10
 
 - name: Assert EL9-era Gnome packages are available
   ansible.builtin.assert:
     that:
-      - item.rc == 0
+      - gnome_pkg_check.rc == 0
     fail_msg: >
-      Expected package {{ item.item }} to be available on EL9 and earlier, but
+      Expected package {{ gnome_pkg_check.item }} to be available on EL9 and earlier, but
       it is missing from configured repositories.
-  loop: "{{ el9_gnome_pkg_availability.results | default([]) }}"
+  loop: "{{ gnome_el9_pkg_availability.results | default([]) }}"
+  loop_control:
+    loop_var: gnome_pkg_check
   when: ansible_facts['distribution_major_version'] | int < 10
 
 - name: Install EL9-era Gnome packages (not available on EL10+)
@@ -82,13 +86,13 @@
 # default target of systemd.
 - name: Get default systemd target
   ansible.builtin.command: systemctl get-default
-  register: default_target
+  register: gnome_default_target
   changed_when: false
   when:
     - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
 
-- name: Change default target to graphical.target
+- name: Change default target to graphical.target # noqa: no-changed-when
   ansible.builtin.command: systemctl set-default graphical.target
   when:
     - ansible_facts['virtualization_type'] is not defined or ansible_facts['virtualization_type'] not in ['docker', 'containerd', 'podman']
-    - default_target.stdout_lines[0] != "graphical.target"
+    - gnome_default_target.stdout_lines[0] != "graphical.target"

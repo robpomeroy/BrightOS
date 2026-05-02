@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
-- name: Run abp2privoxy
+- name: Run abp2privoxy # noqa: no-changed-when
   ansible.builtin.command: /usr/local/bin/abp2privoxy.sh
