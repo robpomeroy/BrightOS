@@ -68,6 +68,51 @@
         - nautilus
       when: ansible_facts['os_family'] == "Debian"
 
+    - name: Assert flatpak package is present (RedHat)
+      ansible.builtin.assert:
+        that: "'flatpak' in ansible_facts.packages"
+        fail_msg: "flatpak is not installed"
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Get configured Flatpak remotes (RedHat)
+      ansible.builtin.command: flatpak remotes --system
+      register: verify_flatpak_remotes
+      changed_when: false
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Assert Flathub remote is configured (RedHat)
+      ansible.builtin.assert:
+        that: "'flathub' in verify_flatpak_remotes.stdout"
+        fail_msg: "Flathub Flatpak remote is not configured"
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Assert ktuberling is present (RedHat)
+      ansible.builtin.assert:
+        that: "'ktuberling' in ansible_facts.packages"
+        fail_msg: "Required GUI package ktuberling is not installed"
+      when:
+        - ansible_facts['os_family'] == "RedHat"
+        - not molecule_is_container
+
+    - name: Get installed Flatpak applications (RedHat)
+      ansible.builtin.command: flatpak list --system --app --columns=application
+      register: verify_flatpak_apps
+      changed_when: false
+      when:
+        - ansible_facts['os_family'] == "RedHat"
+        - not molecule_is_container
+
+    - name: Assert required GUI applications are installed via Flatpak (RedHat)
+      ansible.builtin.assert:
+        that: "item in verify_flatpak_apps.stdout"
+        fail_msg: "Required Flatpak application '{{ item }}' is not installed"
+      loop:
+        - org.gnome.GCompris
+        - net.sourceforge.TuxPaint
+      when:
+        - ansible_facts['os_family'] == "RedHat"
+        - not molecule_is_container
+
     - name: Assert required base packages are present
       ansible.builtin.assert:
         that: "item in ansible_facts.packages"
