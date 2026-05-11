@@ -149,6 +149,8 @@ Definition of done:
 
 #### 5. Resolve RedHat GUI package blockers
 
+STATUS: COMPLETE.
+
 Why this matters:
 Accessible and educational desktop software is part of the user value of
 BrightOS. Missing apps on one supported OS family weakens that promise.
