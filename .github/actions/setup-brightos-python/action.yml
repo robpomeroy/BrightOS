@@ -1,0 +1,19 @@
+name: Set up BrightOS Python environment
+description: Create the repository virtualenv and install the Python and Ansible dependencies used by CI.
+
+runs:
+  using: composite
+  steps:
+    - name: Create Python virtual environment
+      shell: bash
+      run: |
+        python -m venv .venv
+        . .venv/bin/activate
+        python -m pip install --upgrade pip
+        pip install ansible-core ansible-lint yamllint molecule 'molecule-plugins[docker]' testinfra jmespath pyyaml
+
+    - name: Install Ansible collections
+      shell: bash
+      run: |
+        . .venv/bin/activate
+        ansible-galaxy collection install -r requirements.yml

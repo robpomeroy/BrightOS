@@ -34,17 +34,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y shellcheck
 
-      - name: Create Python virtual environment
-        run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          python -m pip install --upgrade pip
-          pip install ansible-core ansible-lint yamllint molecule 'molecule-plugins[docker]' testinfra jmespath pyyaml
-
-      - name: Install Ansible collections
-        run: |
-          . .venv/bin/activate
-          ansible-galaxy collection install -r requirements.yml
+      - name: Set up BrightOS Python environment
+        uses: ./.github/actions/setup-brightos-python
 
       - name: Run YAML lint
         run: |
@@ -79,17 +70,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Create Python virtual environment
-        run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          python -m pip install --upgrade pip
-          pip install ansible-core ansible-lint yamllint molecule 'molecule-plugins[docker]' testinfra jmespath pyyaml
-
-      - name: Install Ansible collections
-        run: |
-          . .venv/bin/activate
-          ansible-galaxy collection install -r requirements.yml
+      - name: Set up BrightOS Python environment
+        uses: ./.github/actions/setup-brightos-python
 
       - name: Prepare Molecule configuration
         run: cp config.yml.example config.yml
@@ -97,4 +79,8 @@ jobs:
       - name: Run Molecule
         run: |
           . .venv/bin/activate
-          molecule test --skip-lint -s "${{ matrix.scenario }}"
+          trap 'molecule destroy -s "${{ matrix.scenario }}"' EXIT
+          molecule create -s "${{ matrix.scenario }}"
+          molecule converge -s "${{ matrix.scenario }}"
+          molecule idempotence -s "${{ matrix.scenario }}"
+          molecule verify -s "${{ matrix.scenario }}"
