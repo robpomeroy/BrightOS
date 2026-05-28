@@ -56,12 +56,25 @@ CI gate executes:
 - `yamllint`
 - `ansible-lint`
 - `shellcheck` for the tracked shell scripts
-- `molecule test --skip-lint -s default`
-- `molecule test --skip-lint -s almalinux`
+- Molecule `create`, `converge`, `idempotence`, and `verify` for `default`
+- Molecule `create`, `converge`, `idempotence`, and `verify` for `almalinux`
 
 CI runs on Ubuntu-hosted GitHub runners and uses Docker for the Molecule
 scenarios. VM scenarios remain manual validation for cases where container
 behaviour is not sufficient.
+
+### Local CI Pre-Flight (Recommended Before Push)
+
+To run the same baseline checks locally before opening or updating a PR, use:
+
+```bash
+cd /path/to/BrightOS
+scripts/ci-preflight.sh
+```
+
+The script mirrors the GitHub Actions baseline path (lint + `default` and
+`almalinux` Molecule container scenarios) and helps catch regressions before
+consuming CI minutes.
 
 ## Prerequisites
 

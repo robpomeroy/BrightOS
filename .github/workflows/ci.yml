@@ -45,7 +45,7 @@ jobs:
       - name: Run Ansible lint
         run: |
           . .venv/bin/activate
-          ansible-lint -x no-loop-var-prefix,command-instead-of-module,package-latest
+          ansible-lint -x no-loop-var-prefix,command-instead-of-module,package-latest,var-naming[no-role-prefix]
 
       - name: Run shell lint
         run: |

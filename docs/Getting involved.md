@@ -76,6 +76,13 @@ scenarios (`default` and `almalinux`). For details on what runs automatically
 and what remains manual (for example VM scenarios), see
 [Testing.md](Testing.md).
 
+Before pushing changes, run the local CI mirror script from the repository
+root:
+
+```bash
+scripts/ci-preflight.sh
+```
+
 If you are working in Windows, please refer to the
 [Windows development](Windows%20development.md) document.
 

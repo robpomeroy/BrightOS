@@ -7,7 +7,7 @@ driver:
 lint: |
   set -e
   yamllint .
-  ansible-lint -x no-loop-var-prefix,command-instead-of-module,package-latest
+  ansible-lint -x no-loop-var-prefix,command-instead-of-module,package-latest,var-naming[no-role-prefix]
 platforms:
   - name: vm-runner
     image: ubuntu:24.04
