@@ -70,6 +70,12 @@ To work on this project, get in touch with me (see the README), and I will set
 you up as a Github collaborator. All additions to the project should be
 developed on branches and submitted for approval as pull requests.
 
+Pull requests are validated automatically by GitHub Actions. Before requesting
+review, ensure the baseline CI checks pass: linting plus Molecule container
+scenarios (`default` and `almalinux`). For details on what runs automatically
+and what remains manual (for example VM scenarios), see
+[Testing.md](Testing.md).
+
 If you are working in Windows, please refer to the
 [Windows development](Windows%20development.md) document.
 
