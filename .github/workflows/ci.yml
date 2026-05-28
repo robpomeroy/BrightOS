@@ -1,0 +1,86 @@
+# This workflow runs linting and Molecule tests.
+name: Baseline CI
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Set up BrightOS Python environment
+        uses: ./.github/actions/setup-brightos-python
+
+      - name: Run YAML lint
+        run: |
+          . .venv/bin/activate
+          yamllint .
+
+      - name: Run Ansible lint
+        run: |
+          . .venv/bin/activate
+          ansible-lint -x no-loop-var-prefix,command-instead-of-module,package-latest,var-naming[no-role-prefix]
+
+      - name: Run shell lint
+        run: |
+          shellcheck scripts/molecule-vm-env.sh roles/proxy/files/abp2privoxy.sh
+
+  molecule:
+    name: Molecule ${{ matrix.scenario }}
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario:
+          - default
+          - almalinux
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Set up BrightOS Python environment
+        uses: ./.github/actions/setup-brightos-python
+
+      - name: Prepare Molecule configuration
+        run: cp config.yml.example config.yml
+
+      - name: Run Molecule
+        run: |
+          . .venv/bin/activate
+          trap 'molecule destroy -s "${{ matrix.scenario }}"' EXIT
+          molecule create -s "${{ matrix.scenario }}"
+          molecule converge -s "${{ matrix.scenario }}"
+          molecule idempotence -s "${{ matrix.scenario }}"
+          molecule verify -s "${{ matrix.scenario }}"

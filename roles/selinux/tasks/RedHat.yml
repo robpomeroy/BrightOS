@@ -10,12 +10,21 @@
 - name: Install SELinux management packages
   ansible.builtin.package:
     name:
+      - selinux-policy
+      - selinux-policy-targeted
       - policycoreutils-python-utils
       - setools-console
       - setroubleshoot-server
+    state: present
+
+- name: Detect whether host is containerized
+  ansible.builtin.set_fact:
+    selinux_is_container: "{{ ansible_facts['virtualization_type'] is defined and ansible_facts['virtualization_type'] in ['docker', 'containerd', 'podman'] }}"
+  changed_when: false
 
 - name: Set SELinux to enforcing mode (targeted policy)
   ansible.posix.selinux:
     policy: targeted
     # Choose enforcing or permissive; reboot needed when changing
     state: enforcing
+  when: not selinux_is_container

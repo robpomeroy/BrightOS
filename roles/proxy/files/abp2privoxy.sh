@@ -37,14 +37,15 @@ PRIVOXY_DIR="/etc/privoxy"
 PRIVOXY_CONF="/etc/privoxy/config"
 
 # Working directories/files
-TMPNAME="$(basename ${0})" # Name of the script
+TMPNAME="$(basename "$0")" # Name of the script
 TMPDIR="/tmp/${TMPNAME}"   # Directory for temporary files
 
 # `trap` ensures we clean up the temporary directory, however we exit
-trap "rm -fr ${TMPDIR};exit" INT TERM EXIT
+trap 'rm -fr ${TMPDIR};exit' INT TERM EXIT
 
 # Create temporary directory (lists will be stored here for processing)
-mkdir -p -m0700 ${TMPDIR}
+mkdir -p "${TMPDIR}"
+chmod 0700 "${TMPDIR}"
 
 # Check/remove lock file
 if [ -f "${TMPDIR}/${TMPNAME}.lock" ]; then
@@ -64,56 +65,56 @@ fi
 echo $$ > "${TMPDIR}/${TMPNAME}.lock"
 
 # Process the lists
-for url in ${ADBLOCK_LISTS[@]}
+for url in "${ADBLOCK_LISTS[@]}"
 do
-    file=${TMPDIR}/$(basename ${url})      # Path to the downloaded file
-    actionfile=${file%\.*}.script.action   # Corresponding action file
-    filterfile=${file%\.*}.script.filter   # Corresponding filter file
-    list=$(basename ${file%\.*})           # Remove the file extension
+    file="${TMPDIR}/$(basename "${url}")"      # Path to the downloaded file
+    actionfile="${file%\.*}.script.action"   # Corresponding action file
+    filterfile="${file%\.*}.script.filter"   # Corresponding filter file
+    list="$(basename "${file%\.*}")"           # Remove the file extension
 
     # Download the Adblock Plus list
-    wget -t 3 --no-check-certificate -O ${file} ${url} >${TMPDIR}/wget-${url//\//#}.log 2>&1
+    wget -t 3 --no-check-certificate -O "${file}" "${url}" >"${TMPDIR}/wget-${url//\//#}.log" 2>&1
 
     # Simple check for true ABP lists; skip if not
-    [ "$(grep -E '^.*\[Adblock.*\].*$' ${file})" == "" ] && continue
+    [ "$(grep -E '^.*\[Adblock.*\].*$' "${file}")" == "" ] && continue
 
     # Convert AdblockPlus list to Privoxy list
     # URL block list
-    echo -e "{ +block{${list}} }" > ${actionfile}
-    sed '/^!.*/d;1,1 d;/^@@.*/d;/\$.*/d;/#/d;s/\./\\./g;s/\?/\\?/g;s/\*/.*/g;s/(/\\(/g;s/)/\\)/g;s/\[/\\[/g;s/\]/\\]/g;s/\^/[\/\&:\?=_]/g;s/^||/\./g;s/^|/^/g;s/|$/\$/g;/|/d' ${file} >> ${actionfile}
+    echo -e "{ +block{${list}} }" > "${actionfile}"
+    sed '/^!.*/d;1,1 d;/^@@.*/d;/\$.*/d;/#/d;s/\./\\./g;s/\?/\\?/g;s/\*/.*/g;s/(/\\(/g;s/)/\\)/g;s/\[/\\[/g;s/\]/\\]/g;s/\^/[\/\&:\?=_]/g;s/^||/\./g;s/^|/^/g;s/|$/\$/g;/|/d' "${file}" >> "${actionfile}"
 
-    echo "FILTER: ${list} Tag filter of ${list}" > ${filterfile}
+    echo "FILTER: ${list} Tag filter of ${list}" > "${filterfile}"
     # Set filter for html elements
-    sed '/^#/!d;s/^##//g;s/^#\(.*\)\[.*\]\[.*\]*/s@<([a-zA-Z0-9]+)\\s+.*id=.?\1.*>.*<\/\\1>@@g/g;s/^#\(.*\)/s@<([a-zA-Z0-9]+)\\s+.*id=.?\1.*>.*<\/\\1>@@g/g;s/^\.\(.*\)/s@<([a-zA-Z0-9]+)\\s+.*class=.?\1.*>.*<\/\\1>@@g/g;s/^a\[\(.*\)\]/s@<a.*\1.*>.*<\/a>@@g/g;s/^\([a-zA-Z0-9]*\)\.\(.*\)\[.*\]\[.*\]*/s@<\1.*class=.?\2.*>.*<\/\1>@@g/g;s/^\([a-zA-Z0-9]*\)#\(.*\):.*[:[^:]]*[^:]*/s@<\1.*id=.?\2.*>.*<\/\1>@@g/g;s/^\([a-zA-Z0-9]*\)#\(.*\)/s@<\1.*id=.?\2.*>.*<\/\1>@@g/g;s/^\[\([a-zA-Z]*\).=\(.*\)\]/s@\1^=\2>@@g/g;s/\^/[\/\&:\?=_]/g;s/\.\([a-zA-Z0-9]\)/\\.\1/g' ${file} >> ${filterfile}
+    sed '/^#/!d;s/^##//g;s/^#\(.*\)\[.*\]\[.*\]*/s@<([a-zA-Z0-9]+)\\s+.*id=.?\1.*>.*<\/\\1>@@g/g;s/^#\(.*\)/s@<([a-zA-Z0-9]+)\\s+.*id=.?\1.*>.*<\/\\1>@@g/g;s/^\.\(.*\)/s@<([a-zA-Z0-9]+)\\s+.*class=.?\1.*>.*<\/\\1>@@g/g;s/^a\[\(.*\)\]/s@<a.*\1.*>.*<\/a>@@g/g;s/^\([a-zA-Z0-9]*\)\.\(.*\)\[.*\]\[.*\]*/s@<\1.*class=.?\2.*>.*<\/\1>@@g/g;s/^\([a-zA-Z0-9]*\)#\(.*\):.*[:[^:]]*[^:]*/s@<\1.*id=.?\2.*>.*<\/\1>@@g/g;s/^\([a-zA-Z0-9]*\)#\(.*\)/s@<\1.*id=.?\2.*>.*<\/\1>@@g/g;s/^\[\([a-zA-Z]*\).=\(.*\)\]/s@\1^=\2>@@g/g;s/\^/[\/\&:\?=_]/g;s/\.\([a-zA-Z0-9]\)/\\.\1/g' "${file}" >> "${filterfile}"
 
     # Add filter file to action file
-    echo "{ +filter{${list}} }" >> ${actionfile}
-    echo "*" >> ${actionfile}
-
-    # URL allow list
-    echo "{ -block }" >> ${actionfile}
-    sed '/^@@.*/!d;s/^@@//g;/\$.*/d;/#/d;s/\./\\./g;s/\?/\\?/g;s/\*/.*/g;s/(/\\(/g;s/)/\\)/g;s/\[/\\[/g;s/\]/\\]/g;s/\^/[\/\&:\?=_]/g;s/^||/\./g;s/^|/^/g;s/|$/\$/g;/|/d' ${file} >> ${actionfile}
-
-    # Image URL allow list
-    echo "{ -block +handle-as-image }" >> ${actionfile}
-    sed '/^@@.*/!d;s/^@@//g;/\$.*image.*/!d;s/\$.*image.*//g;/#/d;s/\./\\./g;s/\?/\\?/g;s/\*/.*/g;s/(/\\(/g;s/)/\\)/g;s/\[/\\[/g;s/\]/\\]/g;s/\^/[\/\&:\?=_]/g;s/^||/\./g;s/^|/^/g;s/|$/\$/g;/|/d' ${file} >> ${actionfile}
+    {
+        echo "{ +filter{${list}} }"
+        echo "*"
+        # URL allow list
+        echo "{ -block }"
+        sed '/^@@.*/!d;s/^@@//g;/\$.*/d;/#/d;s/\./\\./g;s/\?/\\?/g;s/\*/.*/g;s/(/\\(/g;s/)/\\)/g;s/\[/\\[/g;s/\]/\\]/g;s/\^/[\/\&:\?=_]/g;s/^||/\./g;s/^|/^/g;s/|$/\$/g;/|/d' "${file}"
+        # Image URL allow list
+        echo "{ -block +handle-as-image }"
+        sed '/^@@.*/!d;s/^@@//g;/\$.*image.*/!d;s/\$.*image.*//g;/#/d;s/\./\\./g;s/\?/\\?/g;s/\*/.*/g;s/(/\\(/g;s/)/\\)/g;s/\[/\\[/g;s/\]/\\]/g;s/\^/[\/\&:\?=_]/g;s/^||/\./g;s/^|/^/g;s/|$/\$/g;/|/d' "${file}"
+    } >> "${actionfile}"
 
     # Copy Privoxy action file into place
-    install -o ${PRIVOXY_USER} -g ${PRIVOXY_GROUP} ${actionfile} ${PRIVOXY_DIR}
-    if [ "$(grep $(basename ${actionfile}) ${PRIVOXY_CONF})" == "" ] 
+    install -o "${PRIVOXY_USER}" -g "${PRIVOXY_GROUP}" "${actionfile}" "${PRIVOXY_DIR}"
+    if [ "$(grep "$(basename "${actionfile}")" "${PRIVOXY_CONF}")" == "" ] 
     then
         # Ensure the Privoxy configuration loads this action file
-        sed "s/^actionsfile user\.action/actionsfile $(basename ${actionfile})\nactionsfile user.action/" ${PRIVOXY_CONF} > ${TMPDIR}/config
-        install -o ${PRIVOXY_USER} -g ${PRIVOXY_GROUP} ${TMPDIR}/config ${PRIVOXY_CONF}
+        sed "s/^actionsfile user\.action/actionsfile $(basename "${actionfile}")\nactionsfile user.action/" "${PRIVOXY_CONF}" > "${TMPDIR}/config"
+        install -o "${PRIVOXY_USER}" -g "${PRIVOXY_GROUP}" "${TMPDIR}/config" "${PRIVOXY_CONF}"
     fi	
 
     # Copy Privoxy filter file into place
-    install -o ${PRIVOXY_USER} -g ${PRIVOXY_GROUP} ${filterfile} ${PRIVOXY_DIR}
-    if $(grep $(basename ${filterfile}) ${PRIVOXY_CONF})
+    install -o "${PRIVOXY_USER}" -g "${PRIVOXY_GROUP}" "${filterfile}" "${PRIVOXY_DIR}"
+    if grep "$(basename "${filterfile}")" "${PRIVOXY_CONF}" > /dev/null
     then
         # Ensure the Privoxy configuration loads this filter file
-        sed "s/^\(#*\)filterfile user\.filter/filterfile $(basename ${filterfile})\n\1filterfile user.filter/" ${PRIVOXY_CONF} > ${TMPDIR}/config
-        install -o ${PRIVOXY_USER} -g ${PRIVOXY_GROUP} ${TMPDIR}/config ${PRIVOXY_CONF}
+        sed "s/^\(#*\)filterfile user\.filter/filterfile $(basename "${filterfile}")\n\1filterfile user.filter/" "${PRIVOXY_CONF}" > "${TMPDIR}/config"
+        install -o "${PRIVOXY_USER}" -g "${PRIVOXY_GROUP}" "${TMPDIR}/config" "${PRIVOXY_CONF}"
     fi	
 
 done

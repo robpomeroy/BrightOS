@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "chouzz.vscode-better-align",
+        "mkhl.shfmt",
+        "stkb.rewrap",
+        "timonwong.shellcheck"
+    ],
+    "unwantedRecommendations": []
+}

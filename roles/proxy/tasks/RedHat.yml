@@ -2,8 +2,8 @@
 ---
 - name: Define privoxy source build parameters
   ansible.builtin.set_fact:
-    proxy_privoxy_version: "3.0.34"
-    proxy_privoxy_release: "{{ proxy_privoxy_version }}-stable"
+    proxy_privoxy_version: "{{ proxy_privoxy_version | default('3.0.34') }}"
+    proxy_privoxy_release: "{{ (proxy_privoxy_version | default('3.0.34')) ~ '-stable' }}"
 
 - name: Attempt to install privoxy from configured repositories
   ansible.builtin.dnf:
