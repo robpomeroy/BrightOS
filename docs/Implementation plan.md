@@ -233,6 +233,8 @@ Definition of done:
 
 #### 8. Add CI to protect critical behaviour automatically
 
+STATUS: COMPLETE.
+
 Why this matters:
 Once disability-critical checks exist, they should run automatically so they do
 not depend on manual vigilance.
