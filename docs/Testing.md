@@ -48,6 +48,21 @@ Because of these limits, Molecule assertions include container-aware guards in
 some areas. A passing container scenario means role logic is healthy for the
 tested paths, but it is not a complete substitute for full VM/system testing.
 
+## Continuous Integration
+
+GitHub Actions runs the baseline validation path on pull requests. The current
+CI gate executes:
+
+- `yamllint`
+- `ansible-lint`
+- `shellcheck` for the tracked shell scripts
+- `molecule test --skip-lint -s default`
+- `molecule test --skip-lint -s almalinux`
+
+CI runs on Ubuntu-hosted GitHub runners and uses Docker for the Molecule
+scenarios. VM scenarios remain manual validation for cases where container
+behaviour is not sufficient.
+
 ## Prerequisites
 
 Be sure to copy `config.yml.example` to `config.yml` and update any necessary

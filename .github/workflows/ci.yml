@@ -1,0 +1,100 @@
+# This workflow runs linting and Molecule tests.
+name: Baseline CI
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Create Python virtual environment
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install ansible-core ansible-lint yamllint molecule 'molecule-plugins[docker]' testinfra jmespath pyyaml
+
+      - name: Install Ansible collections
+        run: |
+          . .venv/bin/activate
+          ansible-galaxy collection install -r requirements.yml
+
+      - name: Run YAML lint
+        run: |
+          . .venv/bin/activate
+          yamllint .
+
+      - name: Run Ansible lint
+        run: |
+          . .venv/bin/activate
+          ansible-lint -x no-loop-var-prefix,command-instead-of-module,package-latest
+
+      - name: Run shell lint
+        run: |
+          shellcheck scripts/molecule-vm-env.sh roles/proxy/files/abp2privoxy.sh
+
+  molecule:
+    name: Molecule ${{ matrix.scenario }}
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario:
+          - default
+          - almalinux
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Create Python virtual environment
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install ansible-core ansible-lint yamllint molecule 'molecule-plugins[docker]' testinfra jmespath pyyaml
+
+      - name: Install Ansible collections
+        run: |
+          . .venv/bin/activate
+          ansible-galaxy collection install -r requirements.yml
+
+      - name: Prepare Molecule configuration
+        run: cp config.yml.example config.yml
+
+      - name: Run Molecule
+        run: |
+          . .venv/bin/activate
+          molecule test --skip-lint -s "${{ matrix.scenario }}"
