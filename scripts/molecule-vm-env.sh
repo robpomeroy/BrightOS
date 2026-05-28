@@ -94,11 +94,16 @@ load_target() {
   key_var="${TARGET_PREFIX}_KEY"
   ssh_args_var="${TARGET_PREFIX}_SSH_COMMON_ARGS"
 
-  export MOLECULE_VM_HOST="$(first_set_value "${MOLECULE_VM_HOST:-}" "${host_var}")"
-  export MOLECULE_VM_USER="$(first_set_value "${MOLECULE_VM_USER:-brightos}" "${user_var}")"
-  export MOLECULE_VM_PORT="$(first_set_value "${MOLECULE_VM_PORT:-22}" "${port_var}")"
-  export MOLECULE_VM_KEY="$(first_set_value "${MOLECULE_VM_KEY:-}" "${key_var}")"
-  export MOLECULE_VM_SSH_COMMON_ARGS="$(first_set_value "${MOLECULE_VM_SSH_COMMON_ARGS:--o StrictHostKeyChecking=accept-new}" "${ssh_args_var}")"
+  MOLECULE_VM_HOST="$(first_set_value "${MOLECULE_VM_HOST:-}" "${host_var}")"
+  export MOLECULE_VM_HOST
+  MOLECULE_VM_USER="$(first_set_value "${MOLECULE_VM_USER:-brightos}" "${user_var}")"
+  export MOLECULE_VM_USER
+  MOLECULE_VM_PORT="$(first_set_value "${MOLECULE_VM_PORT:-22}" "${port_var}")"
+  export MOLECULE_VM_PORT
+  MOLECULE_VM_KEY="$(first_set_value "${MOLECULE_VM_KEY:-}" "${key_var}")"
+  export MOLECULE_VM_KEY
+  MOLECULE_VM_SSH_COMMON_ARGS="$(first_set_value "${MOLECULE_VM_SSH_COMMON_ARGS:--o StrictHostKeyChecking=accept-new}" "${ssh_args_var}")"
+  export MOLECULE_VM_SSH_COMMON_ARGS
   export MOLECULE_VM_SCENARIO
 
   if [[ -z "${MOLECULE_VM_HOST}" ]]; then
