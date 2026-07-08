@@ -3,7 +3,7 @@
 ![BrightOS logo - Tux mascot in wheelchair with lightbulb](images/BrightOS.png)
 
 Welcome to the BrightOS project, which aims to create a GNU/Linux distribution
-suitable for people with learning difficulties. Initially, this is through the
+suitable for people with a learning disability. Initially, this is through the
 use of an Ansible playbook, applied to a minimal Ubuntu or AlmaLinux
 installation.
 

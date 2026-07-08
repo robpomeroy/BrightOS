@@ -244,7 +244,7 @@
         that: "dns_servers[0] in (dhclient_content.content | b64decode)"
         fail_msg: >
           Protective DNS server {{ dns_servers[0] }} is not present in
-          /etc/dhcp/dhclient.conf — users with learning difficulties may
+          /etc/dhcp/dhclient.conf — users with a learning disability may
           be exposed to unfiltered DNS
       when: ansible_facts['os_family'] == "Debian"
 
@@ -277,7 +277,7 @@
         that: "dns_servers[0] in (resolv_conf_content.content | b64decode)"
         fail_msg: >
           Protective DNS server {{ dns_servers[0] }} is not present in
-          /etc/resolv.conf — users with learning difficulties may be
+          /etc/resolv.conf — users with a learning disability may be
           exposed to unfiltered DNS
       when:
         - ansible_facts['os_family'] == "RedHat"
@@ -348,7 +348,7 @@
         that: "(privoxy_content.content | b64decode | regex_search('(?m)^enforce-blocks\\s+1\\s*$')) is not none"
         fail_msg: >
           Privoxy enforce-blocks is not enabled — blocked content may be
-          reachable by users with learning difficulties
+          reachable by users with a learning disability
 
     - name: Check abp2privoxy script exists
       ansible.builtin.stat:
@@ -447,7 +447,7 @@
         that: "'AutomaticLoginEnable=True' in (gdm_content.content | b64decode)"
         fail_msg: >
           AutomaticLoginEnable is not set to True in /etc/gdm3/custom.conf —
-          users with learning difficulties will be presented with a login
+          users with a learning disability will be presented with a login
           screen and asked for credentials
       when: ansible_facts['os_family'] == "Debian"
 
@@ -468,8 +468,8 @@
         that: gnome_setup_desktop.stat.exists
         fail_msg: >
           /etc/xdg/autostart/gnome-initial-setup-first-login.desktop does not
-          exist — the initial setup wizard may confuse users with learning
-          difficulties
+          exist — the initial setup wizard may confuse users with a learning
+          disability
 
     - name: Read gnome-initial-setup suppression file
       ansible.builtin.slurp:

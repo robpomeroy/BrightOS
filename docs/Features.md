@@ -1,14 +1,14 @@
 # Features
 
 Current feature design is oriented toward safe, focused computer use for users
-with learning difficulties.
+with a learning disability.
 
 ## DNS
 
 This project forcibly sets specific DNS servers (the `dns_servers` variable in
 `config.yml`). The recommended approach is to use the OpenDNS FamilyShield
 servers, which provide some protection against content unsuitable for children
-or users with learning difficulties.
+or users with a learning disability.
 
 ## Content filtering
 

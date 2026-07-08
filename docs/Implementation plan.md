@@ -23,7 +23,7 @@ and safety, but the current verification layer does not test those outcomes.
 STATUS: COMPLETE.
 
 Why this matters:
-Users with learning difficulties need dependable, repeatable system behaviour.
+Users with a learning disability need dependable, repeatable system behaviour.
 Presently, the verify playbook does not catch regressions in safety or
 learning-focused controls.
 
