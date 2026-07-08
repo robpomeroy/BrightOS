@@ -56,10 +56,10 @@
           - "'privoxy' in ansible_facts.packages or privoxy_binary.stat.exists"
         fail_msg: "privoxy is not installed"
 
-    - name: Assert required accessible desktop packages are present (Debian)
+    - name: Assert required learning-focused desktop packages are present (Debian)
       ansible.builtin.assert:
         that: "item in ansible_facts.packages"
-        fail_msg: "Required accessible desktop package '{{ item }}' is not installed"
+        fail_msg: "Required learning-focused desktop package '{{ item }}' is not installed"
       loop:
         - gcompris-qt
         - ktuberling
@@ -244,7 +244,8 @@
         that: "dns_servers[0] in (dhclient_content.content | b64decode)"
         fail_msg: >
           Protective DNS server {{ dns_servers[0] }} is not present in
-          /etc/dhcp/dhclient.conf — vulnerable users may use unprotected DNS
+          /etc/dhcp/dhclient.conf — users with learning difficulties may
+          be exposed to unfiltered DNS
       when: ansible_facts['os_family'] == "Debian"
 
     - name: Check /etc/resolv.conf exists (RedHat)
@@ -276,7 +277,8 @@
         that: "dns_servers[0] in (resolv_conf_content.content | b64decode)"
         fail_msg: >
           Protective DNS server {{ dns_servers[0] }} is not present in
-          /etc/resolv.conf — vulnerable users may use unprotected DNS
+          /etc/resolv.conf — users with learning difficulties may be
+          exposed to unfiltered DNS
       when:
         - ansible_facts['os_family'] == "RedHat"
         - not molecule_is_container
@@ -346,7 +348,7 @@
         that: "(privoxy_content.content | b64decode | regex_search('(?m)^enforce-blocks\\s+1\\s*$')) is not none"
         fail_msg: >
           Privoxy enforce-blocks is not enabled — blocked content may be
-          accessible to vulnerable users
+          reachable by users with learning difficulties
 
     - name: Check abp2privoxy script exists
       ansible.builtin.stat:
@@ -419,7 +421,7 @@
       when: firefox_install | bool
 
     # =========================================================================
-    # GNOME lockdown and accessibility settings
+    # GNOME lockdown and desktop simplification
     # =========================================================================
 
     - name: Check GDM configuration file exists (Debian)
@@ -445,7 +447,8 @@
         that: "'AutomaticLoginEnable=True' in (gdm_content.content | b64decode)"
         fail_msg: >
           AutomaticLoginEnable is not set to True in /etc/gdm3/custom.conf —
-          users will be presented with a login screen they cannot navigate
+          users with learning difficulties will be presented with a login
+          screen and asked for credentials
       when: ansible_facts['os_family'] == "Debian"
 
     - name: Assert automatic login is for the correct user
@@ -465,7 +468,8 @@
         that: gnome_setup_desktop.stat.exists
         fail_msg: >
           /etc/xdg/autostart/gnome-initial-setup-first-login.desktop does not
-          exist — the initial setup wizard may confuse target users
+          exist — the initial setup wizard may confuse users with learning
+          difficulties
 
     - name: Read gnome-initial-setup suppression file
       ansible.builtin.slurp:

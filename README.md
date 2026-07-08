@@ -7,6 +7,10 @@ suitable for people with learning difficulties. Initially, this is through the
 use of an Ansible playbook, applied to a minimal Ubuntu or AlmaLinux
 installation.
 
+Current BrightOS scope is intentionally focused on learning disability. Support
+for other disability categories (for example vision, hearing, or motor needs)
+is acceptable future work, but is not the current engineering target.
+
 I encourage you to read about the [Mission](docs/Mission.md).
 
 -- [Rob Pomeroy](https://pomeroy.me/contact "contact me via my website") |

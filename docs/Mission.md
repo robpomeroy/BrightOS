@@ -40,14 +40,19 @@ difficulties. So the focus here is on safety and on enabling carers to control
 the system for the intended user. Spin-offs or bespoke configuration may be
 appropriate, to target other user groups, but that is not my initial objective.
 
+At this stage, BrightOS is intentionally scoped to learning disability. Support
+for other disability categories (for example vision, hearing, or motor needs)
+is considered future work rather than current project scope.
+
 # Goals
 
 Why this playbook? Why this approach?
 
 1. **Accessible fun.** This project should enhance the lives of people who may
-   otherwise struggle to use a computer.
+  otherwise struggle to use a computer due to learning difficulties.
 2. **Safety.** When preparing a computer environment for vulnerable people,
-   their safety is of paramount importance.
+  especially users with learning difficulties, their safety is of paramount
+  importance.
 3. **Longevity.** Many great, education-focused Linux distributions have started
    well but fizzled out. A low-maintenance strategy is key to survival of a
    project of this nature. An orchestration approach reduces much of the work
