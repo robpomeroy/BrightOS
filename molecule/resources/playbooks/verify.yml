@@ -56,10 +56,10 @@
           - "'privoxy' in ansible_facts.packages or privoxy_binary.stat.exists"
         fail_msg: "privoxy is not installed"
 
-    - name: Assert required learning-focused desktop packages are present (Debian)
+    - name: Assert required desktop packages are present (Debian)
       ansible.builtin.assert:
         that: "item in ansible_facts.packages"
-        fail_msg: "Required learning-focused desktop package '{{ item }}' is not installed"
+        fail_msg: "Required desktop package '{{ item }}' is not installed"
       loop:
         - gcompris-qt
         - ktuberling

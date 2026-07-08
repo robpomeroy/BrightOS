@@ -49,10 +49,10 @@ is considered future work rather than current project scope.
 Why this playbook? Why this approach?
 
 1. **Accessible fun.** This project should enhance the lives of people who may
-  otherwise struggle to use a computer due to a learning disability.
+   otherwise struggle to use a computer due to a learning disability.
 2. **Safety.** When preparing a computer environment for vulnerable people,
-  especially users with a learning disability, their safety is of paramount
-  importance.
+   especially users with a learning disability, their safety is of paramount
+   importance.
 3. **Longevity.** Many great, education-focused Linux distributions have started
    well but fizzled out. A low-maintenance strategy is key to survival of a
    project of this nature. An orchestration approach reduces much of the work

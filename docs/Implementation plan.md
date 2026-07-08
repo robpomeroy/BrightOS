@@ -4,10 +4,10 @@
 
 As a general rule (with possible exceptions):
 
-1. Prioritise needs of users with learning disabilities over developer convenience or platform
-   completeness.
-2. Prioritise user safety and learning-disability usability outcomes before infrastructure or
-   packaging improvements.
+1. Prioritise needs of users with learning disabilities over developer
+   convenience or platform completeness.
+2. Prioritise user safety and learning-disability usability outcomes before
+   infrastructure or packaging improvements.
 3. Prefer changes that can be verified automatically in Molecule.
 4. Keep each iteration narrow enough to implement, review, and test in one PR.
 
