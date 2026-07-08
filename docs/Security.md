@@ -1,9 +1,13 @@
 # Security
 
-This is a project aimed at serving the needs of a vulnerable class of people.
-Nothing this project achieves will eliminate the responsibilities and duties of
-parents and carers. It is hoped however, that it will be reasonably safe to
-leave a user of BrightOS with minimal supervision.
+This project is currently aimed at serving users with a learning disability,
+especially where carers need a safer and simpler desktop setup. Nothing this
+project achieves will eliminate the responsibilities and duties of parents and
+carers. It is hoped however, that it will be reasonably safe to leave a user of
+BrightOS with minimal supervision.
+
+Support for other disability categories (for example vision, hearing, or motor
+needs) is acceptable future work, but is outside current project scope.
 
 ## Safe from malware
 

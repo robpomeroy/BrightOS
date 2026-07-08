@@ -6,7 +6,7 @@ to our twins Morgan and James. Due to a [condition during
 pregnancy](https://en.wikipedia.org/wiki/Twin-to-twin_transfusion_syndrome) our
 boys both acquired profound disabilities. Morgan, who passed away in 2024, had
 severe spastic cerebral palsy, was quadriplegic and vision impaired. James has
-severe learning difficulties, is on the autistic spectrum and suffers from
+a severe learning disability, is on the autistic spectrum and suffers from
 anxiety.
 
 The following years have been a massive learning experience and, I hope,
@@ -18,10 +18,10 @@ specialist bath for Morgan came in at about £10,000, for example.)
 
 It does not have to be costly, to meet computing needs. This open source (free!)
 repository contains an [Ansible](https://www.ansible.com/) playbook for
-customising Linux to help users with learning difficulties. The initial aim of
+customising Linux to help users with a learning disability. The initial aim of
 this project is to create an Ansible build that converts a Linux installation
-into something suitable for users (particularly children) with learning
-difficulties. Later, we may take a more direct approach, creating a Linux
+into something suitable for users (particularly children) with a learning
+disability. Later, we may take a more direct approach, creating a Linux
 distribution with installer.
 
 Why Linux rather than Windows? Several reasons:
@@ -35,19 +35,24 @@ Why Linux rather than Windows? Several reasons:
   software and use orchestration extensively. It's much easier for me to achieve
   this project's goals with Linux.
 
-I'm personally most interested in the protection of users with learning
-difficulties. So the focus here is on safety and on enabling carers to control
-the system for the intended user. Spin-offs or bespoke configuration may be
+I'm personally most interested in the protection of users with a learning
+disability. So the focus here is on safety and on enabling carers to control the
+system for the intended user. Spin-offs or bespoke configuration may be
 appropriate, to target other user groups, but that is not my initial objective.
+
+At this stage, BrightOS is intentionally scoped to learning disability. Support
+for other disability categories (for example vision, hearing, or motor needs)
+is considered future work rather than current project scope.
 
 # Goals
 
 Why this playbook? Why this approach?
 
 1. **Accessible fun.** This project should enhance the lives of people who may
-   otherwise struggle to use a computer.
+   otherwise struggle to use a computer due to a learning disability.
 2. **Safety.** When preparing a computer environment for vulnerable people,
-   their safety is of paramount importance.
+   especially users with a learning disability, their safety is of paramount
+   importance.
 3. **Longevity.** Many great, education-focused Linux distributions have started
    well but fizzled out. A low-maintenance strategy is key to survival of a
    project of this nature. An orchestration approach reduces much of the work
@@ -74,26 +79,26 @@ but I have not tested that.
 # Sources for other ideas
 
 There are some existing child-friendly Linux distributions. These do not focus
-on the needs of users with learning difficulties (a cause dear to my heart) and
+on the needs of users with a learning disability (a cause dear to my heart) and
 many of them suffer from a lack of ongoing maintenance. Nevertheless, they are
 very useful sources of inspiration for this project.
 
 * Ubermix: still under active development; focused on children and education
-  (but not learning difficulties); has some strong features including "20 second
+  (but not learning disability); has some strong features including "20 second
   quick recovery mechanism"
 * Elementary Linux OS: mature, actively developed OS built on Ubuntu/Gnome;
-  focused on education and ease-of-use, but not aimed at learning difficulties
+  focused on education and ease-of-use, but not aimed at learning disability
 * Debian Edu/Skolelinux: a mature project; last release Jul 2019 after a
-  two-year hiatus; focus is education rather than learning difficulties
-* DoudouLinux: the OS I currently use for my son James (on a machine that is not
-  network-connected); apparently abandoned in 2015
+  two-year hiatus; focus is education rather than learning disability
+* DoudouLinux: an OS I have previously used for my son James (on a machine that
+  was not network-connected); apparently abandoned in 2015
 * Edubuntu: was a benchmark at one point, but now seems to be obsolete; the
   latest release was in 2016
 * Qimo 4 Kids: project officially retired in 2016
 * openSUSE-Edu Li-f-e: some good packages and features; project stalled in 2016;
-  an[Ubuntu version
-  exists](https://sourceforge.net/projects/cyberorg-home/files/Li-f-e/) but its
-  future is not clear; not aimed at learning difficulties
+  an
+  [Ubuntu version exists](https://sourceforge.net/projects/cyberorg-home/files/Li-f-e/)
+  but its future is not clear; not aimed at learning disability
 * LinuxKidX: last updated in 2016, seems to have been abandoned
 * UberStudent: aimed at secondary and higher education; last release 2015
 * Educado: particularly interesting due to its inclusion of parental controls;
@@ -103,4 +108,4 @@ very useful sources of inspiration for this project.
 * Leeenux Kids: a child-friendly version of Leeenux, a *non-free* OS that
   specifically targets netbooks (like the Asus Eee PC); less generalised from a
   hardware perspective than most other Linux distributions; documentation about
-  Kids version is scant; not focused on learning difficulties
+  Kids version is scant; not focused on learning disability

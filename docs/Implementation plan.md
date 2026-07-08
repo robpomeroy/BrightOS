@@ -4,28 +4,28 @@
 
 As a general rule (with possible exceptions):
 
-1. Prioritise needs of disabled users over developer convenience or platform
-   completeness.
-2. Prioritise user safety and accessibility outcomes before infrastructure or
-   packaging improvements.
+1. Prioritise needs of users with learning disabilities over developer
+   convenience or platform completeness.
+2. Prioritise user safety and learning-disability usability outcomes before
+   infrastructure or packaging improvements.
 3. Prefer changes that can be verified automatically in Molecule.
 4. Keep each iteration narrow enough to implement, review, and test in one PR.
 
 ## Priority Order
 
-### P0: Define and verify disability-critical outcomes
+### P0: Define and verify learning-disability-critical outcomes
 
-This repository has strong stated goals around accessibility and safety, but the
-current verification layer does not test those outcomes.
+This repository has strong stated goals around learning-disability usability
+and safety, but the current verification layer does not test those outcomes.
 
 #### 1. Replace placeholder verification with real assertions
 
 STATUS: COMPLETE.
 
 Why this matters:
-Users with learning difficulties and other disabilities need dependable,
-repeatable system behaviour. Presently, the verify playbook does not catch
-regressions in safety or accessibility controls.
+Users with a learning disability need dependable, repeatable system behaviour.
+Presently, the verify playbook does not catch regressions in safety or
+learning-focused controls.
 
 Current gap:
 
@@ -38,7 +38,7 @@ Implementation tasks:
 - Assert protective DNS configuration is applied.
 - Assert firewall configuration is present and active where supported.
 - Assert proxy configuration is installed when enabled.
-- Assert required accessibility-oriented packages are present.
+- Assert required learning-focused packages are present.
 - Assert intentionally hidden or disallowed applications remain hidden or
   absent.
 
@@ -51,26 +51,26 @@ Likely files:
 
 Definition of done:
 
-- `molecule verify` fails when a safety or accessibility control regresses.
+- `molecule verify` fails when a safety or learning-focused control regresses.
 - Verification checks reflect actual BrightOS expectations rather than generic
   host health.
 
-#### 2. Turn accessibility goals into concrete acceptance criteria
+#### 2. Turn learning-disability goals into concrete acceptance criteria
 
 Why this matters:
-The project explicitly targets fine motor limitations, mild vision impairment,
-and learning difficulties, but those needs are not yet translated into
-actionable engineering requirements.
+The project targets learning disability outcomes, but those needs are not yet
+translated into actionable engineering requirements.
 
 Current gap:
-- [docs/Accessibility.md](../docs/Accessibility.md) describes intent, not testable
-  standards.
+- [docs/Accessibility.md](../docs/Accessibility.md) describes intent, but current
+  scope boundaries and testable standards for learning disability need to be
+  clearer.
 
 Implementation tasks:
-- Define minimum supported experience for each target need category.
+- Define minimum supported experience for each learning-disability user profile.
 - Identify which settings, apps, or restrictions implement each requirement.
 - Mark which requirements are mandatory for every install and which are
-  optional profiles.
+  future/deferred profiles.
 - Link each requirement to a verification check where possible.
 
 Likely files:
@@ -80,7 +80,7 @@ Likely files:
 - [molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml)
 
 Definition of done:
-- Accessibility requirements can be used as acceptance criteria during PR
+- Learning-disability requirements can be used as acceptance criteria during PR
   review.
 - Each requirement is either automated, manually testable, or explicitly marked
   as future work.
@@ -152,7 +152,7 @@ Definition of done:
 STATUS: COMPLETE.
 
 Why this matters:
-Accessible and educational desktop software is part of the user value of
+Learning-focused and educational desktop software is part of the user value of
 BrightOS. Missing apps on one supported OS family weakens that promise.
 
 Current gap:
@@ -164,7 +164,7 @@ Implementation tasks:
 - If yes, resolve the squashfs/module issue in an idempotent, supportable way.
 - If no, replace Snap-based apps with supported RPM, Flatpak, or alternative
   packages.
-- Reassess package choices against accessibility goals rather than package
+- Reassess package choices against learning-disability goals rather than package
   availability alone.
 
 Likely files:
@@ -173,7 +173,7 @@ Likely files:
 - [docs/Accessibility.md](../docs/Accessibility.md)
 
 Definition of done:
-- RedHat-family installations deliver a defined minimum accessible app set.
+- RedHat-family installations deliver a defined minimum learning-focused app set.
 - The package path is automated and testable.
 
 #### 6. Define a minimum supported application set for target users
@@ -187,7 +187,7 @@ Current gap:
   baseline application profile tied to user needs.
 
 Implementation tasks:
-- Define the minimum app set by disability/user need category.
+- Define the minimum app set by learning-disability user need category.
 - Identify unsupported, distracting, or unsafe applications to hide or remove.
 - Document the rationale for each included app.
 - Add verification for presence or absence of those apps where feasible.
@@ -217,7 +217,7 @@ Current gap:
 Implementation tasks:
 - Turn the current brief list into a complete step-by-step guide.
 - Add a short validation checklist after installation.
-- Call out decisions that matter for disabled-user safety, such as DNS,
+- Call out decisions that matter for learning-disability user safety, such as DNS,
   browser, and user account configuration.
 - Link to testing and Windows/WSL guidance where appropriate.
 
@@ -236,8 +236,8 @@ Definition of done:
 STATUS: COMPLETE.
 
 Why this matters:
-Once disability-critical checks exist, they should run automatically so they do
-not depend on manual vigilance.
+Once learning-disability-critical checks exist, they should run automatically
+so they do not depend on manual vigilance.
 
 Current gap:
 - Mission-level CI/CD goals exist, but no visible repository automation is in
@@ -247,7 +247,7 @@ Implementation tasks:
 - Add CI for lint plus default Molecule scenario.
 - Run verification assertions as part of the gated workflow.
 - Keep CI scope small enough to stay reliable.
-- Treat accessibility and safety regressions as blocking failures.
+- Treat learning-disability and safety regressions as blocking failures.
 
 Likely files:
 - `.github/workflows/*`
@@ -256,7 +256,7 @@ Likely files:
 
 Definition of done:
 - PRs automatically run the baseline validation path.
-- Core safety and accessibility regressions are caught before merge.
+- Core safety and learning-disability regressions are caught before merge.
 
 ### P2: Resolve secondary backlog items
 
@@ -277,7 +277,7 @@ Definition of done:
 
 Why this matters:
 This is important for long-term adoption by non-technical users, but it should
-not displace more immediate accessibility and safety improvements.
+not displace more immediate learning-disability and safety improvements.
 
 Current gap:
 - [docs/Mission.md](../docs/Mission.md) lists ISO generation as a future goal,
@@ -292,18 +292,74 @@ Definition of done:
 - The distribution goal is represented as an ordered backlog, not a single
   large TODO.
 
+### P3: Deferred accessibility work
+
+Motor, vision, and hearing accessibility support remains a valuable long-term
+goal, but requires distinct user research, technical controls, and verification
+approaches. These profiles should be planned and resourced as future work
+rather than folded into learning-disability iterations.
+
+#### 11. Define motor, vision, and hearing accessibility profiles as deferred future work
+
+Why this matters:
+Current BrightOS scope prioritises learning disability protection and
+cognitive simplification. Motor, vision, and hearing impairments require
+distinct technical controls (screen magnification, high-contrast themes,
+text-to-speech, audio cues, input adaptation) that deserve dedicated
+planning. Explicitly deferring these profiles reduces contributor confusion
+and clarifies that [docs/Accessibility.md](../docs/Accessibility.md) mentions
+them only as future possibilities.
+
+Current gap:
+- [docs/Accessibility.md](../docs/Accessibility.md) defers motor, vision, and
+  hearing support but provides no concrete backlog item.
+- No roadmap clarifies what motor, vision, or hearing implementation would
+  entail.
+- Contributors may propose font scaling or magnification features citing
+  Accessibility.md as prior work, without understanding current scope
+  boundaries.
+
+Implementation tasks:
+- Gather accessibility research on motor, vision, and hearing user needs
+  specific to learning and educational contexts.
+- Map each disability profile to required technical controls (for example:
+  vision → magnification, high contrast, font size; motor → input
+  acceleration, keyboard-only navigation; hearing → visual alerts,
+  captions).
+- Audit which applications and GNOME settings would need reconfiguration to
+  support each profile.
+- Decide whether to implement profiles incrementally, as optional
+  accessibility variants, or as a separate downstream distribution.
+- Plan a verification approach for each profile (for example: magnification
+  factor, contrast ratio, input latency thresholds).
+
+Likely files:
+- [docs/Accessibility.md](../docs/Accessibility.md)
+- [docs/Features.md](../docs/Features.md)
+- [docs/Security.md](../docs/Security.md)
+- [molecule/resources/playbooks/verify.yml](../molecule/resources/playbooks/verify.yml)
+
+Definition of done:
+- Each deferred profile (motor, vision, hearing) has explicit acceptance
+  criteria distinct from and subordinate to learning-disability scope.
+- The roadmap clearly marks this work as future, not current baseline.
+- Contributor guidance makes clear that motor, vision, and hearing
+  improvements are welcome as future PRs but should not block
+  learning-disability-focused iterations.
+
 ## Recommended Iteration Sequence
 
 1. Real verification assertions.
-2. Accessibility acceptance criteria.
+2. Learning-disability acceptance criteria and deferred-scope boundaries.
 3. RedHat DNS parity.
 4. RedHat Molecule scenario.
-5. RedHat accessible app path.
+5. RedHat learning-focused app path.
 6. Minimum supported application set.
 7. Expanded installation guide.
 8. CI for baseline validation.
 9. Hostname/domain decision.
 10. ISO pipeline milestones.
+11. Define motor, vision, and hearing accessibility profiles.
 
 ## Working Rule For Future Iterations
 
@@ -311,5 +367,5 @@ When choosing between two backlog items of similar effort, prefer the one that
 most directly improves one of these outcomes:
 
 1. Safety for vulnerable users.
-2. Accessibility for the intended user groups.
+2. Learning-disability usability for the intended user group.
 3. Reliability of those protections through automated verification.
