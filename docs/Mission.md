@@ -6,7 +6,7 @@ to our twins Morgan and James. Due to a [condition during
 pregnancy](https://en.wikipedia.org/wiki/Twin-to-twin_transfusion_syndrome) our
 boys both acquired profound disabilities. Morgan, who passed away in 2024, had
 severe spastic cerebral palsy, was quadriplegic and vision impaired. James has
-severe a learning disability, is on the autistic spectrum and suffers from
+a severe learning disability, is on the autistic spectrum and suffers from
 anxiety.
 
 The following years have been a massive learning experience and, I hope,
@@ -90,7 +90,7 @@ very useful sources of inspiration for this project.
   focused on education and ease-of-use, but not aimed at learning disability
 * Debian Edu/Skolelinux: a mature project; last release Jul 2019 after a
   two-year hiatus; focus is education rather than learning disability
-* DoudouLinux: an OS I have previously use for my son James (on a machine that
+* DoudouLinux: an OS I have previously used for my son James (on a machine that
   was not network-connected); apparently abandoned in 2015
 * Edubuntu: was a benchmark at one point, but now seems to be obsolete; the
   latest release was in 2016
