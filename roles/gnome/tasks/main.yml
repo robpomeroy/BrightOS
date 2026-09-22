@@ -55,7 +55,7 @@
 
 - name: Hide unnecessary application icons
   ansible.builtin.lineinfile:
-    path: "/usr/share/applications/{{ gnome_entry.gnome_app }}"
+    path: "/usr/share/applications/{{ gnome_entry.item }}"
     regexp: '^NoDisplay='
     insertafter: '^\[Desktop Entry\]'
     line: 'NoDisplay=true'

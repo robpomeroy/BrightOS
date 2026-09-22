@@ -112,22 +112,34 @@ sudo apt install -y python3 python3-pip python3-dev python3-virtualenv git \
     shellcheck
 ```
 
-> **Ansible version note:** use **ansible-core 2.16 or later** (Python 3.10+
+> **Ansible version note:** use **ansible-core 2.16 or 2.17** (Python 3.10+
 > based venv). The `devsec.hardening` collection requires the
 > `password_expire_warn` module parameter that only ansible-core 2.16+
-> supports. If your system Python is 3.9, `pip install` will silently
-> downgrade-limit ansible-core to 2.15 — build your venv with a newer Python
-> (for example `python3.12 -m venv`). See [INSTALL.md](INSTALL.md) for details.
+> supports, but ansible-core 2.18+ breaks the Molecule Docker driver (task
+> metadata incompatibility), so CI and `scripts/ci-preflight.sh` pin
+> `ansible-core>=2.16,<2.18`. If your system Python is 3.9, `pip install` will
+> silently downgrade-limit ansible-core to 2.15 — build your venv with a newer
+> Python (for example `python3.12 -m venv`). See [INSTALL.md](INSTALL.md) for
+> details.
 
-Create Python venv for Molecule in WSL:
+Create Python venv for Molecule in WSL. Use an explicit Python 3.10+
+interpreter — do **not** rely on `python3`, which may be 3.9 on older systems
+(and would silently pin ansible-core to 2.15):
 
 ```bash
 mkdir -p ~/venv
 cd ~/venv
-virtualenv -p python3 brightos-test
+# Pick the newest available interpreter (adjust if your system differs)
+PYTHON=$(command -v python3.13 || command -v python3.12 || command -v python3.11 || command -v python3.10)
+if [ -z "$PYTHON" ]; then
+    echo "No Python 3.10+ found; install one, e.g.: sudo apt install python3.12 python3.12-venv"
+    exit 1
+fi
+"$PYTHON" -m venv brightos-test
 source ~/venv/brightos-test/bin/activate
+python --version   # sanity check: must be 3.10 or later
 
-pip install ansible-core ansible-builder ansible-lint ansible-navigator \
+pip install 'ansible-core>=2.16,<2.18' ansible-builder ansible-lint ansible-navigator \
     jmespath molecule 'molecule-plugins[docker]' pyyaml testinfra yamllint
 
 # Install Ansible collections required for Docker driver
