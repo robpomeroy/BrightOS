@@ -18,8 +18,12 @@ python3 -m venv .venv
 . .venv/bin/activate
 
 python -m pip install --upgrade pip
-# Molecule docker driver currently expects task metadata that changed in ansible-core 2.18.
-pip install 'ansible-core<2.18' ansible-lint yamllint molecule 'molecule-plugins[docker]' testinfra jmespath pyyaml
+# Pinned to the tested combination: molecule 26.x (ansible-native config
+# format) with ansible-core 2.18+ (Molecule N/N-1 policy). ansible-core 2.17
+# is excluded by molecule itself (!=2.17.*). Keep in sync with
+# .github/actions/setup-brightos-python/action.yml.
+pip install 'molecule>=26,<27' 'molecule-plugins[docker]' \
+    'ansible-core>=2.18' ansible-lint yamllint testinfra jmespath pyyaml
 
 ansible-galaxy collection install -r requirements.yml
 
