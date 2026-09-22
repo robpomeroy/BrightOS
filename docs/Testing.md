@@ -112,6 +112,13 @@ sudo apt install -y python3 python3-pip python3-dev python3-virtualenv git \
     shellcheck
 ```
 
+> **Ansible version note:** use **ansible-core 2.16 or later** (Python 3.10+
+> based venv). The `devsec.hardening` collection requires the
+> `password_expire_warn` module parameter that only ansible-core 2.16+
+> supports. If your system Python is 3.9, `pip install` will silently
+> downgrade-limit ansible-core to 2.15 — build your venv with a newer Python
+> (for example `python3.12 -m venv`). See [INSTALL.md](INSTALL.md) for details.
+
 Create Python venv for Molecule in WSL:
 
 ```bash

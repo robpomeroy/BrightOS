@@ -7,6 +7,32 @@ machine). You might find my
 [ansible-control repo](https://github.com/robpomeroy/ansible-control) a useful
 starting point.
 
+### Ansible version requirement
+
+The playbook requires **ansible-core 2.16 or later** on the control machine.
+The external `devsec.hardening` collection uses the `password_expire_warn`
+parameter of the `ansible.builtin.user` module, which is only supported by
+ansible-core 2.16+. With an older ansible-core, the `os_hardening` role fails
+with:
+
+> Unsupported parameters for (ansible.builtin.user) module:
+> password_expire_warn
+
+Note that ansible-core 2.16+ requires **Python 3.10 or later** on the control
+machine. If your system Python is older (for example Python 3.9),
+`pip install --upgrade ansible-core` will silently keep the old version
+("Requirement already satisfied"). Use a virtual environment built on a newer
+Python instead:
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip ansible
+ansible-galaxy collection install -r requirements.yml
+```
+
+### Other requirements
+
 In addition, your target machine(s) should meet the following
 requirements:
 
