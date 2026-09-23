@@ -112,16 +112,38 @@ sudo apt install -y python3 python3-pip python3-dev python3-virtualenv git \
     shellcheck
 ```
 
-Create Python venv for Molecule in WSL:
+> **Ansible version note:** use **ansible-core 2.18 or later** (Python 3.11+
+> based venv — ansible-core 2.18 dropped Python 3.10 support on the control
+> node). The `devsec.hardening` collection requires the
+> `password_expire_warn` module parameter that only ansible-core 2.16+
+> supports, and Molecule follows an N/N-1 support policy for Ansible versions
+> (ansible-core 2.17 is excluded by Molecule itself). CI and
+> `scripts/ci-preflight.sh` pin `ansible-core>=2.18` and `molecule>=26,<27`
+> (ansible-native config format). If your system Python is older than 3.11,
+> `pip install` will fail or silently keep an old ansible-core — build your
+> venv with a newer Python (for example `python3.12 -m venv`). See
+> [INSTALL.md](INSTALL.md) for details.
+
+Create Python venv for Molecule in WSL. Use an explicit Python 3.11+
+interpreter — do **not** rely on `python3`, which may be 3.9/3.10 on older
+systems (ansible-core 2.18 requires Python 3.11+ on the control node):
 
 ```bash
 mkdir -p ~/venv
 cd ~/venv
-virtualenv -p python3 brightos-test
+# Pick the newest available interpreter (adjust if your system differs)
+PYTHON=$(command -v python3.13 || command -v python3.12 || command -v python3.11)
+if [ -z "$PYTHON" ]; then
+    echo "No Python 3.11+ found; install one, e.g.: sudo apt install python3.12 python3.12-venv"
+    exit 1
+fi
+"$PYTHON" -m venv brightos-test
 source ~/venv/brightos-test/bin/activate
+python --version   # sanity check: must be 3.11 or later
 
-pip install ansible-core ansible-builder ansible-lint ansible-navigator \
-    jmespath molecule 'molecule-plugins[docker]' pyyaml testinfra yamllint
+pip install 'ansible-core>=2.18' 'molecule>=26,<27' 'molecule-plugins[docker]' \
+    ansible-builder ansible-lint ansible-navigator \
+    jmespath pyyaml testinfra yamllint
 
 # Install Ansible collections required for Docker driver
 ansible-galaxy collection install -r /path/to/BrightOS/requirements.yml

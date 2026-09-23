@@ -14,12 +14,27 @@ if ! docker info >/dev/null 2>&1; then
   exit 1
 fi
 
-python3 -m venv .venv
+# ansible-core>=2.18 requires Python 3.11+ on the control node. Select the
+# newest available interpreter rather than trusting `python3`, which may be
+# 3.9/3.10 on older Ubuntu/WSL systems.
+PY=$(command -v python3.13 || command -v python3.12 || command -v python3.11 || true)
+if [ -z "$PY" ]; then
+  echo "ERROR: Python 3.11+ is required (ansible-core>=2.18). Install one, e.g.:" >&2
+  echo "  sudo apt install python3.12 python3.12-venv" >&2
+  exit 1
+fi
+
+"$PY" -m venv .venv
 . .venv/bin/activate
+python --version  # sanity check: must be 3.11 or later
 
 python -m pip install --upgrade pip
-# Molecule docker driver currently expects task metadata that changed in ansible-core 2.18.
-pip install 'ansible-core<2.18' ansible-lint yamllint molecule 'molecule-plugins[docker]' testinfra jmespath pyyaml
+# Pinned to the tested combination: molecule 26.x (ansible-native config
+# format) with ansible-core 2.18+ (Molecule N/N-1 policy). ansible-core 2.17
+# is excluded by molecule itself (!=2.17.*). Keep in sync with
+# .github/actions/setup-brightos-python/action.yml.
+pip install 'molecule>=26,<27' 'molecule-plugins[docker]' \
+    'ansible-core>=2.18' ansible-lint yamllint testinfra jmespath pyyaml
 
 ansible-galaxy collection install -r requirements.yml
 

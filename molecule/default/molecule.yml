@@ -14,11 +14,12 @@ platforms:
     pre_build_image: false
     command: /bin/bash -c 'while true; do sleep 1; done'
     privileged: true
-    environment:
-      DEBIAN_FRONTEND: noninteractive
 provisioner:
   name: ansible
   log: true
+ansible:
+  executor:
+    backend: ansible-playbook
   env:
     ANSIBLE_ROLES_PATH: "../../roles"
   playbooks:

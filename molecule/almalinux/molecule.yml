@@ -17,6 +17,9 @@ platforms:
 provisioner:
   name: ansible
   log: true
+ansible:
+  executor:
+    backend: ansible-playbook
   env:
     ANSIBLE_ROLES_PATH: "../../roles"
   playbooks:

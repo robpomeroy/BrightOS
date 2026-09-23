@@ -55,15 +55,15 @@
 
 - name: Hide unnecessary application icons
   ansible.builtin.lineinfile:
-    path: "/usr/share/applications/{{ gnome_app.item }}"
+    path: "/usr/share/applications/{{ gnome_entry.item }}"
     regexp: '^NoDisplay='
     insertafter: '^\[Desktop Entry\]'
     line: 'NoDisplay=true'
     mode: "0644"
   loop: "{{ gnome_optional_desktop_entries.results }}"
   loop_control:
-    loop_var: gnome_app
-  when: gnome_app.stat.exists
+    loop_var: gnome_entry
+  when: gnome_entry.stat.exists
 
 # Not strictly Gnome-related, but no need for a separate role just for this
 - name: Create /etc/X11/xorg.conf.d directory
