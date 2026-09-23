@@ -18,8 +18,9 @@ with:
 > Unsupported parameters for (ansible.builtin.user) module:
 > password_expire_warn
 
-Note that ansible-core 2.16+ requires **Python 3.10 or later** on the control
-machine. If your system Python is older (for example Python 3.9),
+Note that ansible-core 2.18+ requires **Python 3.11 or later** on the control
+machine (and Molecule's N/N-1 policy excludes ansible-core 2.17). If your
+system Python is older (for example Python 3.9 or 3.10),
 `pip install --upgrade ansible-core` will silently keep the old version
 ("Requirement already satisfied"). Use a virtual environment built on a newer
 Python instead:
