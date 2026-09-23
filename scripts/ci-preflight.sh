@@ -17,7 +17,7 @@ fi
 # ansible-core>=2.18 requires Python 3.11+ on the control node. Select the
 # newest available interpreter rather than trusting `python3`, which may be
 # 3.9/3.10 on older Ubuntu/WSL systems.
-PY=$(command -v python3.13 || command -v python3.12 || command -v python3.11)
+PY=$(command -v python3.13 || command -v python3.12 || command -v python3.11 || true)
 if [ -z "$PY" ]; then
   echo "ERROR: Python 3.11+ is required (ansible-core>=2.18). Install one, e.g.:" >&2
   echo "  sudo apt install python3.12 python3.12-venv" >&2

@@ -79,7 +79,7 @@ and what remains manual (for example VM scenarios), see
 **Ansible version:** run ansible-core 2.16 or later on your control machine —
 the `devsec.hardening` collection relies on the `password_expire_warn` user
 module parameter, unsupported in older ansible-core. If your system Python is
-older than 3.10, build your virtualenv with a newer Python (see
+older than 3.11, build your virtualenv with a newer Python (see
 [INSTALL.md](INSTALL.md#ansible-version-requirement)).
 
 Before pushing changes, run the local CI mirror script from the repository
